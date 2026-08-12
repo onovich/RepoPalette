@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 
 const root = new URL("../", import.meta.url);
+const execFileAsync = promisify(execFile);
 
 test("keeps the public install example aligned with the package version", async () => {
   const packageJson = JSON.parse(await readText("package.json"));
@@ -32,6 +36,38 @@ test("keeps the public install example aligned with the package version", async 
   assert.match(changelog, new RegExp(
     "/releases/tag/" + escapeRegExp(versionTag)
   ));
+});
+
+test("pins a commit that implements every advertised layout", async () => {
+  const documents = await Promise.all([
+    readText("README.md"),
+    readText("README.zh-CN.md")
+  ]);
+  const pins = documents.map((document) =>
+    /uses: onovich\/RepoPalette@([0-9a-f]{40})/.exec(document)?.[1]
+  );
+  assert.ok(pins.every(Boolean));
+  assert.equal(new Set(pins).size, 1);
+
+  const { stdout: registry } = await execFileAsync(
+    "git",
+    ["show", pins[0] + ":src/renderers/index.mjs"],
+    { cwd: fileURLToPath(root) }
+  );
+  for (const style of [
+    "bars",
+    "orbit",
+    "constellation",
+    "ribbon",
+    "bead-halo",
+    "matrix",
+    "halo",
+    "treemap",
+    "voronoi",
+    "prism"
+  ]) {
+    assert.match(registry, new RegExp('defineStyle\\("' + style + '"'));
+  }
 });
 
 test("keeps the action metadata ready for a tagged preview", async () => {
