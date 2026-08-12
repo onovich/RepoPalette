@@ -47,7 +47,7 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@339d87033bea46cdd9afb3d831cf4a336da26725 # v0.2.0 implementation
+        uses: onovich/RepoPalette@28fbd4570f50b87ce76dbfbc456263324faa14e9 # v0.2.0 implementation
         with:
           style: orbit
           theme: aurora
