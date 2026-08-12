@@ -6,103 +6,97 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Choose a layout and theme, then generate a programming-language chart from your public GitHub repositories.
+A language-composition chart for your GitHub Profile—designed to look intentional, stay accurate, and update itself.
 
-RepoPalette runs on a schedule and saves the SVG plus its audit data in your own Profile repository. There is no personal token, hosted image service, or separate account to set up.
+RepoPalette reads your public repositories, creates an SVG in your Profile repository, and checks for changes every Monday.
 
-| `ribbon` | `matrix` | `voronoi` |
-| --- | --- | --- |
-| ![Ribbon layout](docs/gallery/ribbon-paper.svg) | ![Matrix layout](docs/gallery/matrix-paper.svg) | ![Voronoi layout](docs/gallery/voronoi-paper.svg) |
+One small file, one commit. No separate account, secret key, or image server to set up.
 
-[Compare all layouts and themes in the gallery.](docs/GALLERY.md)
-
-## What makes it different?
-
-- Ten purpose-built layouts keep exact language names and percentages visible.
-- The full public repository list is read instead of silently stopping after an early page.
-- The generated files belong to your repository, so the image does not depend on a live card service.
-- A readable JSON file shows which repositories were included or excluded. If an update fails, the last valid files stay in place.
-- Optional, user-declared Manual/Vibe splitting creates two separate charts without pretending to detect AI-written code.
+![RepoPalette ribbon preview](docs/gallery/ribbon-paper.svg)
 
 ## Quick start
 
-In your GitHub Profile repository (`your-name/your-name`), create `.github/workflows/repopalette.yml`:
+### Install with AI
+
+If an AI coding agent can edit your Profile repository, paste this message into it:
+
+> Install RepoPalette in this GitHub Profile repository. Follow https://github.com/onovich/RepoPalette/blob/v0.4.0/docs/INSTALL_WITH_AI.md, use the defaults, and verify the first automatic run.
+
+The guide tells the agent exactly what to change and what to leave alone. You do not need to explain GitHub Actions to it.
+
+### Install yourself
+
+In your Profile repository (`your-name/your-name`), create `.github/workflows/repopalette.yml` and paste:
 
 ```yaml
-name: Update RepoPalette
-
+name: RepoPalette
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/repopalette.yml
   schedule:
     - cron: "17 3 * * 1"
-
 permissions:
   contents: write
-
 jobs:
   update:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out profile repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Generate language chart
-        id: repopalette
-        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
-        with:
-          style: orbit
-          theme: aurora
-
-      - name: Commit changes
-        shell: bash
-        env:
-          SVG_PATH: ${{ steps.repopalette.outputs.svg-path }}
-          DATA_PATH: ${{ steps.repopalette.outputs.data-path }}
-        run: |
-          git add -- "$SVG_PATH" "$DATA_PATH"
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(profile): update RepoPalette"
-          git push
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@9612810ee34ef9c33123b9149981b2ed0424669a # v0.4.0
 ```
 
-Then:
+<details>
+<summary><strong>New to GitHub's file editor?</strong></summary>
 
-1. Open the repository's **Actions** tab and run **Update RepoPalette** once.
-2. Add `![GitHub languages](./assets/top-langs.svg)` to your Profile `README.md`.
+Open your Profile repository, choose **Add file → Create new file**, enter `.github/workflows/repopalette.yml` as the file name, paste the block above, then choose **Commit changes**.
+</details>
 
-The workflow checks for changes every Monday. The readable `@v0.3.0` tag is also available after release; the full commit SHA above is safer for a workflow with write access.
+Commit the file. That first commit starts RepoPalette automatically; when the Actions check turns green, the chart is already in your Profile README. It then checks every Monday. **Actions → RepoPalette → Run workflow** remains available whenever you want to refresh it manually.
 
-## Customize it
+The readable `@v0.4.0` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
 
-Change the two values in the `with` block:
+## Why RepoPalette?
 
-- `style`: `bars`, `orbit`, `constellation`, `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, or `prism`
-- `theme`: `light`, `paper`, `midnight`, `aurora`, `terminal`, or `neon`
+- **More than a standard bar card.** Ten layouts balance visual character with exact language names and percentages.
+- **Your Profile does not depend on a live image service.** The generated chart belongs to your repository and remains visible if a later update fails.
+- **The result can be checked.** A readable data file lists the repositories that were included or excluded instead of hiding the counting scope.
+- **The setup stays small.** The short workflow handles generation, validation, README placement, and future updates.
 
-You can also change the title, width, number of languages, and repository or language filters. The small `RepoPalette` watermark is shown by default; set `show-branding: false` to remove it. See [`action.yml`](action.yml) for every option.
+[Compare all layouts and themes in the gallery.](docs/GALLERY.md)
 
-To create separate **Manual Coding** and **Vibe Coding** charts, set `coding-mode: split` and list the languages you personally classify as manual in `manual-languages` (for example, `"C#,ShaderLab,HLSL,GLSL"`). All remaining and newly discovered languages go to Vibe Coding. The two titles can be changed with `manual-title` and `vibe-title`. Commit the paths from `manual-svg-path`, `vibe-svg-path`, and `data-path`, then embed `assets/top-langs-manual.svg` and `assets/top-langs-vibe.svg`. This is an opt-in display rule, not AI detection.
+## Common questions
 
-## What gets counted?
+<details>
+<summary><strong>I do not have a Profile repository yet. What should I do?</strong></summary>
 
-- Public repositories owned by the selected GitHub account.
-- Forks are excluded. Archived repositories are excluded by default.
-- Percentages use GitHub's language byte counts.
-- The chart does not measure skill, time, code quality, or AI authorship. Any Manual/Vibe split is declared by the profile owner.
+[Create a public repository](https://github.com/new?visibility=public) whose name exactly matches your GitHub username, initialize it with a README, then follow the Quick start above. GitHub will display that README on your Profile.
+</details>
 
-RepoPalette also writes `assets/top-langs-data.json` with the complete counting scope.
+<details>
+<summary><strong>What gets counted?</strong></summary>
 
-## Development
+Public repositories owned by your account. Forks are excluded, archived repositories are excluded by default, and percentages use GitHub's language byte counts. New public repositories are picked up on the next run. GitHub may pause schedules in a public repository after 60 days without repository activity; if that happens, re-enable the workflow in Actions and run it once. [Details](docs/ADVANCED_USAGE.md#troubleshooting-scheduled-updates)
+</details>
 
-RepoPalette requires Node.js 24 or newer and has no runtime dependencies.
+<details>
+<summary><strong>Do I need to create a secret or personal token?</strong></summary>
 
-```bash
-npm run check
-```
+No. GitHub gives each run a temporary permission slip, then expires it. You do not create or store a long-lived private key, register another account, or deploy a server.
+</details>
 
-See the [changelog](CHANGELOG.md), [product decisions](docs/PRODUCT_DECISIONS.md), and [MIT license](LICENSE).
+<details>
+<summary><strong>Why does the workflow need write permission?</strong></summary>
+
+Only to save the generated chart and data in your Profile repository and maintain its small marked section in `README.md`. It does not write to the repositories being measured.
+</details>
+
+<details>
+<summary><strong>Does it measure skill or detect AI-written code?</strong></summary>
+
+No. It reports language composition, not ability, time, quality, or authorship. An optional Manual/Vibe view is available only as a grouping you declare yourself.
+</details>
+
+## Need more control?
+
+The default is `ribbon` with the `paper` theme. See the [gallery](docs/GALLERY.md) to choose a look, then use the [advanced guide](docs/ADVANCED_USAGE.md) for themes, filters, titles, branding, Manual/Vibe charts, or the lower-level Action. Every input is also listed in [`action.yml`](action.yml).
+
+Contributors need Node.js 24 or newer and can run `npm run check`. See the [changelog](CHANGELOG.md), [product decisions](docs/PRODUCT_DECISIONS.md), and [MIT license](LICENSE).

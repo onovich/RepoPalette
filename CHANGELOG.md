@@ -6,9 +6,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
-### Planned
+## [0.4.0] - 2026-08-13
 
-- AI-assisted installation and GitHub Marketplace publication.<br/>**增加 AI 辅助安装并发布到 GitHub Marketplace。**
+### Added
+
+- A public reusable workflow reduces the default installation to one short file and one commit.<br/>**增加公共可复用工作流，将默认安装压缩为一个短文件和一次提交。**
+- The first installation commit generates the chart automatically, maintains an idempotent marked block in the Profile README, and keeps weekly updates.<br/>**首次安装提交会自动生成图表，在 Profile README 中幂等维护带标记的区块，并保留每周更新。**
+- A focused AI-agent installation contract and a separate advanced usage guide.<br/>**增加面向 AI 编程工具的安装约定，以及独立的高级使用说明。**
+- `update-readme` and `readme-path` provide opt-in README placement for direct Action users.<br/>**为直接使用 Action 的用户增加可选的 `update-readme` 与 `readme-path`。**
+
+### Changed
+
+- Reworked both READMEs around a low-pressure beginner path, plain-language FAQs, and a clear advanced escape hatch.<br/>**围绕低心智压力的新手路径、大白话常见问题和清晰的高级入口重写中英文 README。**
+- The default quick-start design is now `ribbon` with the `paper` theme.<br/>**Quick Start 默认视觉改为 `ribbon` 布局和 `paper` 主题。**
 
 ## [0.3.0] - 2026-08-13
 
@@ -60,7 +70,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.4.0
 [0.3.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.3.0
 [0.2.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.2.0
 [0.1.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.1.0

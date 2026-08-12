@@ -16,13 +16,16 @@ test("keeps the public install example aligned with the package version", async 
   const versionTag = "v" + packageJson.version;
 
   for (const document of [readme, chineseReadme]) {
-    assert.match(document, /uses: onovich\/RepoPalette@[0-9a-f]{40}/);
-    assert.match(document, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
-    assert.match(document, /permissions:\s*\n\s+contents: write/);
     assert.match(
       document,
-      /uses: actions\/checkout@[0-9a-f]{40}\s+# v\d+\.\d+\.\d+/
+      /uses: onovich\/RepoPalette\/\.github\/workflows\/profile\.yml@[0-9a-f]{40}/
     );
+    assert.match(document, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
+    assert.match(document, new RegExp(
+      "/blob/" + escapeRegExp(versionTag) + "/docs/INSTALL_WITH_AI\\.md"
+    ));
+    assert.match(document, /permissions:\s*\n\s+contents: write/);
+    assert.doesNotMatch(fencedBlock(document, "yaml"), /actions\/checkout/);
   }
   assert.equal(
     fencedBlock(readme, "yaml"),
@@ -38,20 +41,44 @@ test("keeps the public install example aligned with the package version", async 
   ));
 });
 
-test("pins a commit that implements every advertised layout", async () => {
+test("pins a commit that contains the complete reusable installer", async () => {
   const documents = await Promise.all([
     readText("README.md"),
     readText("README.zh-CN.md")
   ]);
   const pins = documents.map((document) =>
-    /uses: onovich\/RepoPalette@([0-9a-f]{40})/.exec(document)?.[1]
+    /uses: onovich\/RepoPalette\/\.github\/workflows\/profile\.yml@([0-9a-f]{40})/.exec(document)?.[1]
   );
   assert.ok(pins.every(Boolean));
   assert.equal(new Set(pins).size, 1);
 
+  const { stdout: workflow } = await execFileAsync(
+    "git",
+    ["show", pins[0] + ":.github/workflows/profile.yml"],
+    { cwd: fileURLToPath(root) }
+  );
+  const actionPin = /uses: onovich\/RepoPalette@([0-9a-f]{40})/.exec(
+    workflow
+  )?.[1];
+  assert.ok(actionPin, "the reusable workflow must pin the underlying Action");
+  assert.match(workflow, /update-readme: true/);
+  await execFileAsync(
+    "git",
+    [
+      "diff",
+      "--exit-code",
+      actionPin,
+      pins[0],
+      "--",
+      "action.yml",
+      "src"
+    ],
+    { cwd: fileURLToPath(root) }
+  );
+
   const { stdout: registry } = await execFileAsync(
     "git",
-    ["show", pins[0] + ":src/renderers/index.mjs"],
+    ["show", actionPin + ":src/renderers/index.mjs"],
     { cwd: fileURLToPath(root) }
   );
   for (const style of [
@@ -77,7 +104,7 @@ test("pins a commit that implements every advertised layout", async () => {
       "HEAD",
       "--",
       "action.yml",
-      "package.json",
+      ".github/workflows/profile.yml",
       "scripts",
       "src"
     ],
@@ -113,11 +140,13 @@ test("keeps the action metadata ready for a tagged preview", async () => {
     action,
     /coding-mode:[\s\S]*?default: off/
   );
+  assert.match(action, /update-readme:[\s\S]*?default: "false"/);
   assert.match(action, /manual-languages:/);
   assert.match(action, /manual-title:[\s\S]*?default: Manual Coding/);
   assert.match(action, /vibe-title:[\s\S]*?default: Vibe Coding/);
   assert.match(action, /^  manual-svg-path:$/m);
   assert.match(action, /^  vibe-svg-path:$/m);
+  assert.match(action, /^  readme-path:$/m);
   assert.match(action, /^\s+using: node24$/m);
   assert.match(action, /^\s+main: src\/action\.mjs$/m);
   assert.match(action, /^branding:\s*$/m);
@@ -149,7 +178,11 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
     "action.yml",
     "package.json",
     "docs/GALLERY.md",
-    "docs/PRODUCT_DECISIONS.md"
+    "docs/PRODUCT_DECISIONS.md",
+    "docs/ADVANCED_USAGE.md",
+    "docs/INSTALL_WITH_AI.md",
+    "docs/QUICK_START_INSTALLATION_RESEARCH.md",
+    ".github/workflows/profile.yml"
   ]) {
     const bytes = await readFile(new URL(path, root));
     assert.notDeepEqual(

@@ -196,9 +196,24 @@ with:
 
 首版按“整种语言”标记，因此无法表达“这个 TypeScript 仓库是 vibe，另一个 TypeScript 仓库是传统编程”。如果真实用户频繁遇到这种情况，再增加按仓库覆盖的配置；首版不为尚未验证的复杂度提前设计完整规则系统。
 
-## 6. 当前产品顺序
+## 6. 默认安装体验
 
-当前进度（2026-08-13）：第 1、2、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明生成 Manual Coding 与 Vibe Coding 两张图。“使用 AI 协助安装”尚未实现。Marketplace 上架前还需完成安装体验与发布准备。
+在不要求用户创建 PAT、不运行 RepoPalette 后端、结果继续保存在用户仓库的约束下，默认安装承诺是“一个文件、一次提交”，不使用“真正一键安装”等无法兑现的表述。GitHub 要求 workflow 文件进入目标仓库，仓库所有者至少要确认一次写入。
+
+默认入口使用公共 reusable workflow：
+
+- 用户仓库只保存触发条件、`contents: write` 最小权限和一个固定完整提交 SHA 的 `uses`；
+- 安装文件自身的首次 `push` 自动触发生成，不再要求用户随后手动运行；
+- called workflow 封装 checkout、生成、验证和提交；默认使用 `ribbon` + `paper`；
+- 首次成功后只在 `<!-- repopalette:start -->` 与 `<!-- repopalette:end -->` 之间幂等维护 README 图片；
+- 底层 Action 的 `update-readme` 默认仍为 `false`，避免升级后意外修改原有用户的 README；
+- AI 安装入口提供明确、可执行的安装约定，但不引入新的账户、令牌或服务。
+
+高级用户仍可直接使用 Action，以控制完整输入、输出和提交策略。GitHub App 只有在用户需求足以支持长期后端、私钥管理与授权流程时再评估。官方能力与替代路径见 [`QUICK_START_INSTALLATION_RESEARCH.md`](QUICK_START_INSTALLATION_RESEARCH.md)。
+
+## 7. 当前产品顺序
+
+当前进度（2026-08-13）：第 1、2、3、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明生成 Manual Coding 与 Vibe Coding 两张图。安装体验通过公共 reusable workflow 压缩为“一个短文件、一次提交”，首次提交自动生成并幂等插入 README，同时提供 AI 安装约定。Marketplace 上架仍待完成。
 
 1. 将现有统计核心迁入独立仓库并包装成可复用 Action；
 2. 实现 `orbit`、`constellation` 和重制的 `bars`；
@@ -208,7 +223,7 @@ with:
 6. 从启用日起积累历史快照，再实现 timeline；
 7. 暂不开发任何 AI 代码检测功能。
 
-## 7. 远期视觉实验（不属于当前产品承诺）
+## 8. 远期视觉实验（不属于当前产品承诺）
 
 在语言构成图和 Action 安装体验稳定之后，可以探索比统计图更具叙事性和传播性的独立输出，例如：
 
