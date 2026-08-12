@@ -1,10 +1,8 @@
 import {
   bytePercentage,
-  escapeXml,
-  formatPercentage,
+  renderLegend,
   safeColor,
-  svgNumber,
-  truncateLabel
+  svgNumber
 } from "./common.mjs";
 
 export function renderOrbit({ stats, config, languages, theme }) {
@@ -48,35 +46,14 @@ export function renderOrbit({ stats, config, languages, theme }) {
   });
 
   const legendY = centerY + outerRadius + 30;
-  const legend = renderLegend({ config, languages, theme, startY: legendY });
+  const legend = renderLegend({
+    width: config.width,
+    languages,
+    theme,
+    startY: legendY
+  });
   lines.push(...legend.lines);
   return { height: legend.height, lines };
-}
-
-function renderLegend({ config, languages, theme, startY }) {
-  const columnWidth = (config.width - 48) / 2;
-  const rows = Math.ceil(languages.length / 2);
-  const maxCharacters = Math.max(7, Math.floor((columnWidth - 58) / 6.5));
-  const lines = [];
-
-  languages.forEach((language, index) => {
-    const column = index % 2;
-    const row = Math.floor(index / 2);
-    const x = 24 + column * columnWidth;
-    const y = startY + row * 26;
-    const color = safeColor(language.color, theme.accent);
-    lines.push(
-      '  <circle cx="' + (x + 4) + '" cy="' + (y - 4)
-        + '" r="4" fill="' + color + '"/>',
-      '  <text class="legend-label" x="' + (x + 16) + '" y="' + y + '">'
-        + escapeXml(truncateLabel(language.name, maxCharacters)) + "</text>",
-      '  <text class="legend-value" text-anchor="end" x="'
-        + (x + columnWidth - 4) + '" y="' + y + '">'
-        + formatPercentage(language.percentage) + "</text>"
-    );
-  });
-
-  return { lines, height: startY + rows * 26 + 18 };
 }
 
 function renderEmptyOrbit(config, theme) {

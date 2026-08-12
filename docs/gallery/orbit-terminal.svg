@@ -37,22 +37,24 @@
   <path data-role="orbit-value" data-share="6" d="M 243.84 247.84 A 62 62 0 0 1 229.87 258.33" fill="none" stroke="#89E051" stroke-width="7" stroke-linecap="round"/>
   <path d="M 233.94 237.94 A 48 48 0 1 1 233.94 170.06" fill="none" stroke="#15321f" stroke-width="7" stroke-linecap="round"/>
   <path data-role="orbit-value" data-share="5" d="M 233.94 237.94 A 48 48 0 0 1 225.08 244.93" fill="none" stroke="#E34C26" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="28" cy="348" r="4" fill="#3178C6"/>
-  <text class="legend-label" x="40" y="352">TypeScript</text>
-  <text class="legend-value" text-anchor="end" x="196" y="352">42.0%</text>
-  <circle cx="204" cy="348" r="4" fill="#3572A5"/>
-  <text class="legend-label" x="216" y="352">Python</text>
-  <text class="legend-value" text-anchor="end" x="372" y="352">25.0%</text>
-  <circle cx="28" cy="374" r="4" fill="#178600"/>
-  <text class="legend-label" x="40" y="378">C#</text>
-  <text class="legend-value" text-anchor="end" x="196" y="378">14.0%</text>
-  <circle cx="204" cy="374" r="4" fill="#222C37"/>
-  <text class="legend-label" x="216" y="378">ShaderLab</text>
-  <text class="legend-value" text-anchor="end" x="372" y="378">8.0%</text>
-  <circle cx="28" cy="400" r="4" fill="#89E051"/>
-  <text class="legend-label" x="40" y="404">Shell</text>
-  <text class="legend-value" text-anchor="end" x="196" y="404">6.0%</text>
-  <circle cx="204" cy="400" r="4" fill="#E34C26"/>
-  <text class="legend-label" x="216" y="404">HTML</text>
-  <text class="legend-value" text-anchor="end" x="372" y="404">5.0%</text>
+  <g data-role="legend" data-columns="2">
+    <circle cx="28" cy="348" r="4" fill="#3178C6"/>
+    <text class="legend-label" x="40" y="352">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="196" y="352">42.0%</text>
+    <circle cx="204" cy="348" r="4" fill="#3572A5"/>
+    <text class="legend-label" x="216" y="352">Python</text>
+    <text class="legend-value" text-anchor="end" x="372" y="352">25.0%</text>
+    <circle cx="28" cy="374" r="4" fill="#178600"/>
+    <text class="legend-label" x="40" y="378">C#</text>
+    <text class="legend-value" text-anchor="end" x="196" y="378">14.0%</text>
+    <circle cx="204" cy="374" r="4" fill="#222C37"/>
+    <text class="legend-label" x="216" y="378">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="372" y="378">8.0%</text>
+    <circle cx="28" cy="400" r="4" fill="#89E051"/>
+    <text class="legend-label" x="40" y="404">Shell</text>
+    <text class="legend-value" text-anchor="end" x="196" y="404">6.0%</text>
+    <circle cx="204" cy="400" r="4" fill="#E34C26"/>
+    <text class="legend-label" x="216" y="404">HTML</text>
+    <text class="legend-value" text-anchor="end" x="372" y="404">5.0%</text>
+  </g>
 </svg>

@@ -2,7 +2,7 @@ import {
   bytePercentage,
   contrastColor,
   escapeXml,
-  formatPercentage,
+  renderLegend,
   safeColor,
   svgNumber,
   truncateLabel
@@ -81,7 +81,7 @@ export function renderConstellation({ stats, config, languages, theme }) {
   });
 
   const legend = renderLegend({
-    config,
+    width: config.width,
     languages,
     theme,
     startY: 346
@@ -98,7 +98,7 @@ function layoutNodes(languages, totalBytes, width, top, bottom) {
   const nodes = languages.map((language, index) => {
     const share = bytePercentage(language, totalBytes);
     const anchor = ANCHORS[index];
-    const radius = Math.max(8, Math.sqrt(share) * 5.2);
+    const radius = Math.sqrt(64 + share * 25);
     return {
       language,
       share,
@@ -163,32 +163,6 @@ function nearestPreviousNode(node, previousNodes) {
     );
     return candidateDistance < nearestDistance ? candidate : nearest;
   });
-}
-
-function renderLegend({ config, languages, theme, startY }) {
-  const columnWidth = (config.width - 48) / 2;
-  const rows = Math.ceil(languages.length / 2);
-  const maxCharacters = Math.max(7, Math.floor((columnWidth - 58) / 6.5));
-  const lines = [];
-
-  languages.forEach((language, index) => {
-    const column = index % 2;
-    const row = Math.floor(index / 2);
-    const x = 24 + column * columnWidth;
-    const y = startY + row * 26;
-    const color = safeColor(language.color, theme.accent);
-    lines.push(
-      '  <circle cx="' + (x + 4) + '" cy="' + (y - 4)
-        + '" r="4" fill="' + color + '"/>',
-      '  <text class="legend-label" x="' + (x + 16) + '" y="' + y + '">'
-        + escapeXml(truncateLabel(language.name, maxCharacters)) + "</text>",
-      '  <text class="legend-value" text-anchor="end" x="'
-        + (x + columnWidth - 4) + '" y="' + y + '">'
-        + formatPercentage(language.percentage) + "</text>"
-    );
-  });
-
-  return { lines, height: startY + rows * 26 + 18 };
 }
 
 function renderEmptyConstellation(config, theme) {

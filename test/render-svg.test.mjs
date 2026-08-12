@@ -135,6 +135,71 @@ test("renders all twelve configured languages at supported width extremes", () =
   }
 });
 
+test("keeps real long language names visible in narrow visual legends", () => {
+  const languages = [
+    { name: "DIGITAL Command Language", bytes: 60, percentage: 60, color: "#012456" },
+    { name: "Jupyter Notebook", bytes: 40, percentage: 40, color: "#DA5B0B" }
+  ];
+  const stats = fixtureStats({ totalBytes: 100, languages });
+
+  for (const style of ["orbit", "constellation"]) {
+    const svg = renderSvg(stats, fixtureConfig({ width: 320, style }));
+    assert.match(svg, /data-role="legend" data-columns="1"/);
+    assert.match(
+      svg,
+      /class="legend-label"[^>]*>DIGITAL Command Language<\/text>/
+    );
+    assert.match(svg, /class="legend-label"[^>]*>Jupyter Notebook<\/text>/);
+  }
+});
+
+test("does not split an emoji when a visible label is shortened", () => {
+  const svg = renderSvg(fixtureStats({
+    languages: [{
+      name: "AAAAAAAAAAAAAAAAAAAAAA😀 language",
+      bytes: 100,
+      percentage: 100,
+      color: "#3178C6"
+    }]
+  }), fixtureConfig({ width: 320, top: 1 }));
+
+  assert.match(svg, /AAAAAAAAAAAAAAAAAAAAAA😀…/);
+  assert.doesNotMatch(svg, /\uFFFD/);
+  assert.equal(hasLoneSurrogate(svg), false);
+});
+
+test("keeps small constellation shares distinguishable by node area", () => {
+  const svg = renderSvg(fixtureStats({
+    totalBytes: 100,
+    languages: [
+      { name: "Large", bytes: 97, percentage: 97, color: "#3178C6" },
+      { name: "Small", bytes: 2, percentage: 2, color: "#3572A5" },
+      { name: "Smaller", bytes: 1, percentage: 1, color: "#178600" }
+    ]
+  }), fixtureConfig({ style: "constellation" }));
+  const radii = [...svg.matchAll(
+    /data-role="constellation-node"[^>]*data-share="[^"]+"[^>]*r="([0-9.]+)"/g
+  )].map((match) => Number(match[1]));
+
+  assert.equal(radii.length, 3);
+  assert.ok(radii[0] > radii[1]);
+  assert.ok(radii[1] > radii[2]);
+  assert.ok(radii[2] >= 8);
+});
+
+test("chooses readable node text for bright GitHub language colors", () => {
+  const svg = renderSvg(fixtureStats({
+    languages: [{
+      name: "Go",
+      bytes: 100,
+      percentage: 100,
+      color: "#00ADD8"
+    }]
+  }), fixtureConfig({ style: "constellation", top: 1 }));
+
+  assert.match(svg, /class="node-label"[^>]*fill="#111318"[^>]*>Go<\/text>/);
+});
+
 function fixtureStats(overrides = {}) {
   return {
     repositoryCount: 4,
@@ -159,4 +224,20 @@ function fixtureConfig(overrides = {}) {
     theme: "light",
     ...overrides
   };
+}
+
+function hasLoneSurrogate(value) {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (next < 0xdc00 || next > 0xdfff) {
+        return true;
+      }
+      index += 1;
+    } else if (code >= 0xdc00 && code <= 0xdfff) {
+      return true;
+    }
+  }
+  return false;
 }
