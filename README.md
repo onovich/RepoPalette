@@ -1,28 +1,29 @@
 # RepoPalette
 
-> Generate a validated GitHub programming-language SVG and auditable data from your public, owned repositories.<br/>**根据你名下的公开仓库，生成经过校验的 GitHub 编程语言 SVG 和可核对数据。**
+[简体中文](README.zh-CN.md)
 
-RepoPalette collects language data from your public, owned GitHub repositories and writes a validated SVG plus an auditable JSON file into your own repository.<br/>**RepoPalette 汇总你名下公开 GitHub 仓库的语言数据，并将经过校验的 SVG 和可核对的 JSON 文件写入你自己的仓库。**
+[![CI](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml/badge.svg)](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml)
+[![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Status
+Generate a programming-language chart from your public GitHub repositories.
 
-RepoPalette is in its first extraction phase. The proven statistics core has moved out of the `onovich/onovich` Profile repository and now runs as a standalone, dependency-free JavaScript Action.<br/>**RepoPalette 目前处于第一阶段：已经将经过验证的统计核心从 `onovich/onovich` Profile 仓库迁出，并封装成零运行时依赖的独立 JavaScript Action。**
+RepoPalette runs in GitHub Actions and saves a validated SVG plus audit data directly in your Profile repository. Public repositories work with GitHub's built-in token, so there is no personal access token or hosted service to set up.
 
-- Available now: complete public-repository pagination, language aggregation, filtering, validated SVG/JSON output, retries, and fail-safe file replacement.<br/>**当前可用：完整公开仓库分页、语言汇总、筛选、SVG/JSON 校验输出、失败重试，以及安全文件替换。**
-- Current renderer: `bars` with the `light` theme, retained as the behavior-compatibility baseline.<br/>**当前渲染器：`bars` + `light`，作为行为兼容基线保留。**
-- Planned renderers: redesigned `bars`, `orbit`, and `constellation`, followed by additional themes.<br/>**计划中的渲染器：新版 `bars`、`orbit` 和 `constellation`，随后增加更多主题。**
+[![Live RepoPalette example](https://raw.githubusercontent.com/onovich/onovich/main/assets/top-langs.svg)](https://github.com/onovich/onovich/blob/main/assets/top-langs-data.json)
 
-## Why RepoPalette
+> **Preview:** v0.1 currently provides the `bars` layout with the `light` theme. More layouts and themes are planned.
 
-- It follows every repository page instead of silently stopping at GitHub's first page of results.<br/>**它会继续读取所有仓库分页，不会在 GitHub 第一页结果处悄悄截断。**
-- It uses GitHub's automatic workflow token for public repositories, so users do not need to create or store a personal access token.<br/>**统计公开仓库时使用 GitHub 自动提供的工作流令牌，用户无需创建或保管个人访问令牌。**
-- It commits ordinary SVG and JSON files to the user's repository; the Profile image does not depend on a third-party rendering endpoint staying online.<br/>**它把普通 SVG 和 JSON 文件保存在用户自己的仓库里；Profile 图片无需依赖第三方实时渲染服务持续在线。**
-- It validates both outputs before replacement. If collection or rendering fails, the last successful files remain untouched.<br/>**替换前会同时校验两份输出；如果采集或渲染失败，上一次成功生成的文件会保持不变。**
-- The JSON records included repositories, excluded repositories and reasons, filters, byte totals, percentages, and language colors so the displayed result can be checked.<br/>**JSON 会记录实际纳入的仓库、排除的仓库及原因、筛选条件、字节总量、占比和语言颜色，使展示结果可以被核对。**
+## Why use it?
 
-## Quick Start
+- Set it up once, then let a scheduled workflow keep the chart current.
+- Check every page of your public repository list instead of silently stopping early.
+- Keep the SVG and JSON in your own repository instead of relying on a live image service.
+- Keep the last valid image when an update fails, and inspect exactly what was counted in the audit JSON.
 
-Add this workflow to the Profile repository named after your GitHub account, for example `.github/workflows/repopalette.yml`.<br/>**在与你 GitHub 用户名同名的 Profile 仓库中添加以下工作流，例如 `.github/workflows/repopalette.yml`。**
+## Quick start
+
+1. In your GitHub Profile repository (`your-name/your-name`), create `.github/workflows/repopalette.yml` with this content:
 
 ```yaml
 name: Update RepoPalette
@@ -42,22 +43,18 @@ jobs:
       - name: Check out profile repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Generate language visual
+      - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@823db1eec5727810ece5b33c650851a1aca30bfd
-        with:
-          style: bars
-          theme: light
+        uses: onovich/RepoPalette@4dfd83c030dfd6dff7bd8af12ad30947c4b63f1f # Pinned preview revision
 
-      - name: Commit changed outputs
+      - name: Commit changes
         shell: bash
         env:
-          REPOPALETTE_SVG: ${{ steps.repopalette.outputs.svg-path }}
-          REPOPALETTE_DATA: ${{ steps.repopalette.outputs.data-path }}
+          SVG_PATH: ${{ steps.repopalette.outputs.svg-path }}
+          DATA_PATH: ${{ steps.repopalette.outputs.data-path }}
         run: |
-          git add -- "$REPOPALETTE_SVG" "$REPOPALETTE_DATA"
+          git add -- "$SVG_PATH" "$DATA_PATH"
           if git diff --cached --quiet; then
-            echo "RepoPalette outputs are already current."
             exit 0
           fi
 
@@ -67,58 +64,45 @@ jobs:
           git push
 ```
 
-The pre-release example pins both actions to immutable commit SHAs. The first stable release will also provide the easier-to-read `@v1` reference.<br/>**预发布示例将两个 Action 都固定到不可变的提交 SHA；首个稳定版本发布后还会提供更易阅读的 `@v1` 引用。**
+2. Open the repository's **Actions** tab and run **Update RepoPalette** once.
 
-Embed the generated SVG in the Profile README.<br/>**在 Profile README 中嵌入生成的 SVG。**
+3. Add the generated image to your Profile `README.md`:
 
 ```markdown
 ![GitHub languages](./assets/top-langs.svg)
 ```
 
-Run the workflow once from the Actions tab. Future scheduled runs will update the files only when the statistics change.<br/>**在 Actions 页面手动运行一次；之后定时任务只会在统计结果变化时更新文件。**
+The workflow will update the files every Monday when the statistics change. The readable `@v0.1.0` release tag is also available, but the full commit SHA above is safer for a workflow with write access.
 
-## Configuration
+## Customize it
 
-The only presentation inputs are `style` and `theme`. During Phase 1 their supported values are deliberately limited to `bars` and `light`; unsupported values fail clearly rather than pretending to apply a design.<br/>**展示层只提供 `style` 和 `theme` 两项核心输入。第一阶段有意只支持 `bars` 和 `light`；传入尚未实现的值会明确失败，不会假装已经应用某种设计。**
+Add a `with` block to the **Generate language chart** step. For example:
 
-Advanced collection inputs are optional.<br/>**以下采集类高级输入均为可选。**
+```yaml
+with:
+  top: "8"
+  title: My Languages
+  exclude-repositories: "demo,sandbox"
+  exclude-languages: "HTML,CSS"
+```
 
-- `username`: account to analyze; defaults to the current repository owner.<br/>**`username`：要分析的账号；默认使用当前仓库所有者。**
-- `top`: number of displayed languages, from 1 to 12; defaults to `6`.<br/>**`top`：展示语言数量，范围为 1–12；默认 `6`。**
-- `include-archived`: include archived repositories; defaults to `false`.<br/>**`include-archived`：是否包含归档仓库；默认 `false`。**
-- `exclude-repositories`: comma-separated repository names to omit.<br/>**`exclude-repositories`：要排除的仓库名称，使用逗号分隔。**
-- `exclude-languages`: comma-separated language names to omit.<br/>**`exclude-languages`：要排除的语言名称，使用逗号分隔。**
-- `title`: SVG title; defaults to `Most Used Languages`.<br/>**`title`：SVG 标题；默认 `Most Used Languages`。**
-- `width`: SVG width from 320 to 800 pixels; defaults to `400`.<br/>**`width`：SVG 宽度，范围为 320–800 像素；默认 `400`。**
-- `output-directory`: repository-relative output directory; defaults to `assets`.<br/>**`output-directory`：相对于仓库的输出目录；默认 `assets`。**
+See [`action.yml`](action.yml) for every input and output.
 
-## Data Scope
+## What gets counted?
 
-The default statistics include public repositories owned by the selected account, exclude forks, and exclude archived repositories. Repository and language exclusions are applied after collection.<br/>**默认统计所选账号名下的公开自有仓库，排除 fork，并排除归档仓库；仓库和语言排除项在采集后应用。**
+- Public repositories owned by the selected GitHub account.
+- Forks are excluded. Archived repositories are excluded by default.
+- Language percentages use GitHub's language byte counts.
+- The result does not measure skill, time spent, code quality, or AI authorship.
 
-RepoPalette reports language byte counts from GitHub's language data. It does not claim to measure proficiency, time spent, code quality, or whether code was written by AI.<br/>**RepoPalette 展示 GitHub 语言数据中的字节量；它不声称衡量熟练度、投入时间、代码质量，也不判断代码是否由 AI 编写。**
+RepoPalette also writes `assets/top-langs-data.json`, which lists included and excluded repositories and the reasons for each exclusion.
 
-## Local Development
+## Development
 
-Node.js 24 or newer is required. The project has no runtime dependencies.<br/>**本项目要求 Node.js 24 或更高版本，并且没有运行时依赖。**
+RepoPalette requires Node.js 24 or newer and has no runtime dependencies.
 
 ```bash
-npm test
 npm run check
 ```
 
-To generate locally, edit `repopalette.config.json`, provide an authenticated GitHub token through the environment, and run the generator.<br/>**如需在本地生成，请编辑 `repopalette.config.json`，通过环境变量提供已认证的 GitHub 令牌，然后运行生成器。**
-
-```bash
-GITHUB_TOKEN="$(gh auth token)" npm run generate
-```
-
-Generated files are written to `assets/top-langs.svg` and `assets/top-langs-data.json`.<br/>**生成文件写入 `assets/top-langs.svg` 和 `assets/top-langs-data.json`。**
-
-## Roadmap
-
-The agreed product direction, competitive positioning, renderer roadmap, and optional self-declared coding-style concept are recorded in [`docs/PRODUCT_DECISIONS.md`](docs/PRODUCT_DECISIONS.md).<br/>**已经确认的产品方向、竞争定位、渲染器路线图，以及可选的用户自声明编程方式设想，记录在 [`docs/PRODUCT_DECISIONS.md`](docs/PRODUCT_DECISIONS.md) 中。**
-
-## License
-
-RepoPalette is available under the MIT License.<br/>**RepoPalette 采用 MIT License。**
+See the [changelog](CHANGELOG.md), [product decisions](docs/PRODUCT_DECISIONS.md), and [MIT license](LICENSE).

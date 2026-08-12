@@ -1,14 +1,14 @@
 name: RepoPalette
 author: onovich
-description: Generate a validated SVG and auditable JSON from public, owned GitHub repositories.
+description: Generate a validated GitHub language SVG and auditable JSON in your own repository.
 
 inputs:
   style:
-    description: Visual layout. Phase 1 currently supports bars.
+    description: Visual layout. The v0.1 preview supports bars.
     required: false
     default: bars
   theme:
-    description: Color theme. Phase 1 currently supports light.
+    description: Color theme. The v0.1 preview supports light.
     required: false
     default: light
   username:
