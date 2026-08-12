@@ -77,6 +77,7 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
     ".github/workflows/ci.yml",
     "action.yml",
     "package.json",
+    "docs/GALLERY.md",
     "docs/PRODUCT_DECISIONS.md"
   ]) {
     const bytes = await readFile(new URL(path, root));

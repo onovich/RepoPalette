@@ -8,9 +8,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Planned
 
-- Redesigned `bars`, plus `orbit` and `constellation` layouts.<br/>**重新设计 `bars`，并增加 `orbit` 与 `constellation` 布局。**
-- Additional themes and a preview gallery.<br/>**增加更多主题与预览画廊。**
 - Optional user-declared coding-style grouping, disabled by default.<br/>**增加默认关闭、由用户主动声明的编程方式分组。**
+- AI-assisted installation and GitHub Marketplace publication.<br/>**增加 AI 辅助安装并发布到 GitHub Marketplace。**
+
+## [0.2.0] - 2026-08-12
+
+### Added
+
+- Purpose-built `orbit` and `constellation` layouts with exact percentage legends.<br/>**增加专门设计的 `orbit` 与 `constellation` 布局，并保留准确的百分比图例。**
+- Six independent themes: `light`, `paper`, `midnight`, `aurora`, `terminal`, and `neon`.<br/>**增加六套可独立选择的主题：`light`、`paper`、`midnight`、`aurora`、`terminal` 与 `neon`。**
+- A checked-in comparison gallery generated from deterministic fixture data.<br/>**增加由固定示例数据生成并纳入版本管理的对比画廊。**
+- Public `style` and `theme` inputs for both the Action and local configuration.<br/>**Action 与本地配置均可通过公开的 `style` 和 `theme` 输入选择视觉方案。**
+
+### Changed
+
+- Redesigned `bars` with a language spectrum, ranked rows, and clearer information hierarchy.<br/>**重新设计 `bars`，增加语言光谱、排名行和更清晰的信息层级。**
+- All layouts now share accessible descriptions, self-contained SVG output, responsive widths from 320 to 800 pixels, and support for up to 12 languages.<br/>**所有布局现在共享可访问性描述、自包含 SVG 输出、320 至 800 像素宽度适配，并支持最多 12 种语言。**
 
 ## [0.1.0] - 2026-08-12
 
@@ -31,5 +44,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.2.0
 [0.1.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.1.0
