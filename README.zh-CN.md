@@ -20,7 +20,7 @@ RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在
 
 如果 AI 编程工具可以编辑你的 Profile 仓库，把下面这句话发给它：
 
-> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/67c081d8b83fce6213a4d027237efe41c9d2c3c2/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
+> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/f3029acfcb41fa90e6a77a5d252194cc3855a882/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
 
 安装说明已经写明该改什么、哪些内容不能碰，你不需要先学会 GitHub Actions。
 
