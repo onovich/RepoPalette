@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@9612810ee34ef9c33123b9149981b2ed0424669a # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
 ```
 
 <details>
