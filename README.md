@@ -92,7 +92,7 @@ Only to save the generated chart and data in your Profile repository and maintai
 <details>
 <summary><strong>Does it measure skill or detect AI-written code?</strong></summary>
 
-No. It reports language composition, not ability, time, quality, or authorship. An optional Manual/Vibe view is available only as a grouping you declare yourself.
+No. It reports language composition, not ability, time, quality, or authorship. An optional combined Manual/Vibe view is available only as a grouping you declare yourself.
 </details>
 
 ## Need more control?

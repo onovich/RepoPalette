@@ -30,9 +30,11 @@ export function renderHalo({ stats, config, languages, theme }) {
   lines.push(
     "  </g>",
     '  <text class="center-label" text-anchor="middle" x="' + centerX
-      + '" y="185">LANGUAGE</text>',
+      + '" y="185">'
+      + (config.compactPanel ? languages.length : "LANGUAGE") + "</text>",
     '  <text class="center-value" text-anchor="middle" x="' + centerX
-      + '" y="205">100% COMPOSITION</text>'
+      + '" y="205">'
+      + (config.compactPanel ? "LANGUAGES" : "100% COMPOSITION") + "</text>"
   );
   const legend = renderCompositionLegend({
     width: config.width,

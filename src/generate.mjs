@@ -6,6 +6,7 @@ import { splitCodingStats, unclassifiedAudit } from "./classification.mjs";
 import { validateConfig } from "./config.mjs";
 import { fetchAllRepositories } from "./github-client.mjs";
 import { writeValidatedOutputs } from "./output-files.mjs";
+import { renderSplitSvg } from "./render-split-svg.mjs";
 import { renderSvg } from "./render-svg.mjs";
 
 export async function generateTopLanguages({
@@ -72,26 +73,14 @@ function renderOutputs(stats, config) {
     const groups = splitCodingStats(stats, config.manualLanguages);
     return {
       classification: groups.audit,
-      svgs: [
-        {
-          filename: "top-langs-manual.svg",
-          content: renderSvg(groups.manual, {
-            ...config,
-            title: config.manualTitle
-          })
-        },
-        {
-          filename: "top-langs-vibe.svg",
-          content: renderSvg(groups.vibe, {
-            ...config,
-            title: config.vibeTitle
-          })
-        }
-      ],
+      svgs: [{
+        filename: "top-langs.svg",
+        content: renderSplitSvg(groups, config)
+      }],
       outputFiles: {
-        svg: "",
-        manualSvg: "top-langs-manual.svg",
-        vibeSvg: "top-langs-vibe.svg"
+        svg: "top-langs.svg",
+        manualSvg: "",
+        vibeSvg: ""
       }
     };
   }

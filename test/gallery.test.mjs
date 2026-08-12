@@ -15,7 +15,7 @@ test("generates a deterministic preview for every style and theme", async (t) =>
 
   await generateGallery(outputDirectory);
 
-  assert.equal(GALLERY_PREVIEWS.length, 13);
+  assert.equal(GALLERY_PREVIEWS.length, 14);
   assert.deepEqual(
     new Set(GALLERY_PREVIEWS.map(({ style }) => style)),
     new Set([
@@ -43,8 +43,16 @@ test("generates a deterministic preview for every style and theme", async (t) =>
     );
     assert.match(svg, new RegExp('data-style="' + preview.style + '"'));
     assert.match(svg, new RegExp('data-theme="' + preview.theme + '"'));
-    assert.match(svg, />TypeScript<\/text>/);
-    assert.match(svg, />42\.0%<\/text>/);
+    if (preview.codingMode === "split") {
+      assert.match(svg, /data-coding-mode="split"/);
+      assert.match(svg, />Manual Coding<\/text>/);
+      assert.match(svg, />Vibe Coding<\/text>/);
+      assert.match(svg, /data-group="manual" data-share="22"/);
+      assert.match(svg, /data-group="vibe" data-share="78"/);
+    } else {
+      assert.match(svg, />TypeScript<\/text>/);
+      assert.match(svg, />42\.0%<\/text>/);
+    }
   }
 });
 

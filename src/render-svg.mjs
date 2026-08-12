@@ -41,7 +41,7 @@ export function renderSvg(stats, configInput) {
     '  <title id="title">' + escapeXml(config.title) + "</title>",
     '  <desc id="description">'
       + buildDescription(stats, descriptionLanguages, style) + "</desc>",
-    ...styleLines(theme),
+    ...renderStyleLines(theme),
     '  <rect class="card" x="0.5" y="0.5" width="'
       + (config.width - 1) + '" height="' + (layout.height - 1)
       + '" rx="14" fill="' + theme.canvas + '" stroke="'
@@ -80,7 +80,7 @@ function buildDescription(stats, languages, style) {
   return escapeXml(scope + " " + breakdown + "." + quantization);
 }
 
-function styleLines(theme) {
+export function renderStyleLines(theme) {
   return [
     "  <style>",
     "    text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }",

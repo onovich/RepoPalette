@@ -182,14 +182,14 @@ with:
 - 未出现在手动列表中的语言进入 `vibe`；
 - 配置只改变统计分组和展示，不改变原始语言字节数；
 - 审计数据标记 `source: user-declared`，并记录原始手动列表与两个分组的字节数；
-- 默认模式继续生成 `top-langs.svg`；分组模式生成 `top-langs-manual.svg` 和 `top-langs-vibe.svg`。
+- 默认与分组模式都生成 `top-langs.svg`。分组模式在同一外框中共享标题、仓库范围、总占比带和水印，再分别展示两组的组内语言构成；成功升级后清理旧的双 SVG 文件。
 - 分组标题默认是 `Manual Coding` 与 `Vibe Coding`，可分别通过 `manual-title` 和 `vibe-title` 修改；单图模式的 `title` 保持原有语义。
 
 ### 展示方式
 
-- Manual Coding 与 Vibe Coding 各自生成一张完整图表，所有现有布局和主题都可使用；
-- 每张图内的语言百分比以该组字节数为分母，因此构成图仍准确闭合到 100%；
-- 标题下方同时显示该组占全部语言字节的比例，使两张图仍可横向比较；
+- Manual Coding 与 Vibe Coding 在同一张完整图表中分栏展示，所有现有布局和主题都可使用；
+- 每个分区内的语言百分比以该组字节数为分母，因此构成图仍准确闭合到 100%；
+- 两个分区共用一条总览带，显示各组占全部语言字节的比例，避免重复标题、仓库数、外框和水印；
 - 可访问性描述明确说明分组由用户声明，不暗示工具做过 AI 代码检测。
 
 ### 已知限制
@@ -213,7 +213,7 @@ with:
 
 ## 7. 当前产品顺序
 
-当前进度（2026-08-13）：第 1、2、3、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明生成 Manual Coding 与 Vibe Coding 两张图。安装体验通过公共 reusable workflow 压缩为“一个短文件、一次提交”，首次提交自动生成并幂等插入 README，同时提供 AI 安装约定。Marketplace 上架仍待完成。
+当前进度（2026-08-13）：第 1、2、3、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明合并到一张 Manual Coding / Vibe Coding 图中。安装体验通过公共 reusable workflow 压缩为“一个短文件、一次提交”，首次提交自动生成并幂等插入 README，同时提供 AI 安装约定。Marketplace 上架仍待完成。
 
 1. 将现有统计核心迁入独立仓库并包装成可复用 Action；
 2. 实现 `orbit`、`constellation` 和重制的 `bars`；

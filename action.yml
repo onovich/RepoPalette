@@ -40,19 +40,19 @@ inputs:
     required: false
     default: ""
   title:
-    description: Title rendered in the single SVG when coding-mode is off.
+    description: Title rendered once at the top of the SVG.
     required: false
     default: Most Used Languages
   width:
-    description: SVG width from 320 to 800 pixels.
+    description: Base SVG width from 320 to 800 pixels. Split mode combines two panels into a 640 to 800 pixel card.
     required: false
     default: "400"
   show-branding:
-    description: Show a small RepoPalette watermark in each SVG.
+    description: Show one small RepoPalette watermark in the SVG.
     required: false
     default: "true"
   coding-mode:
-    description: "Programming-method display: off for one chart, or split for separate Manual Coding and Vibe Coding charts. Classification is always user-declared."
+    description: "Programming-method display: off for one composition, or split for one combined Manual Coding and Vibe Coding view. Classification is always user-declared."
     required: false
     default: off
   manual-languages:
@@ -60,11 +60,11 @@ inputs:
     required: false
     default: ""
   manual-title:
-    description: Title rendered in the manual SVG when coding-mode is split.
+    description: Manual section title when coding-mode is split.
     required: false
     default: Manual Coding
   vibe-title:
-    description: Title rendered in the vibe SVG when coding-mode is split.
+    description: Vibe section title when coding-mode is split.
     required: false
     default: Vibe Coding
   update-readme:
@@ -74,11 +74,11 @@ inputs:
 
 outputs:
   svg-path:
-    description: Absolute path to the single SVG when coding-mode is off; empty in split mode.
+    description: Absolute path to the generated SVG in both coding modes.
   manual-svg-path:
-    description: Absolute path to the Manual Coding SVG in split mode; otherwise empty.
+    description: Deprecated compatibility output; always empty because split mode now uses one SVG.
   vibe-svg-path:
-    description: Absolute path to the Vibe Coding SVG in split mode; otherwise empty.
+    description: Deprecated compatibility output; always empty because split mode now uses one SVG.
   data-path:
     description: Absolute path to the generated audit JSON.
   readme-path:

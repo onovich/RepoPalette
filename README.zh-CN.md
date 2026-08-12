@@ -92,11 +92,11 @@ jobs:
 <details>
 <summary><strong>它会评价编程能力或检测 AI 代码吗？</strong></summary>
 
-不会。它只展示语言构成，不评价能力、投入时间、代码质量或作者身份。可选的 Manual/Vibe 双图也只是由你本人声明的分组。
+不会。它只展示语言构成，不评价能力、投入时间、代码质量或作者身份。可选的 Manual/Vibe 合并视图也只是由你本人声明的分组。
 </details>
 
 ## 需要更多控制？
 
-默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 双图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
 
 参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。
