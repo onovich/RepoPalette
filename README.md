@@ -48,7 +48,7 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@af29b0fb5f2273fb71bb410517ac1b3e97b93c63 # v0.3.0 implementation
+        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
         with:
           style: orbit
           theme: aurora
@@ -86,7 +86,7 @@ Change the two values in the `with` block:
 
 You can also change the title, width, number of languages, and repository or language filters. The small `RepoPalette` watermark is shown by default; set `show-branding: false` to remove it. See [`action.yml`](action.yml) for every option.
 
-To create separate **Manual Coding** and **Vibe Coding** charts, set `coding-mode: split` and list the languages you personally classify as manual in `manual-languages` (for example, `"C#,ShaderLab,HLSL,GLSL"`). All remaining and newly discovered languages go to Vibe Coding. Commit the paths from `manual-svg-path`, `vibe-svg-path`, and `data-path`, then embed `assets/top-langs-manual.svg` and `assets/top-langs-vibe.svg`. This is an opt-in display rule, not AI detection.
+To create separate **Manual Coding** and **Vibe Coding** charts, set `coding-mode: split` and list the languages you personally classify as manual in `manual-languages` (for example, `"C#,ShaderLab,HLSL,GLSL"`). All remaining and newly discovered languages go to Vibe Coding. The two titles can be changed with `manual-title` and `vibe-title`. Commit the paths from `manual-svg-path`, `vibe-svg-path`, and `data-path`, then embed `assets/top-langs-manual.svg` and `assets/top-langs-vibe.svg`. This is an opt-in display rule, not AI detection.
 
 ## What gets counted?
 

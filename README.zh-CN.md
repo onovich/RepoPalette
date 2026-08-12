@@ -48,7 +48,7 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@af29b0fb5f2273fb71bb410517ac1b3e97b93c63 # v0.3.0 implementation
+        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
         with:
           style: orbit
           theme: aurora
@@ -86,7 +86,7 @@ jobs:
 
 你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。图中默认显示小号 `RepoPalette` 署名；设置 `show-branding: false` 可将其关闭。全部选项见 [`action.yml`](action.yml)。
 
-如需分别生成 **Manual Coding** 与 **Vibe Coding** 两张图，设置 `coding-mode: split`，并在 `manual-languages` 中列出你本人声明为手动编码的语言（例如 `"C#,ShaderLab,HLSL,GLSL"`）。其余语言以及以后新出现的语言都会进入 Vibe Coding。提交 `manual-svg-path`、`vibe-svg-path` 与 `data-path` 指向的文件，再嵌入 `assets/top-langs-manual.svg` 和 `assets/top-langs-vibe.svg`。这只是用户主动选择的展示规则，不是 AI 检测。
+如需分别生成 **Manual Coding** 与 **Vibe Coding** 两张图，设置 `coding-mode: split`，并在 `manual-languages` 中列出你本人声明为手动编码的语言（例如 `"C#,ShaderLab,HLSL,GLSL"`）。其余语言以及以后新出现的语言都会进入 Vibe Coding；可通过 `manual-title` 与 `vibe-title` 修改两张图的标题。提交 `manual-svg-path`、`vibe-svg-path` 与 `data-path` 指向的文件，再嵌入 `assets/top-langs-manual.svg` 和 `assets/top-langs-vibe.svg`。这只是用户主动选择的展示规则，不是 AI 检测。
 
 ## 统计范围
 
