@@ -9,12 +9,12 @@ import {
 const UNIT_COUNT = 200;
 const MATRIX_LAYOUT = Object.freeze({
   role: "matrix-unit",
-  renderUnits: renderMatrixUnits,
+  points: matrixPoints,
   legendY: 292
 });
 const BEAD_HALO_LAYOUT = Object.freeze({
   role: "bead-halo-unit",
-  renderUnits: renderHaloUnits,
+  points: haloPoints,
   legendY: 310
 });
 
@@ -37,7 +37,13 @@ function renderUnits({ stats, config, languages, theme }, layout) {
   );
   const lines = ['  <g data-role="unit-field" data-unit-share="0.5">'];
 
-  layout.renderUnits(lines, config.width, parts, unitGroups, layout.role);
+  emitGroupedUnits(
+    lines,
+    parts,
+    unitGroups,
+    layout.points(config.width),
+    layout.role
+  );
   lines.push("  </g>");
   const legend = renderCompositionLegend({
     width: config.width,
@@ -49,36 +55,25 @@ function renderUnits({ stats, config, languages, theme }, layout) {
   return { height: legend.height, lines };
 }
 
-function renderMatrixUnits(lines, width, parts, unitGroups, role) {
+function matrixPoints(width) {
   const columns = 20;
   const gap = Math.max(2, Math.min(4, (width - 320) / 120 + 2));
   const size = Math.min(13, (width - 48 - gap * (columns - 1)) / columns);
   const gridWidth = columns * size + (columns - 1) * gap;
   const startX = (width - gridWidth) / 2;
   const startY = 92;
-  let currentGroup = -1;
-  unitGroups.forEach((groupIndex, index) => {
-    const part = parts[groupIndex];
-    if (groupIndex !== currentGroup) {
-      if (currentGroup !== -1) {
-        lines.push("    </g>");
-      }
-      lines.push("    <g " + compositionAttributes(part) + ">");
-      currentGroup = groupIndex;
-    }
+  return Array.from({ length: UNIT_COUNT }, (_, index) => {
     const column = index % columns;
     const row = Math.floor(index / columns);
-    lines.push(
-      '      <circle data-role="' + role + '" cx="'
-        + svgNumber(startX + column * (size + gap) + size / 2)
-        + '" cy="' + svgNumber(startY + row * (size + gap) + size / 2)
-        + '" r="' + svgNumber(size / 2) + '" fill="' + part.color + '"/>'
-    );
+    return {
+      x: startX + column * (size + gap) + size / 2,
+      y: startY + row * (size + gap) + size / 2,
+      radius: size / 2
+    };
   });
-  lines.push("    </g>");
 }
 
-function renderHaloUnits(lines, width, parts, unitGroups, role) {
+function haloPoints(width) {
   const centerX = width / 2;
   const centerY = 190;
   const outerRadius = Math.min(105, (width - 82) / 2);
@@ -97,20 +92,25 @@ function renderHaloUnits(lines, width, parts, unitGroups, role) {
     })
   ).sort((first, second) => first.angle - second.angle);
   const radius = Math.max(2.5, outerRadius * 0.036);
+  return points.map((point) => ({ ...point, radius }));
+}
 
+function emitGroupedUnits(lines, parts, unitGroups, points, role) {
   let currentGroup = -1;
   points.forEach((point, index) => {
-    const part = parts[unitGroups[index]];
-    if (unitGroups[index] !== currentGroup) {
+    const groupIndex = unitGroups[index];
+    const part = parts[groupIndex];
+    if (groupIndex !== currentGroup) {
       if (currentGroup !== -1) {
         lines.push("    </g>");
       }
       lines.push("    <g " + compositionAttributes(part) + ">");
-      currentGroup = unitGroups[index];
+      currentGroup = groupIndex;
     }
     lines.push(
       '      <circle data-role="' + role + '" cx="' + svgNumber(point.x)
-        + '" cy="' + svgNumber(point.y) + '" r="' + svgNumber(radius)
+        + '" cy="' + svgNumber(point.y) + '" r="'
+        + svgNumber(point.radius)
         + '" fill="' + part.color + '"/>'
     );
   });

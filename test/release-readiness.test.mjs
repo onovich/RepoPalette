@@ -117,6 +117,10 @@ test("runs CI for semantic version tags and checks the package version", async (
 
   assert.match(workflow, /push:\s*\n\s+branches:\s*\n\s+- main/);
   assert.match(workflow, /tags:\s*\n\s+- "v\*"/);
+  assert.match(
+    workflow,
+    /name: Check out repository\s*\n\s+uses: actions\/checkout@[0-9a-f]{40}[^\n]*\n\s+with:\s*\n\s+fetch-depth: 0/
+  );
   assert.match(workflow, /if: github\.ref_type == 'tag'/);
   assert.match(workflow, /GITHUB_REF_NAME/);
   assert.match(workflow, /package\.json/);
