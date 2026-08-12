@@ -1,0 +1,17 @@
+{
+    "schemaVersion":  1,
+    "initializedMarker":  "codex-project-git-workflow: initialized",
+    "initializedAt":  "2026-08-12 18:55:51 +08:00",
+    "projectName":  "RepoPalette",
+    "repoRoot":  "C:/Users/Administrator/Documents/Playground 2/RepoPalette",
+    "safeDirectory":  "C:/Users/Administrator/Documents/Playground 2/RepoPalette",
+    "statusCommand":  "git -c \"safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette\" status --short --branch",
+    "validationCommands":  [
+
+                           ],
+    "stagingPolicy":  "ask each time",
+    "commitCommand":  "",
+    "pushCommand":  "git -c \"safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette\" push -u origin HEAD",
+    "docsRequirement":  "",
+    "forbiddenCommands":  ""
+}
