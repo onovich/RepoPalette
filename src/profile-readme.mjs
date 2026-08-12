@@ -86,7 +86,14 @@ function markdownPath(root, filePath) {
   if (path === "" || path === ".." || path.startsWith(".." + sep)) {
     throw new Error("Generated SVG paths must stay inside the workspace");
   }
-  return "./" + path.split(sep).join("/");
+  return "./" + path.split(sep).map(encodePathSegment).join("/");
+}
+
+function encodePathSegment(segment) {
+  return encodeURIComponent(segment).replace(
+    /[!'()*]/g,
+    (character) => "%" + character.charCodeAt(0).toString(16).toUpperCase()
+  );
 }
 
 async function readOrCreate(path, username) {

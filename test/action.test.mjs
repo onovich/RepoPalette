@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { runAction } from "../src/action-runner.mjs";
+import { updateProfileReadme } from "../src/profile-readme.mjs";
 
 test("runs from GitHub context without a personal access token", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-action-"));
@@ -260,6 +261,38 @@ test("rejects reversed README markers instead of reporting success", async (t) =
     /one complete, ordered RepoPalette block or none/
   );
   assert.equal(await readFile(readmePath, "utf8"), originalReadme);
+});
+
+test("encodes custom output paths in Markdown and HTML image targets", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-paths-"));
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  await updateProfileReadme({
+    workspace,
+    username: "onovich",
+    codingMode: "split",
+    manualSvgPath: join(
+      workspace,
+      "profile cards",
+      'manual #"chart).svg'
+    ),
+    vibeSvgPath: join(
+      workspace,
+      "profile cards",
+      "vibe (chart).svg"
+    )
+  });
+
+  const readme = await readFile(join(workspace, "README.md"), "utf8");
+  assert.match(
+    readme,
+    /src="\.\/profile%20cards\/manual%20%23%22chart%29\.svg"/
+  );
+  assert.match(
+    readme,
+    /src="\.\/profile%20cards\/vibe%20%28chart%29\.svg"/
+  );
+  assert.doesNotMatch(readme, /src="[^"]*[ #()]/);
 });
 
 test("rejects an unknown renderer instead of silently changing the design", async () => {
