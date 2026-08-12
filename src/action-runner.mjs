@@ -12,7 +12,9 @@ const DEFAULTS = Object.freeze({
   width: 400,
   outputDirectory: "assets",
   showBranding: true,
-  codingMode: "off"
+  codingMode: "off",
+  manualTitle: "Manual Coding",
+  vibeTitle: "Vibe Coding"
 });
 
 export async function runAction({
@@ -106,7 +108,9 @@ function readInputs(env, cwd) {
         DEFAULTS.showBranding
       ),
       codingMode: input(env, "coding-mode") || DEFAULTS.codingMode,
-      manualLanguages: listInput(env, "manual-languages")
+      manualLanguages: listInput(env, "manual-languages"),
+      manualTitle: input(env, "manual-title") || DEFAULTS.manualTitle,
+      vibeTitle: input(env, "vibe-title") || DEFAULTS.vibeTitle
     }
   };
 }

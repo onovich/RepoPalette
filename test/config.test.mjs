@@ -16,7 +16,9 @@ test("fills the documented defaults for a valid username", () => {
     theme: "light",
     showBranding: true,
     codingMode: "off",
-    manualLanguages: []
+    manualLanguages: [],
+    manualTitle: "Manual Coding",
+    vibeTitle: "Vibe Coding"
   });
 });
 
@@ -25,7 +27,9 @@ test("accepts opt-in coding groups and a removable brand watermark", () => {
     username: "onovich",
     showBranding: false,
     codingMode: "split",
-    manualLanguages: ["C#", "ShaderLab", "HLSL", "GLSL"]
+    manualLanguages: ["C#", "ShaderLab", "HLSL", "GLSL"],
+    manualTitle: "Handwritten",
+    vibeTitle: "AI-assisted"
   }), {
     username: "onovich",
     top: 6,
@@ -38,7 +42,9 @@ test("accepts opt-in coding groups and a removable brand watermark", () => {
     theme: "light",
     showBranding: false,
     codingMode: "split",
-    manualLanguages: ["C#", "ShaderLab", "HLSL", "GLSL"]
+    manualLanguages: ["C#", "ShaderLab", "HLSL", "GLSL"],
+    manualTitle: "Handwritten",
+    vibeTitle: "AI-assisted"
   });
 });
 
@@ -102,6 +108,10 @@ test("rejects malformed, out-of-range, and unknown configuration", () => {
   assert.throws(
     () => validateConfig({ username: "onovich", codingMode: "detect" }),
     /codingMode must be one of: off, split/
+  );
+  assert.throws(
+    () => validateConfig({ username: "onovich", manualTitle: "" }),
+    /manualTitle must be a non-empty string/
   );
   assert.throws(
     () => validateConfig({

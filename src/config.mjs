@@ -11,7 +11,9 @@ const DEFAULT_CONFIG = Object.freeze({
   theme: "light",
   showBranding: true,
   codingMode: "off",
-  manualLanguages: []
+  manualLanguages: [],
+  manualTitle: "Manual Coding",
+  vibeTitle: "Vibe Coding"
 });
 
 export function validateConfig(input) {
@@ -39,7 +41,9 @@ export function validateConfig(input) {
     theme: input.theme ?? DEFAULT_CONFIG.theme,
     showBranding: input.showBranding ?? DEFAULT_CONFIG.showBranding,
     codingMode: input.codingMode ?? DEFAULT_CONFIG.codingMode,
-    manualLanguages: input.manualLanguages ?? DEFAULT_CONFIG.manualLanguages
+    manualLanguages: input.manualLanguages ?? DEFAULT_CONFIG.manualLanguages,
+    manualTitle: input.manualTitle ?? DEFAULT_CONFIG.manualTitle,
+    vibeTitle: input.vibeTitle ?? DEFAULT_CONFIG.vibeTitle
   };
 
   if (typeof config.username !== "string" || config.username.trim() === "") {
@@ -73,6 +77,12 @@ export function validateConfig(input) {
   }
   if (config.codingMode === "off" && config.manualLanguages.length > 0) {
     throw new TypeError("manualLanguages requires codingMode split");
+  }
+  for (const titleName of ["manualTitle", "vibeTitle"]) {
+    if (typeof config[titleName] !== "string"
+        || config[titleName].trim() === "") {
+      throw new TypeError(titleName + " must be a non-empty string");
+    }
   }
 
   return {

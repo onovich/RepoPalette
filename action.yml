@@ -40,7 +40,7 @@ inputs:
     required: false
     default: ""
   title:
-    description: Title rendered in the SVG.
+    description: Title rendered in the single SVG when coding-mode is off.
     required: false
     default: Most Used Languages
   width:
@@ -59,6 +59,14 @@ inputs:
     description: "Comma-separated languages declared as manually coded when coding-mode is split. Every remaining language is placed in the Vibe Coding chart."
     required: false
     default: ""
+  manual-title:
+    description: Title rendered in the manual SVG when coding-mode is split.
+    required: false
+    default: Manual Coding
+  vibe-title:
+    description: Title rendered in the vibe SVG when coding-mode is split.
+    required: false
+    default: Vibe Coding
 
 outputs:
   svg-path:

@@ -183,6 +183,7 @@ with:
 - 配置只改变统计分组和展示，不改变原始语言字节数；
 - 审计数据标记 `source: user-declared`，并记录原始手动列表与两个分组的字节数；
 - 默认模式继续生成 `top-langs.svg`；分组模式生成 `top-langs-manual.svg` 和 `top-langs-vibe.svg`。
+- 分组标题默认是 `Manual Coding` 与 `Vibe Coding`，可分别通过 `manual-title` 和 `vibe-title` 修改；单图模式的 `title` 保持原有语义。
 
 ### 展示方式
 

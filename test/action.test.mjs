@@ -76,6 +76,8 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
       INPUT_USERNAME: "onovich",
       "INPUT_CODING-MODE": "split",
       "INPUT_MANUAL-LANGUAGES": "C#, ShaderLab, HLSL, GLSL",
+      "INPUT_MANUAL-TITLE": "Handwritten",
+      "INPUT_VIBE-TITLE": "AI-assisted",
       "INPUT_SHOW-BRANDING": "false",
       INPUT_STYLE: "ribbon",
       INPUT_THEME: "paper",
@@ -106,7 +108,7 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
   );
   const outputs = await readFile(outputFile, "utf8");
 
-  assert.match(manualSvg, /<title id="title">Manual Coding<\/title>/);
+  assert.match(manualSvg, /<title id="title">Handwritten<\/title>/);
   assert.match(manualSvg, />C#<\/text>/);
   assert.match(manualSvg, />ShaderLab<\/text>/);
   assert.doesNotMatch(manualSvg, />TypeScript<\/text>/);
@@ -114,7 +116,7 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
   assert.match(manualSvg, /40\.0% OF BYTES/);
   assert.doesNotMatch(manualSvg, />RepoPalette<\/text>/);
 
-  assert.match(vibeSvg, /<title id="title">Vibe Coding<\/title>/);
+  assert.match(vibeSvg, /<title id="title">AI-assisted<\/title>/);
   assert.match(vibeSvg, />TypeScript<\/text>/);
   assert.match(vibeSvg, />Python<\/text>/);
   assert.doesNotMatch(vibeSvg, />C#<\/text>/);

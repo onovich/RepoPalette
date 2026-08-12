@@ -114,6 +114,8 @@ test("keeps the action metadata ready for a tagged preview", async () => {
     /coding-mode:[\s\S]*?default: off/
   );
   assert.match(action, /manual-languages:/);
+  assert.match(action, /manual-title:[\s\S]*?default: Manual Coding/);
+  assert.match(action, /vibe-title:[\s\S]*?default: Vibe Coding/);
   assert.match(action, /^  manual-svg-path:$/m);
   assert.match(action, /^  vibe-svg-path:$/m);
   assert.match(action, /^\s+using: node24$/m);

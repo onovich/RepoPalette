@@ -1,3 +1,5 @@
+import { percentageOf } from "./percentage.mjs";
+
 export function aggregateLanguages(repositories, config) {
   const totals = new Map();
   const excludedRepositories = new Set(config.excludeRepositories);
@@ -68,7 +70,7 @@ export function aggregateLanguages(repositories, config) {
     )
     .map((language) => ({
       ...language,
-      percentage: roundPercentage(language.bytes, totalBytes)
+      percentage: percentageOf(language.bytes, totalBytes)
     }));
 
   return {
@@ -78,14 +80,6 @@ export function aggregateLanguages(repositories, config) {
     totalBytes,
     languages
   };
-}
-
-function roundPercentage(bytes, totalBytes) {
-  if (totalBytes === 0) {
-    return 0;
-  }
-
-  return Math.round((bytes / totalBytes) * 1_000_000) / 10_000;
 }
 
 function compareNames(left, right) {

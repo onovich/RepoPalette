@@ -77,14 +77,14 @@ function renderOutputs(stats, config) {
           filename: "top-langs-manual.svg",
           content: renderSvg(groups.manual, {
             ...config,
-            title: "Manual Coding"
+            title: config.manualTitle
           })
         },
         {
           filename: "top-langs-vibe.svg",
           content: renderSvg(groups.vibe, {
             ...config,
-            title: "Vibe Coding"
+            title: config.vibeTitle
           })
         }
       ],

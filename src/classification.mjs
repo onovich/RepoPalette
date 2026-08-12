@@ -1,3 +1,5 @@
+import { percentageOf } from "./percentage.mjs";
+
 export function splitCodingStats(stats, manualLanguages) {
   const manualNames = new Set(manualLanguages);
   const manual = buildGroup(stats, "manual", (language) =>
@@ -39,7 +41,7 @@ function buildGroup(stats, group, predicate) {
   );
   const languages = sourceLanguages.map((language) => ({
     ...language,
-    percentage: percentage(language.bytes, totalBytes)
+    percentage: percentageOf(language.bytes, totalBytes)
   }));
   return {
     ...stats,
@@ -48,7 +50,7 @@ function buildGroup(stats, group, predicate) {
     classification: {
       group,
       source: "user-declared",
-      percentageOfTotal: percentage(totalBytes, stats.totalBytes)
+      percentageOfTotal: percentageOf(totalBytes, stats.totalBytes)
     }
   };
 }
@@ -59,11 +61,4 @@ function auditGroup(stats) {
     percentage: stats.classification.percentageOfTotal,
     languages: stats.languages.map((language) => language.name)
   };
-}
-
-function percentage(bytes, totalBytes) {
-  if (totalBytes === 0) {
-    return 0;
-  }
-  return Math.round((bytes / totalBytes * 100) * 10_000) / 10_000;
 }

@@ -8,6 +8,8 @@ import {
 } from "node:fs/promises";
 import { join } from "node:path";
 
+import { percentageOf } from "./percentage.mjs";
+
 const AUDIT_KEYS = [
   "schemaVersion",
   "username",
@@ -49,16 +51,17 @@ export async function writeValidatedOutputs({
   expectedAudit
 }) {
   const svgOutputs = svgs ?? [{ filename: "top-langs.svg", content: svg }];
-  validateSvgOutputs(svgOutputs);
+  validateSvgOutputs(svgOutputs, expectedAudit);
   validateAuditJson(json, expectedAudit);
   await replaceOutputs({ outputDirectory, svgOutputs, json });
 }
 
-function validateSvgOutputs(outputs) {
+function validateSvgOutputs(outputs, expectedAudit) {
   if (!Array.isArray(outputs) || outputs.length < 1) {
     throw new Error("At least one generated SVG output is required");
   }
   const names = new Set();
+  const documents = new Map();
   for (const output of outputs) {
     if (!output || typeof output !== "object"
         || !/^top-langs(?:-(?:manual|vibe))?\.svg$/.test(output.filename)) {
@@ -68,7 +71,37 @@ function validateSvgOutputs(outputs) {
       throw new Error("Generated SVG output filenames must be unique");
     }
     names.add(output.filename);
-    validateSvg(output.content);
+    documents.set(output.filename, validateSvg(output.content));
+  }
+
+  const mode = expectedAudit?.classification?.mode;
+  if (mode === "split") {
+    const required = ["top-langs-manual.svg", "top-langs-vibe.svg"];
+    if (names.size !== required.length
+        || required.some((name) => !names.has(name))) {
+      throw new Error(
+        "split mode requires both manual and vibe SVG outputs"
+      );
+    }
+    for (const group of ["manual", "vibe"]) {
+      const attributes = documents.get("top-langs-" + group + ".svg")
+        .root.attributes;
+      if (attributes["data-coding-group"] !== group) {
+        throw new Error(
+          group + ' SVG must declare data-coding-group="' + group + '"'
+        );
+      }
+    }
+  } else if (mode === "off") {
+    if (names.size !== 1 || !names.has("top-langs.svg")) {
+      throw new Error("off mode requires the single top-langs SVG output");
+    }
+    if (documents.get("top-langs.svg").root.attributes["data-coding-group"]
+        !== undefined) {
+      throw new Error("off mode SVG must not declare a coding group");
+    }
+  } else {
+    throw new Error("Generated SVG outputs require a known classification mode");
   }
 }
 
@@ -106,6 +139,7 @@ function validateSvg(svg) {
       || viewBox[3] !== height) {
     throw new Error("Generated SVG viewBox must match its width and height");
   }
+  return document;
 }
 
 function parseSvg(svg) {
@@ -383,7 +417,7 @@ function validateClassification(classification, audit) {
       assigned.add(name);
       languageBytes += language.bytes;
     }
-    const expectedPercentage = percentage(group.totalBytes, audit.totalBytes);
+    const expectedPercentage = percentageOf(group.totalBytes, audit.totalBytes);
     if (languageBytes !== group.totalBytes
         || Math.abs(group.percentage - expectedPercentage) > 0.000_001) {
       throw new Error("Generated audit JSON coding group totals do not match");
@@ -394,12 +428,6 @@ function validateClassification(classification, audit) {
       || assigned.size !== audit.languages.length) {
     throw new Error("Generated audit JSON coding groups are incomplete");
   }
-}
-
-function percentage(bytes, totalBytes) {
-  return totalBytes === 0
-    ? 0
-    : Math.round((bytes / totalBytes * 100) * 10_000) / 10_000;
 }
 
 function validateFilters(filters) {
