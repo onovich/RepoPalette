@@ -7,15 +7,23 @@ const root = new URL("../", import.meta.url);
 test("keeps the public install example aligned with the package version", async () => {
   const packageJson = JSON.parse(await readText("package.json"));
   const readme = await readText("README.md");
+  const chineseReadme = await readText("README.zh-CN.md");
   const changelog = await readText("CHANGELOG.md");
   const versionTag = "v" + packageJson.version;
 
-  assert.match(readme, /uses: onovich\/RepoPalette@[0-9a-f]{40}/);
-  assert.match(readme, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
-  assert.match(readme, /permissions:\s*\n\s+contents: write/);
-  assert.match(
-    readme,
-    /uses: actions\/checkout@[0-9a-f]{40}\s+# v\d+\.\d+\.\d+/
+  for (const document of [readme, chineseReadme]) {
+    assert.match(document, /uses: onovich\/RepoPalette@[0-9a-f]{40}/);
+    assert.match(document, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
+    assert.match(document, /permissions:\s*\n\s+contents: write/);
+    assert.match(
+      document,
+      /uses: actions\/checkout@[0-9a-f]{40}\s+# v\d+\.\d+\.\d+/
+    );
+  }
+  assert.equal(
+    fencedBlock(readme, "yaml"),
+    fencedBlock(chineseReadme, "yaml"),
+    "English and Chinese quick starts must stay identical"
   );
   assert.match(changelog, new RegExp(
     "^## \\[" + escapeRegExp(packageJson.version) + "\\]",
@@ -58,6 +66,7 @@ test("runs CI for semantic version tags and checks the package version", async (
 test("keeps release-facing text as UTF-8 without a byte-order mark", async () => {
   for (const path of [
     "README.md",
+    "README.zh-CN.md",
     "CHANGELOG.md",
     ".gitattributes",
     ".github/workflows/ci.yml",
@@ -75,41 +84,35 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
   }
 });
 
-test("keeps the README in paired English and Chinese blocks", async () => {
+test("keeps English as the concise default with a Chinese entry point", async () => {
   const readme = await readText("README.md");
-  assertPairedReadme(readme);
-  assertPairedReadme(readme.replace(/\r?\n/g, "\r\n"));
+  const chineseReadme = await readText("README.zh-CN.md");
+
+  assert.match(readme, /^\[简体中文\]\(README\.zh-CN\.md\)$/m);
+  assert.match(chineseReadme, /^\[English\]\(README\.md\)$/m);
+  assert.match(chineseReadme, /\p{Script=Han}/u);
+  assert.doesNotMatch(
+    readme.replace("[简体中文](README.zh-CN.md)", ""),
+    /\p{Script=Han}/u,
+    "the default README should remain English-only outside the language link"
+  );
+  assert.doesNotMatch(readme, /<br\/>\*\*/);
+  assert.ok(
+    readme.split(/\r?\n/).length <= 120,
+    "the default README should remain quick to scan"
+  );
+  assert.ok(
+    Buffer.byteLength(readme, "utf8") <= 9_000,
+    "the default README should remain concise"
+  );
 });
 
-function assertPairedReadme(readme) {
-  let insideCodeFence = false;
-
-  for (const [index, line] of readme.split(/\r?\n/).entries()) {
-    if (line.startsWith("```")) {
-      insideCodeFence = !insideCodeFence;
-      continue;
-    }
-    if (insideCodeFence || line === "" || line.startsWith("[![")) {
-      continue;
-    }
-    if (line.startsWith("#")) {
-      assert.doesNotMatch(line, /\p{Script=Han}/u, "heading " + (index + 1));
-      continue;
-    }
-
-    assert.match(
-      line,
-      /<br\/>\*\*.+\*\*$/u,
-      "README line " + (index + 1) + " must pair English with bold Chinese"
-    );
-    const translation = line.split("<br/>").at(-1);
-    assert.equal(
-      translation.slice(2, -2).includes("**"),
-      false,
-      "README line " + (index + 1) + " contains nested bold markup"
-    );
-  }
-  assert.equal(insideCodeFence, false, "README has an unclosed code fence");
+function fencedBlock(markdown, language) {
+  const match = markdown.match(new RegExp(
+    "```" + escapeRegExp(language) + "\\r?\\n([\\s\\S]*?)\\r?\\n```"
+  ));
+  assert.ok(match, "missing " + language + " code block");
+  return match[1].replace(/\r\n/g, "\n");
 }
 
 function readText(path) {
