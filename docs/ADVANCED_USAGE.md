@@ -9,7 +9,7 @@ Add a `with` block to the `update` job:
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@3a79027aba65cb621d856ae38b9a60a88f1c07b3 # v0.5.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
     with:
       style: matrix
       theme: midnight
@@ -26,7 +26,7 @@ This is an optional grouping declared by the profile owner, not AI detection. La
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@3a79027aba65cb621d856ae38b9a60a88f1c07b3 # v0.5.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
     with:
       coding-mode: split
       manual-languages: "C#,ShaderLab,HLSL,GLSL"
@@ -41,7 +41,7 @@ Use the Action directly when you need titles, width, archived repositories, or r
 ```yaml
 - name: Generate RepoPalette
   id: repopalette
-  uses: onovich/RepoPalette@3a7d4fed98b454cb39810e97d4381259d47e851a # v0.5.0 implementation
+  uses: onovich/RepoPalette@6f8085196d98ec020aafb6643c90874d088cddd3 # v0.5.0 implementation
   with:
     style: ribbon
     theme: paper
