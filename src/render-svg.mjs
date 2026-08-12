@@ -3,7 +3,9 @@ import {
   compositionLanguages,
   escapeXml,
   formatPercentage,
-  truncateLabel
+  formatPercentageMarkup,
+  truncateLabel,
+  withExactBytePercentages
 } from "./renderers/common.mjs";
 import { getStyleDefinition } from "./renderers/index.mjs";
 
@@ -22,7 +24,10 @@ export function renderSvg(stats, configInput) {
     throw new TypeError("unknown style: " + config.style);
   }
   const theme = getTheme(config.theme);
-  const languages = stats.languages.slice(0, config.top);
+  const languages = withExactBytePercentages(
+    stats.languages.slice(0, config.top),
+    stats.totalBytes
+  );
   const descriptionLanguages = style.composition
     ? compositionLanguages(languages, stats.totalBytes, theme)
     : languages;
@@ -114,7 +119,7 @@ function headerLines(stats, config, theme) {
     ? stats.repositoryCount
     : stats.includedRepositoryCount;
   const meta = stats.classification
-    ? formatPercentage(stats.classification.percentageOfTotal)
+    ? formatPercentageMarkup(stats.classification.percentageOfTotal)
       + " OF BYTES · " + stats.includedRepositoryCount + "/"
       + repositoryCount + " REPOS"
     : stats.includedRepositoryCount + " OF " + repositoryCount

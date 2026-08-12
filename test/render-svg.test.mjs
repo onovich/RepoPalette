@@ -181,6 +181,74 @@ test("the combined overview and group legends retain both percentage bases", () 
   assert.doesNotMatch(unbranded, />RepoPalette<\/text>/);
 });
 
+test("shows a non-zero sub-tenth share instead of rounding it to zero", () => {
+  const stats = fixtureStats({
+    totalBytes: 11_000_001,
+    languages: [
+      { name: "C#", bytes: 5_500_000, percentage: 50, color: "#178600" },
+      { name: "TypeScript", bytes: 5_500_000, percentage: 50, color: "#3178C6" },
+      { name: "GLSL", bytes: 1, percentage: 0, color: "#5686a5" }
+    ]
+  });
+  const groups = splitCodingStats(stats, ["C#", "GLSL"]);
+
+  for (const style of STYLES) {
+    const splitSvg = renderSplitSvg(groups, fixtureConfig({
+      style,
+      theme: "paper"
+    }));
+    const manualSection = codingGroupSection(splitSvg, "manual");
+
+    assert.match(
+      manualSection,
+      />GLSL<\/text>[\s\S]*?>&lt;0\.1%<\/text>/,
+      style + " split"
+    );
+    assert.doesNotMatch(
+      manualSection,
+      />0\.0%<\/text>/,
+      style + " split"
+    );
+    assert.match(
+      splitSvg,
+      /GLSL: &lt;0\.1%/,
+      style + " split description"
+    );
+    assert.doesNotMatch(
+      splitSvg,
+      /&amp;lt;0\.1%/,
+      style + " split escaping"
+    );
+
+    const plainSvg = renderSvg(stats, fixtureConfig({ style, theme: "paper" }));
+    assert.match(
+      plainSvg,
+      />GLSL<\/text>[\s\S]*?>&lt;0\.1%<\/text>/,
+      style + " unclassified"
+    );
+    assert.match(
+      plainSvg,
+      /GLSL: &lt;0\.1%/,
+      style + " unclassified description"
+    );
+  }
+
+  const tinyGroupStats = fixtureStats({
+    totalBytes: 11_000_001,
+    languages: [
+      { name: "TypeScript", bytes: 11_000_000, percentage: 100, color: "#3178C6" },
+      { name: "GLSL", bytes: 1, percentage: 0, color: "#5686a5" }
+    ]
+  });
+  const tinyGroups = splitCodingStats(tinyGroupStats, ["GLSL"]);
+  const tinyGroupSvg = renderSplitSvg(tinyGroups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper"
+  }));
+  assert.match(tinyGroupSvg, />&lt;0\.1% OF BYTES<\/text>/);
+  assert.match(tinyGroupSvg, /Manual Coding is &lt;0\.1% of all language bytes/);
+});
+
 test("paper split groups use matching warm and cool semantic palettes", () => {
   const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
   const svg = renderSplitSvg(groups, fixtureConfig({

@@ -1,7 +1,7 @@
 import {
   bytePercentage,
   escapeXml,
-  formatPercentage,
+  formatPercentageMarkup,
   seriesColor,
   svgNumber,
   truncateLabel
@@ -51,7 +51,7 @@ export function renderBars({ stats, config, languages, theme }) {
         + escapeXml(truncateLabel(language.name, maxLabelCharacters)) + "</text>",
       '  <text class="value" text-anchor="end" x="'
         + (config.width - 24) + '" y="' + labelY + '">'
-        + formatPercentage(language.percentage) + "</text>",
+        + formatPercentageMarkup(language.percentage) + "</text>",
       '  <rect x="24" y="' + barY + '" width="' + chartWidth
         + '" height="7" rx="2" fill="' + theme.track + '"/>',
       '  <rect data-role="bar-value" data-share="' + svgNumber(share, 4)

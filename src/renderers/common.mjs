@@ -23,13 +23,27 @@ export function clampPercentage(value) {
 }
 
 export function formatPercentage(value) {
-  return clampPercentage(value).toFixed(1) + "%";
+  const percentage = clampPercentage(value);
+  return percentage > 0 && percentage < 0.1
+    ? "<0.1%"
+    : percentage.toFixed(1) + "%";
+}
+
+export function formatPercentageMarkup(value) {
+  return escapeXml(formatPercentage(value));
 }
 
 export function bytePercentage(language, totalBytes) {
   return totalBytes > 0
     ? clampPercentage(language.bytes / totalBytes * 100)
     : 0;
+}
+
+export function withExactBytePercentages(languages, totalBytes) {
+  return languages.map((language) => ({
+    ...language,
+    percentage: bytePercentage(language, totalBytes)
+  }));
 }
 
 export function svgNumber(value, precision = 2) {
@@ -183,7 +197,7 @@ export function renderLegend({
         + escapeXml(language.name) + "</text>",
       '    <text class="legend-value" text-anchor="end" x="'
         + (x + columnWidth - 4) + '" y="' + y + '">'
-        + formatPercentage(language.percentage) + "</text>"
+        + formatPercentageMarkup(language.percentage) + "</text>"
     );
   });
   lines.push("  </g>");

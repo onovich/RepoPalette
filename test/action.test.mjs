@@ -159,6 +159,48 @@ test("combines user-declared coding groups into one Action output", async (t) =>
   assert.match(outputs, /^vibe-svg-path=$/m);
 });
 
+test("keeps a non-zero sub-tenth language visible without calling it zero", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-small-share-"));
+  const outputFile = join(workspace, "github-output.txt");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  await runAction({
+    cwd: workspace,
+    env: {
+      "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+      INPUT_USERNAME: "onovich",
+      "INPUT_CODING-MODE": "split",
+      "INPUT_MANUAL-LANGUAGES": "C#,GLSL",
+      INPUT_STYLE: "bars",
+      INPUT_THEME: "paper",
+      GITHUB_OUTPUT: outputFile
+    },
+    fetchImpl: async () => fixtureResponse({
+      languages: [
+        { name: "C#", size: 5_500_000, color: "#178600" },
+        { name: "TypeScript", size: 5_500_000, color: "#3178c6" },
+        { name: "GLSL", size: 1, color: "#5686a5" }
+      ]
+    }),
+    sleep: async () => {},
+    logger: { info() {}, warn() {} }
+  });
+
+  const svg = await readFile(
+    join(workspace, "assets", "top-langs.svg"),
+    "utf8"
+  );
+  const audit = JSON.parse(
+    await readFile(join(workspace, "assets", "top-langs-data.json"), "utf8")
+  );
+  assert.equal(
+    audit.languages.find(({ name }) => name === "GLSL")?.bytes,
+    1
+  );
+  assert.match(svg, />GLSL<\/text>[\s\S]*?>&lt;0\.1%<\/text>/);
+  assert.doesNotMatch(svg, />GLSL<\/text>[\s\S]{0,200}>0\.0%<\/text>/);
+});
+
 test("can install and maintain a single chart in the profile README", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-"));
   const outputFile = join(workspace, "github-output.txt");

@@ -1,10 +1,13 @@
 import { getCodingGroupTheme, getTheme } from "./presentation.mjs";
 import {
+  bytePercentage,
   compositionLanguages,
   escapeXml,
   formatPercentage,
+  formatPercentageMarkup,
   svgNumber,
-  truncateLabel
+  truncateLabel,
+  withExactBytePercentages
 } from "./renderers/common.mjs";
 import { getStyleDefinition } from "./renderers/index.mjs";
 import { renderStyleLines } from "./render-svg.mjs";
@@ -56,8 +59,15 @@ export function renderSplitSvg(groups, configInput) {
   const repositoryCount = Number.isInteger(groups.manual.repositoryCount)
     ? groups.manual.repositoryCount
     : groups.manual.includedRepositoryCount;
-  const manualShare = groups.manual.classification.percentageOfTotal;
-  const vibeShare = groups.vibe.classification.percentageOfTotal;
+  const totalBytes = groups.manual.totalBytes + groups.vibe.totalBytes;
+  const manualShare = bytePercentage(
+    { bytes: groups.manual.totalBytes },
+    totalBytes
+  );
+  const vibeShare = bytePercentage(
+    { bytes: groups.vibe.totalBytes },
+    totalBytes
+  );
   const manualColor = manualTheme.series[0];
   const vibeColor = vibeTheme.series[0];
   const lines = [
@@ -75,7 +85,9 @@ export function renderSplitSvg(groups, configInput) {
         config,
         style,
         manualTheme,
-        vibeTheme
+        vibeTheme,
+        manualShare,
+        vibeShare
       ) + "</desc>",
     ...renderStyleLines(theme),
     ...splitStyleLines(theme, manualColor, vibeColor),
@@ -135,7 +147,7 @@ export function renderSplitSvg(groups, configInput) {
 }
 
 function renderGroupLayout(stats, config, style, theme) {
-  const languages = stats.languages.slice(0, config.top);
+  const languages = visibleLanguages(stats, config.top);
   return style.render({ stats, config, languages, theme });
 }
 
@@ -173,7 +185,7 @@ function groupHeaderLines({ x, width, title, share, color }) {
     '  <text class="group-title" x="' + (x + 12) + '" y="84">'
       + escapeXml(truncateLabel(title, titleCharacters)) + "</text>",
     '  <text class="group-share" text-anchor="end" x="' + (x + width)
-      + '" y="84">' + formatPercentage(share) + " OF BYTES</text>"
+      + '" y="84">' + formatPercentageMarkup(share) + " OF BYTES</text>"
   ];
 }
 
@@ -222,7 +234,9 @@ function buildDescription(
   config,
   style,
   manualTheme,
-  vibeTheme
+  vibeTheme,
+  manualShare,
+  vibeShare
 ) {
   const repositoryCount = Number.isInteger(groups.manual.repositoryCount)
     ? groups.manual.repositoryCount
@@ -232,14 +246,16 @@ function buildDescription(
     groups.manual,
     config.top,
     style,
-    manualTheme
+    manualTheme,
+    manualShare
   );
   const vibe = describeGroup(
     config.vibeTitle,
     groups.vibe,
     config.top,
     style,
-    vibeTheme
+    vibeTheme,
+    vibeShare
   );
   const quantization = style.quantizedUnit
     ? " Values are shown with exact percentages; visual "
@@ -252,8 +268,8 @@ function buildDescription(
   );
 }
 
-function describeGroup(title, stats, top, style, theme) {
-  const languages = stats.languages.slice(0, top);
+function describeGroup(title, stats, top, style, theme, overallShare) {
+  const languages = visibleLanguages(stats, top);
   const described = style.composition
     ? compositionLanguages(languages, stats.totalBytes, theme)
     : languages;
@@ -262,6 +278,13 @@ function describeGroup(title, stats, top, style, theme) {
     : described.map((language) => language.name + ": "
       + formatPercentage(language.share ?? language.percentage)).join("; ");
   return title + " is "
-    + formatPercentage(stats.classification.percentageOfTotal)
+    + formatPercentage(overallShare)
     + " of all language bytes; within this group: " + breakdown + ".";
+}
+
+function visibleLanguages(stats, top) {
+  return withExactBytePercentages(
+    stats.languages.slice(0, top),
+    stats.totalBytes
+  );
 }

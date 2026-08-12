@@ -20,7 +20,7 @@ One small file, one commit. No separate account, secret key, or image server to 
 
 If an AI coding agent can edit your Profile repository, paste this message into it:
 
-> Install RepoPalette in this GitHub Profile repository. Follow https://github.com/onovich/RepoPalette/blob/67c081d8b83fce6213a4d027237efe41c9d2c3c2/docs/INSTALL_WITH_AI.md, use the defaults, and verify the first automatic run.
+> Install RepoPalette in this GitHub Profile repository. Follow https://github.com/onovich/RepoPalette/blob/f3029acfcb41fa90e6a77a5d252194cc3855a882/docs/INSTALL_WITH_AI.md, use the defaults, and verify the first automatic run.
 
 The guide tells the agent exactly what to change and what to leave alone. You do not need to explain GitHub Actions to it.
 
@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@14cda2b1dfd721aae91086a63ee11e3f7148edd7 # v0.6.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@d15d0c57a8d71461fc247819fb041b95aab0b9a6 # v0.6.1
 ```
 
 <details>
@@ -52,7 +52,7 @@ Open your Profile repository, choose **Add file → Create new file**, enter `.g
 
 Commit the file. That first commit starts RepoPalette automatically; when the Actions check turns green, the chart is already in your Profile README. It then checks every Monday. **Actions → RepoPalette → Run workflow** remains available whenever you want to refresh it manually.
 
-The readable `@v0.6.0` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
+The readable `@v0.6.1` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
 
 ## Why RepoPalette?
 
