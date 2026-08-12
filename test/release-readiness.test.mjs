@@ -90,6 +90,11 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
   }
 });
 
+test("keeps generated SVG previews byte-stable across platforms", async () => {
+  const attributes = await readText(".gitattributes");
+  assert.match(attributes, /^\*\.svg text eol=lf$/m);
+});
+
 test("keeps English as the concise default with a Chinese entry point", async () => {
   const readme = await readText("README.md");
   const chineseReadme = await readText("README.zh-CN.md");
