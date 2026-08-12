@@ -253,6 +253,30 @@ test("paper ribbon keeps Other distinct from the adjacent language", () => {
   assert.match(svg, /data-language="Other"[^>]*stroke="#fef7ef"/);
 });
 
+test("ribbon omits direct labels that do not fit their segments", () => {
+  const svg = renderSvg(fixtureStats({
+    totalBytes: 100,
+    languages: [
+      {
+        name: "Digital Command Language",
+        bytes: 23,
+        percentage: 23,
+        color: "#3178C6"
+      },
+      { name: "TypeScript", bytes: 77, percentage: 77, color: "#3572A5" }
+    ]
+  }), fixtureConfig({ style: "ribbon", width: 320, top: 2 }));
+
+  assert.doesNotMatch(
+    svg,
+    /class="part-label"[^>]*>Digital Command Language<\/text>/
+  );
+  assert.match(
+    svg,
+    /class="legend-label"[^>]*>Digital Command Language<\/text>/
+  );
+});
+
 test("prism facets stay ordered and inside the chart at narrow shares", () => {
   const svg = renderSvg(fixtureStats({
     totalBytes: 1000,
@@ -404,6 +428,47 @@ test("area layouts omit direct labels that do not fit their cells", () => {
       /class="legend-label"[^>]*>Digital Command Language<\/text>/,
       style
     );
+  }
+});
+
+test("area layouts externalize tiny rank markers without collisions", () => {
+  const bytes = [
+    500_000, 240_000, 130_000, 70_000, 30_000, 15_000,
+    7_000, 4_000, 2_000, 1_000, 600, 400
+  ];
+  const stats = fixtureStats({
+    totalBytes: 1_000_000,
+    languages: bytes.map((value, index) => ({
+      name: "Language-" + String(index + 1).padStart(2, "0"),
+      bytes: value,
+      percentage: value / 10_000,
+      color: "#3178C6"
+    }))
+  });
+
+  for (const style of ["treemap", "voronoi", "prism"]) {
+    const svg = renderSvg(
+      stats,
+      fixtureConfig({ style, width: 320, top: 12 })
+    );
+    const callouts = [...svg.matchAll(
+      /data-role="rank-callout" data-rank="(\d+)" data-lane="(top|bottom)" data-callout-x="([0-9.]+)"/g
+    )].map((match) => ({
+      rank: Number(match[1]),
+      lane: match[2],
+      x: Number(match[3])
+    }));
+
+    assert.ok(callouts.length >= 3, style);
+    for (const lane of ["top", "bottom"]) {
+      const positions = callouts
+        .filter((callout) => callout.lane === lane)
+        .map((callout) => callout.x)
+        .sort((first, second) => first - second);
+      for (let index = 1; index < positions.length; index += 1) {
+        assert.ok(positions[index] - positions[index - 1] >= 15, style);
+      }
+    }
   }
 });
 

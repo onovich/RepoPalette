@@ -7,19 +7,28 @@ import {
 } from "./common.mjs";
 
 const UNIT_COUNT = 200;
+const MATRIX_LAYOUT = Object.freeze({
+  role: "matrix-unit",
+  renderUnits: renderMatrixUnits,
+  legendY: 292
+});
+const BEAD_HALO_LAYOUT = Object.freeze({
+  role: "bead-halo-unit",
+  renderUnits: renderHaloUnits,
+  legendY: 310
+});
 
 export function renderMatrix(context) {
-  return renderUnits(context, "matrix");
+  return renderUnits(context, MATRIX_LAYOUT);
 }
 
 export function renderBeadHalo(context) {
-  return renderUnits(context, "bead-halo");
+  return renderUnits(context, BEAD_HALO_LAYOUT);
 }
 
-function renderUnits({ stats, config, languages, theme }, style) {
-  const role = style === "matrix" ? "matrix-unit" : "bead-halo-unit";
+function renderUnits({ stats, config, languages, theme }, layout) {
   if (languages.length === 0) {
-    return renderCompositionEmpty(config, theme, role);
+    return renderCompositionEmpty(config, theme, layout.role);
   }
   const parts = compositionLanguages(languages, stats.totalBytes, theme);
   const counts = allocateUnits(parts);
@@ -28,17 +37,13 @@ function renderUnits({ stats, config, languages, theme }, style) {
   );
   const lines = ['  <g data-role="unit-field" data-unit-share="0.5">'];
 
-  if (style === "matrix") {
-    renderMatrixUnits(lines, config.width, parts, unitGroups, role);
-  } else {
-    renderHaloUnits(lines, config.width, parts, unitGroups, role);
-  }
+  layout.renderUnits(lines, config.width, parts, unitGroups, layout.role);
   lines.push("  </g>");
   const legend = renderCompositionLegend({
     width: config.width,
     parts,
     theme,
-    startY: style === "matrix" ? 292 : 310
+    startY: layout.legendY
   });
   lines.push(...legend.lines);
   return { height: legend.height, lines };

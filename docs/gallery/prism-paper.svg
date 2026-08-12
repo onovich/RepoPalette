@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="prism" data-theme="paper" width="400" height="445.28" viewBox="0 0 400 445.28">
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="prism" data-theme="paper" width="400" height="455.28" viewBox="0 0 400 455.28">
   <title id="title">Language Composition</title>
   <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%.</desc>
   <style>
@@ -24,7 +24,7 @@
     .node-label { font-size: 9px; font-weight: 750; }
     .empty { fill: #4d738d; font-size: 11px; }
   </style>
-  <rect class="card" x="0.5" y="0.5" width="399" height="444.28" rx="14" fill="#fef7ef" stroke="#a9c9dc"/>
+  <rect class="card" x="0.5" y="0.5" width="399" height="454.28" rx="14" fill="#fef7ef" stroke="#a9c9dc"/>
   <rect x="24" y="20" width="4" height="35" rx="2" fill="#fd7136"/>
   <text class="title" x="38" y="35">Language Composition</text>
   <text class="meta" x="38" y="55">24 OF 27 PUBLIC REPOS</text>
@@ -45,32 +45,32 @@
     <polygon data-role="composition-part" data-language="Shell" data-share="6" data-shape-role="prism-part" points="340.58,86 363.74,86 353.06,311.28 333.98,311.28" fill="#fed9da" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
     <text class="part-rank" data-role="part-rank" data-rank="5" text-anchor="middle" x="347.98" y="198.02" fill="#111318">05</text>
     <polygon data-role="composition-part" data-language="HTML" data-share="5" data-shape-role="prism-part" points="363.74,86 376,86 376,311.28 353.06,311.28" fill="#fd7136" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
-    <text class="part-rank" data-role="part-rank" data-rank="6" text-anchor="middle" x="366.93" y="214" fill="#111318">06</text>
+    <text class="part-rank" data-role="part-rank" data-rank="6" text-anchor="middle" x="366.93" y="213.03" fill="#111318">06</text>
   </g>
   <g data-role="legend" data-columns="2">
-    <text class="legend-rank" data-role="legend-rank" data-rank="1" x="24" y="349.28">01</text>
-    <circle cx="56" cy="345.28" r="4" fill="#024b81"/>
-    <text class="legend-label" x="68" y="349.28">TypeScript</text>
-    <text class="legend-value" text-anchor="end" x="188" y="349.28">42.0%</text>
-    <text class="legend-rank" data-role="legend-rank" data-rank="2" x="208" y="349.28">02</text>
-    <circle cx="240" cy="345.28" r="4" fill="#367db7"/>
-    <text class="legend-label" x="252" y="349.28">Python</text>
-    <text class="legend-value" text-anchor="end" x="372" y="349.28">25.0%</text>
-    <text class="legend-rank" data-role="legend-rank" data-rank="3" x="24" y="375.28">03</text>
-    <circle cx="56" cy="371.28" r="4" fill="#6faddf"/>
-    <text class="legend-label" x="68" y="375.28">C#</text>
-    <text class="legend-value" text-anchor="end" x="188" y="375.28">14.0%</text>
-    <text class="legend-rank" data-role="legend-rank" data-rank="4" x="208" y="375.28">04</text>
-    <circle cx="240" cy="371.28" r="4" fill="#c9dce8"/>
-    <text class="legend-label" x="252" y="375.28">ShaderLab</text>
-    <text class="legend-value" text-anchor="end" x="372" y="375.28">8.0%</text>
-    <text class="legend-rank" data-role="legend-rank" data-rank="5" x="24" y="401.28">05</text>
-    <circle cx="56" cy="397.28" r="4" fill="#fed9da"/>
-    <text class="legend-label" x="68" y="401.28">Shell</text>
-    <text class="legend-value" text-anchor="end" x="188" y="401.28">6.0%</text>
-    <text class="legend-rank" data-role="legend-rank" data-rank="6" x="208" y="401.28">06</text>
-    <circle cx="240" cy="397.28" r="4" fill="#fd7136"/>
-    <text class="legend-label" x="252" y="401.28">HTML</text>
-    <text class="legend-value" text-anchor="end" x="372" y="401.28">5.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="1" x="24" y="359.28">01</text>
+    <circle cx="56" cy="355.28" r="4" fill="#024b81"/>
+    <text class="legend-label" x="68" y="359.28">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="188" y="359.28">42.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="2" x="208" y="359.28">02</text>
+    <circle cx="240" cy="355.28" r="4" fill="#367db7"/>
+    <text class="legend-label" x="252" y="359.28">Python</text>
+    <text class="legend-value" text-anchor="end" x="372" y="359.28">25.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="3" x="24" y="385.28">03</text>
+    <circle cx="56" cy="381.28" r="4" fill="#6faddf"/>
+    <text class="legend-label" x="68" y="385.28">C#</text>
+    <text class="legend-value" text-anchor="end" x="188" y="385.28">14.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="4" x="208" y="385.28">04</text>
+    <circle cx="240" cy="381.28" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="252" y="385.28">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="372" y="385.28">8.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="5" x="24" y="411.28">05</text>
+    <circle cx="56" cy="407.28" r="4" fill="#fed9da"/>
+    <text class="legend-label" x="68" y="411.28">Shell</text>
+    <text class="legend-value" text-anchor="end" x="188" y="411.28">6.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="6" x="208" y="411.28">06</text>
+    <circle cx="240" cy="407.28" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="252" y="411.28">HTML</text>
+    <text class="legend-value" text-anchor="end" x="372" y="411.28">5.0%</text>
   </g>
 </svg>

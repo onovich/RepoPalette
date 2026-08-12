@@ -3,6 +3,7 @@ import {
   compositionLanguages,
   contrastColor,
   escapeXml,
+  estimatedTextWidth,
   formatPercentage,
   renderCompositionEmpty,
   renderCompositionLegend,
@@ -36,7 +37,9 @@ export function renderRibbon({ stats, config, languages, theme }) {
         + part.color + '" stroke="' + theme.canvas
         + '" stroke-width="2"/>'
     );
-    if (!part.isOther && partWidth >= 62) {
+    if (!part.isOther
+        && partWidth >= 62
+        && estimatedTextWidth(part.name) <= partWidth - 20) {
       const textColor = contrastColor(part.color);
       lines.push(
         '    <text class="part-label" x="' + svgNumber(cursor + 10)
