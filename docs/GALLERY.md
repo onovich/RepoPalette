@@ -4,6 +4,8 @@
 
 Every preview below uses the same language data. Names and percentages remain exact; only the layout and theme change.
 
+Layout names are kept outside the artwork. Each SVG shows the small default `RepoPalette` attribution, which can be disabled with `show-branding: false`.
+
 ## Layouts
 
 - `bars` is the most direct ranking view.
