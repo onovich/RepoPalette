@@ -20,7 +20,7 @@ One small file, one commit. No separate account, secret key, or image server to 
 
 If an AI coding agent can edit your Profile repository, paste this message into it:
 
-> Install RepoPalette in this GitHub Profile repository. Follow https://github.com/onovich/RepoPalette/blob/da7a7a7ad5ad0e64662fa9bb96d9ad9a0940102e/docs/INSTALL_WITH_AI.md, use the defaults, and verify the first automatic run.
+> Install RepoPalette in this GitHub Profile repository. Follow https://github.com/onovich/RepoPalette/blob/ecedae024e71824333856352111eea5d05d56773/docs/INSTALL_WITH_AI.md, use the defaults, and verify the first automatic run.
 
 The guide tells the agent exactly what to change and what to leave alone. You do not need to explain GitHub Actions to it.
 
