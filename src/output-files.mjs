@@ -14,6 +14,7 @@ const AUDIT_KEYS = [
   "repositoryCount",
   "includedRepositoryCount",
   "totalBytes",
+  "repositoryScope",
   "languages",
   "filters"
 ];
@@ -32,6 +33,12 @@ const FORBIDDEN_ELEMENTS = new Set([
   "image",
   "use"
 ]);
+const REPOSITORY_EXCLUSION_REASONS = new Set([
+  "not-public",
+  "fork",
+  "archived",
+  "configured"
+]);
 
 export async function writeValidatedOutputs({
   outputDirectory,
@@ -48,11 +55,10 @@ function validateSvg(svg) {
   if (typeof svg !== "string" || !svg.endsWith("\n")) {
     throw new Error("Generated SVG must be UTF-8 text ending in a newline");
   }
-  if (/\b(?:href|src)\s*=|url\s*\(/i.test(svg)) {
+  const document = parseSvg(svg);
+  if (/@import\b|url\s*\(/i.test(document.styleText)) {
     throw new Error("Generated SVG contains a forbidden external resource");
   }
-
-  const document = parseSvg(svg);
   const { attributes } = document.root;
   if (document.root.name !== "svg") {
     throw new Error("Generated SVG root element must be svg");
@@ -85,13 +91,18 @@ function parseSvg(svg) {
   const tokenPattern = /<[^>]*>/g;
   const stack = [];
   const elementNames = new Set();
+  const styleTextSegments = [];
   let root = null;
   let rootClosed = false;
   let cursor = 0;
   let match;
 
   while ((match = tokenPattern.exec(svg)) !== null) {
-    validateTextSegment(svg.slice(cursor, match.index), stack.length);
+    captureTextSegment(
+      svg.slice(cursor, match.index),
+      stack,
+      styleTextSegments
+    );
     const rawTag = match[0];
 
     if (rawTag.startsWith("</")) {
@@ -117,6 +128,9 @@ function parseSvg(svg) {
         if (["href", "xlink:href", "src"].includes(attributeName.toLowerCase())) {
           throw new Error("Generated SVG contains a forbidden external attribute");
         }
+        if (/url\s*\(/i.test(opening.attributes[attributeName])) {
+          throw new Error("Generated SVG contains a forbidden external resource");
+        }
       }
 
       if (root === null) {
@@ -135,11 +149,22 @@ function parseSvg(svg) {
     cursor = tokenPattern.lastIndex;
   }
 
-  validateTextSegment(svg.slice(cursor), stack.length);
+  captureTextSegment(svg.slice(cursor), stack, styleTextSegments);
   if (!root || stack.length !== 0 || !rootClosed) {
     throw new Error("Generated SVG is not well-formed XML");
   }
-  return { root, elementNames };
+  return {
+    root,
+    elementNames,
+    styleText: styleTextSegments.join("")
+  };
+}
+
+function captureTextSegment(text, stack, styleTextSegments) {
+  validateTextSegment(text, stack.length);
+  if (stack.at(-1)?.toLowerCase() === "style") {
+    styleTextSegments.push(text);
+  }
 }
 
 function parseOpeningTag(rawTag) {
@@ -203,7 +228,7 @@ function validateAuditJson(json, expectedAudit) {
   }
 
   requireExactKeys(audit, AUDIT_KEYS, "audit JSON");
-  if (audit.schemaVersion !== 1) {
+  if (audit.schemaVersion !== 2) {
     throw new Error("Generated audit JSON has an unsupported schemaVersion");
   }
   if (typeof audit.username !== "string" || audit.username === "") {
@@ -220,6 +245,7 @@ function validateAuditJson(json, expectedAudit) {
     );
   }
   requireNonNegativeInteger(audit.totalBytes, "totalBytes");
+  validateRepositoryScope(audit.repositoryScope, audit);
   if (!Array.isArray(audit.languages)) {
     throw new Error("Generated audit JSON languages must be an array");
   }
@@ -288,6 +314,53 @@ function validateFilters(filters) {
   }
 }
 
+function validateRepositoryScope(scope, audit) {
+  requireExactKeys(scope, ["included", "excluded"], "repositoryScope");
+  if (!Array.isArray(scope.included) || !Array.isArray(scope.excluded)) {
+    throw new Error("Generated audit JSON repositoryScope must contain arrays");
+  }
+
+  const seenNames = new Set();
+  for (const name of scope.included) {
+    requireRepositoryName(name, seenNames);
+  }
+  for (const repository of scope.excluded) {
+    requireExactKeys(repository, ["name", "reasons"], "excluded repository");
+    requireRepositoryName(repository.name, seenNames);
+    if (!Array.isArray(repository.reasons)
+        || repository.reasons.length === 0
+        || repository.reasons.some((reason) =>
+          !REPOSITORY_EXCLUSION_REASONS.has(reason)
+        )
+        || new Set(repository.reasons).size !== repository.reasons.length) {
+      throw new Error(
+        "Generated audit JSON contains invalid repository exclusion reasons"
+      );
+    }
+  }
+
+  if (scope.included.length !== audit.includedRepositoryCount) {
+    throw new Error(
+      "Generated audit JSON repositoryScope does not match includedRepositoryCount"
+    );
+  }
+  if (scope.included.length + scope.excluded.length !== audit.repositoryCount) {
+    throw new Error(
+      "Generated audit JSON repositoryScope does not match repositoryCount"
+    );
+  }
+}
+
+function requireRepositoryName(name, seenNames) {
+  if (typeof name !== "string" || name === "") {
+    throw new Error("Generated audit JSON contains an invalid repository name");
+  }
+  if (seenNames.has(name)) {
+    throw new Error("Generated audit JSON contains duplicate repositories");
+  }
+  seenNames.add(name);
+}
+
 function compareExpectedAudit(actual, expected) {
   for (const key of [
     "username",
@@ -300,6 +373,8 @@ function compareExpectedAudit(actual, expected) {
     }
   }
   if (JSON.stringify(actual.languages) !== JSON.stringify(expected.languages)
+      || JSON.stringify(actual.repositoryScope)
+        !== JSON.stringify(expected.repositoryScope)
       || JSON.stringify(actual.filters) !== JSON.stringify(expected.filters)) {
     throw new Error("Generated audit JSON differs from source data");
   }
@@ -379,4 +454,3 @@ async function rollbackOutputs(targets) {
     }
   }
 }
-

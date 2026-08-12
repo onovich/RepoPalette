@@ -1,6 +1,6 @@
 # RepoPalette
 
-> A more distinctive GitHub language visual than a standard card, without the complexity of a full profile metrics framework.<br/>**比标准语言卡更有辨识度，同时不引入完整 Profile 统计框架的复杂度。**
+> Generate a validated GitHub programming-language SVG and auditable data from your public, owned repositories.<br/>**根据你名下的公开仓库，生成经过校验的 GitHub 编程语言 SVG 和可核对数据。**
 
 RepoPalette collects language data from your public, owned GitHub repositories and writes a validated SVG plus an auditable JSON file into your own repository.<br/>**RepoPalette 汇总你名下公开 GitHub 仓库的语言数据，并将经过校验的 SVG 和可核对的 JSON 文件写入你自己的仓库。**
 
@@ -18,7 +18,7 @@ RepoPalette is in its first extraction phase. The proven statistics core has mov
 - It uses GitHub's automatic workflow token for public repositories, so users do not need to create or store a personal access token.<br/>**统计公开仓库时使用 GitHub 自动提供的工作流令牌，用户无需创建或保管个人访问令牌。**
 - It commits ordinary SVG and JSON files to the user's repository; the Profile image does not depend on a third-party rendering endpoint staying online.<br/>**它把普通 SVG 和 JSON 文件保存在用户自己的仓库里；Profile 图片无需依赖第三方实时渲染服务持续在线。**
 - It validates both outputs before replacement. If collection or rendering fails, the last successful files remain untouched.<br/>**替换前会同时校验两份输出；如果采集或渲染失败，上一次成功生成的文件会保持不变。**
-- The JSON records repository counts, filters, byte totals, percentages, and language colors so the displayed result can be checked.<br/>**JSON 会记录仓库数量、筛选条件、字节总量、占比和语言颜色，使展示结果可以被核对。**
+- The JSON records included repositories, excluded repositories and reasons, filters, byte totals, percentages, and language colors so the displayed result can be checked.<br/>**JSON 会记录实际纳入的仓库、排除的仓库及原因、筛选条件、字节总量、占比和语言颜色，使展示结果可以被核对。**
 
 ## Quick Start
 
@@ -43,6 +43,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Generate language visual
+        id: repopalette
         uses: onovich/RepoPalette@main
         with:
           style: bars
@@ -50,8 +51,11 @@ jobs:
 
       - name: Commit changed outputs
         shell: bash
+        env:
+          REPOPALETTE_SVG: ${{ steps.repopalette.outputs.svg-path }}
+          REPOPALETTE_DATA: ${{ steps.repopalette.outputs.data-path }}
         run: |
-          git add assets/top-langs.svg assets/top-langs-data.json
+          git add -- "$REPOPALETTE_SVG" "$REPOPALETTE_DATA"
           if git diff --cached --quiet; then
             echo "RepoPalette outputs are already current."
             exit 0

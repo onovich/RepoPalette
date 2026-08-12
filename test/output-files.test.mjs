@@ -57,6 +57,20 @@ test("invalid SVG or JSON never replaces the last successful outputs", async (t)
   );
   await assertLastGood(outputDirectory);
 
+  await assert.rejects(
+    writeValidatedOutputs({
+      outputDirectory,
+      svg: validSvg.replace(
+        "    .card {",
+        '    @import "https://example.com/theme.css";\n    .card {'
+      ),
+      json: validJson,
+      expectedAudit: expected.audit
+    }),
+    /forbidden external resource/
+  );
+  await assertLastGood(outputDirectory);
+
   const invalidAudit = structuredClone(expected.audit);
   invalidAudit.languages[0].percentage = 99;
   await assert.rejects(
@@ -84,11 +98,35 @@ test("invalid SVG or JSON never replaces the last successful outputs", async (t)
   await assertLastGood(outputDirectory);
 });
 
+test("allows URL-like text in a safely escaped title", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "toplang-title-"));
+  const outputDirectory = join(workspace, "assets");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  const expected = expectedOutput();
+  expected.config.title = "Docs at URL(example) or href=value";
+  await writeValidatedOutputs({
+    outputDirectory,
+    svg: renderSvg(expected.stats, expected.config),
+    json: JSON.stringify(expected.audit, null, 2) + "\n",
+    expectedAudit: expected.audit
+  });
+
+  assert.match(
+    await readFile(join(outputDirectory, "top-langs.svg"), "utf8"),
+    /Docs at URL\(example\) or href=value/
+  );
+});
+
 function expectedOutput() {
   const stats = {
     repositoryCount: 1,
     includedRepositoryCount: 1,
     totalBytes: 100,
+    repositoryScope: {
+      included: ["example"],
+      excluded: []
+    },
     languages: [{
       name: "C#",
       bytes: 100,
@@ -106,11 +144,12 @@ function expectedOutput() {
     excludeLanguages: []
   };
   const audit = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     username: config.username,
     repositoryCount: stats.repositoryCount,
     includedRepositoryCount: stats.includedRepositoryCount,
     totalBytes: stats.totalBytes,
+    repositoryScope: stats.repositoryScope,
     languages: stats.languages,
     filters: {
       includeForks: false,
@@ -132,4 +171,3 @@ async function assertLastGood(outputDirectory) {
     "last good json"
   );
 }
-

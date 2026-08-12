@@ -1,6 +1,6 @@
 name: RepoPalette
 author: onovich
-description: Distinctive GitHub language visuals, without configuration overload.
+description: Generate a validated SVG and auditable JSON from public, owned GitHub repositories.
 
 inputs:
   style:

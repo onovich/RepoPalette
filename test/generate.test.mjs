@@ -49,11 +49,15 @@ test("generates an auditable SVG and JSON from the public configuration", async 
   assert.match(svg, />C#</);
   assert.equal(summary.repositoryCount, 1);
   assert.deepEqual(data, {
-    schemaVersion: 1,
+    schemaVersion: 2,
     username: "onovich",
     repositoryCount: 1,
     includedRepositoryCount: 1,
     totalBytes: 1_000,
+    repositoryScope: {
+      included: ["unity-game"],
+      excluded: []
+    },
     languages: [
       { name: "C#", bytes: 1_000, percentage: 100, color: "#178600" }
     ],
@@ -146,4 +150,3 @@ function fixtureResponse({ totalCount = 1 } = {}) {
     headers: { "content-type": "application/json" }
   });
 }
-

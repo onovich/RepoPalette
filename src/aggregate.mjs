@@ -2,11 +2,38 @@ export function aggregateLanguages(repositories, config) {
   const totals = new Map();
   const excludedRepositories = new Set(config.excludeRepositories);
   const excludedLanguages = new Set(config.excludeLanguages);
-  const includedRepositories = repositories.filter((repository) =>
-    repository.visibility === "PUBLIC"
-      && !repository.isFork
-      && (config.includeArchived || !repository.isArchived)
-      && !excludedRepositories.has(repository.name)
+  const includedRepositories = [];
+  const repositoryScope = {
+    included: [],
+    excluded: []
+  };
+
+  for (const repository of repositories) {
+    const reasons = [];
+    if (repository.visibility !== "PUBLIC") {
+      reasons.push("not-public");
+    }
+    if (repository.isFork) {
+      reasons.push("fork");
+    }
+    if (!config.includeArchived && repository.isArchived) {
+      reasons.push("archived");
+    }
+    if (excludedRepositories.has(repository.name)) {
+      reasons.push("configured");
+    }
+
+    if (reasons.length > 0) {
+      repositoryScope.excluded.push({ name: repository.name, reasons });
+    } else {
+      includedRepositories.push(repository);
+      repositoryScope.included.push(repository.name);
+    }
+  }
+
+  repositoryScope.included.sort(compareNames);
+  repositoryScope.excluded.sort((left, right) =>
+    compareNames(left.name, right.name)
   );
 
   for (const repository of includedRepositories) {
@@ -47,6 +74,7 @@ export function aggregateLanguages(repositories, config) {
   return {
     repositoryCount: repositories.length,
     includedRepositoryCount: includedRepositories.length,
+    repositoryScope,
     totalBytes,
     languages
   };
@@ -66,4 +94,3 @@ function compareNames(left, right) {
   }
   return left < right ? -1 : 1;
 }
-

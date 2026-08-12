@@ -2,7 +2,7 @@
   "name": "repopalette",
   "version": "0.1.0",
   "private": true,
-  "description": "Distinctive GitHub language visuals, without configuration overload.",
+  "description": "Generate a validated SVG and auditable JSON from public, owned GitHub repositories.",
   "type": "module",
   "scripts": {
     "generate": "node src/cli.mjs",

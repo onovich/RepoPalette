@@ -7,7 +7,6 @@ const TOP_LANGUAGES_QUERY = [
   "      first: 100",
   "      after: $cursor",
   "      ownerAffiliations: OWNER",
-  "      isFork: false",
   "      privacy: PUBLIC",
   "      orderBy: { field: NAME, direction: ASC }",
   "    ) {",
@@ -37,11 +36,15 @@ export async function fetchAllRepositories({
   username,
   token,
   fetchImpl = globalThis.fetch,
-  maxPages = 20,
+  maxPages,
   maxRetries = 3,
   sleep = delay,
   logger = {}
 }) {
+  if (maxPages !== undefined
+      && (!Number.isInteger(maxPages) || maxPages < 1)) {
+    throw new TypeError("maxPages must be a positive integer when provided");
+  }
   const client = createGitHubClient({
     token,
     fetchImpl,
@@ -58,7 +61,7 @@ export async function fetchAllRepositories({
   let rateLimit = null;
 
   while (true) {
-    if (pageCount >= maxPages) {
+    if (maxPages !== undefined && pageCount >= maxPages) {
       throw new Error("GitHub repository pagination exceeded " + maxPages + " pages");
     }
 
@@ -332,4 +335,3 @@ async function parseJsonResponse(response, operation) {
 function delay(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
-

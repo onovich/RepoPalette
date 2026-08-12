@@ -16,6 +16,10 @@ test("aggregates the same language across repositories by byte count", () => {
 
   assert.equal(result.repositoryCount, 2);
   assert.equal(result.includedRepositoryCount, 2);
+  assert.deepEqual(result.repositoryScope, {
+    included: ["game-one", "game-two"],
+    excluded: []
+  });
   assert.equal(result.totalBytes, 1_250);
   assert.deepEqual(result.languages, [
     { name: "C#", bytes: 1_000, percentage: 80, color: "#178600" },
@@ -48,6 +52,15 @@ test("filters forks, private, archived, repository, and language exclusions", ()
 
   assert.equal(result.repositoryCount, 5);
   assert.equal(result.includedRepositoryCount, 1);
+  assert.deepEqual(result.repositoryScope, {
+    included: ["kept"],
+    excluded: [
+      { name: "archived", reasons: ["archived"] },
+      { name: "forked", reasons: ["fork"] },
+      { name: "ignored", reasons: ["configured"] },
+      { name: "private", reasons: ["not-public"] }
+    ]
+  });
   assert.equal(result.totalBytes, 600);
   assert.deepEqual(result.languages, [
     { name: "C#", bytes: 600, percentage: 100, color: "#178600" }
@@ -112,4 +125,3 @@ function defaultConfig(overrides = {}) {
     ...overrides
   };
 }
-

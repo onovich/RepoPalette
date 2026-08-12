@@ -3,6 +3,28 @@ import test from "node:test";
 
 import { fetchAllRepositories } from "../src/github-client.mjs";
 
+test("collects public forks so the audit can record their exclusion", async () => {
+  let query = "";
+  await fetchAllRepositories({
+    username: "onovich",
+    token: "test-token",
+    fetchImpl: async (_url, options) => {
+      query = JSON.parse(options.body).query;
+      return graphqlResponse(repositoryPage({
+        names: ["example"],
+        hasNextPage: false,
+        endCursor: null,
+        totalCount: 1
+      }));
+    },
+    sleep: async () => {}
+  });
+
+  assert.match(query, /ownerAffiliations: OWNER/);
+  assert.match(query, /privacy: PUBLIC/);
+  assert.doesNotMatch(query, /isFork:\s*false/);
+});
+
 test("fetches every repository page after the first 100 results", async () => {
   const seenCursors = [];
   const fetchImpl = async (_url, options) => {
@@ -362,6 +384,27 @@ test("rejects a repeated cursor and a configured page limit", async (t) => {
   });
 });
 
+test("follows more than twenty repository pages by default", async () => {
+  let page = 0;
+  const result = await fetchAllRepositories({
+    username: "onovich",
+    token: "test-token",
+    fetchImpl: async () => {
+      page += 1;
+      return graphqlResponse(repositoryPage({
+        names: ["repo-" + page],
+        hasNextPage: page < 21,
+        endCursor: page < 21 ? "page-" + (page + 1) : null,
+        totalCount: 21
+      }));
+    },
+    sleep: async () => {}
+  });
+
+  assert.equal(result.meta.pageCount, 21);
+  assert.equal(result.repositories.length, 21);
+});
+
 test("reports HTTP status and request id even when an error body is not JSON", async () => {
   await assert.rejects(
     fetchAllRepositories({
@@ -420,4 +463,3 @@ function graphqlResponse(body, status = 200, extraHeaders = {}) {
     }
   });
 }
-

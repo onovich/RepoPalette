@@ -79,11 +79,12 @@ async function readConfig(configPath) {
 
 function buildAudit(stats, config) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     username: config.username,
     repositoryCount: stats.repositoryCount,
     includedRepositoryCount: stats.includedRepositoryCount,
     totalBytes: stats.totalBytes,
+    repositoryScope: stats.repositoryScope,
     languages: stats.languages,
     filters: {
       includeForks: false,
