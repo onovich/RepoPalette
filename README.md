@@ -40,11 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out profile repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Generate language visual
         id: repopalette
-        uses: onovich/RepoPalette@main
+        uses: onovich/RepoPalette@823db1eec5727810ece5b33c650851a1aca30bfd
         with:
           style: bars
           theme: light
@@ -67,7 +67,7 @@ jobs:
           git push
 ```
 
-The example intentionally uses `@main` while the project is pre-release. The first stable release will provide the recommended `@v1` reference.<br/>**项目尚未正式发布，因此示例暂时使用 `@main`；首个稳定版本发布后将提供推荐的 `@v1` 引用。**
+The pre-release example pins both actions to immutable commit SHAs. The first stable release will also provide the easier-to-read `@v1` reference.<br/>**预发布示例将两个 Action 都固定到不可变的提交 SHA；首个稳定版本发布后还会提供更易阅读的 `@v1` 引用。**
 
 Embed the generated SVG in the Profile README.<br/>**在 Profile README 中嵌入生成的 SVG。**
 
