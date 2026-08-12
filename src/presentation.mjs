@@ -81,10 +81,81 @@ const THEME_TOKENS = Object.freeze({
   })
 });
 
+const CODING_GROUP_PALETTES = Object.freeze({
+  light: defineCodingPalettes(
+    ["#d85f32", "#e77d50", "#f09d73", "#f6bd9f", "#f9d9ca", "#b34222"],
+    "#fbe8df",
+    ["#075fc7", "#3b82cf", "#70a5dc", "#9bc3e8", "#c8def3", "#285d99"],
+    "#dce9f7"
+  ),
+  paper: defineCodingPalettes(
+    ["#fd7136", "#f9915a", "#f7b184", "#facbb0", "#fde2d4", "#d9562c"],
+    "#feeee6",
+    ["#024b81", "#27669f", "#6faddf", "#9ac7e7", "#c9dce8", "#598fb8"],
+    "#dce9f1"
+  ),
+  midnight: defineCodingPalettes(
+    ["#ff7a59", "#f4936f", "#e9ad8f", "#ffc4ae", "#9f5140", "#d9664d"],
+    "#59352f",
+    ["#58a6ff", "#388bfd", "#79c0ff", "#a5d6ff", "#1f6feb", "#6e8dff"],
+    "#294764"
+  ),
+  aurora: defineCodingPalettes(
+    ["#ff986b", "#f6b25d", "#f5c77a", "#d98268", "#ffd4b8", "#dc7b68"],
+    "#5a3a32",
+    ["#63e6be", "#41c7b0", "#43afc2", "#6fd6d0", "#a0efe0", "#42a5b5"],
+    "#275e63"
+  ),
+  terminal: defineCodingPalettes(
+    ["#f4c95d", "#e8a94b", "#d88c3d", "#ffd98a", "#94571f", "#f0b85b"],
+    "#59471f",
+    ["#45e37d", "#2ec46a", "#72f0a0", "#38b98e", "#9ef4b8", "#167344"],
+    "#285c3a"
+  ),
+  neon: defineCodingPalettes(
+    ["#ff5fd2", "#ff70a6", "#ff8a82", "#e849b7", "#ffc0dc", "#c5368e"],
+    "#63304f",
+    ["#55d6ff", "#5fa8ff", "#7a7dff", "#a279f2", "#76e4f7", "#b1c8ff"],
+    "#3d4d78"
+  )
+});
+
 export function getTheme(name) {
   const theme = THEME_TOKENS[name];
   if (!theme) {
     throw new TypeError("unknown theme: " + name);
   }
   return theme;
+}
+
+export function getCodingGroupTheme(name, group) {
+  const theme = getTheme(name);
+  const palette = CODING_GROUP_PALETTES[name]?.[group];
+  if (!palette) {
+    throw new TypeError("unknown coding group: " + group);
+  }
+  return Object.freeze({
+    ...theme,
+    accent: palette.series[0],
+    series: palette.series,
+    other: palette.other
+  });
+}
+
+function defineCodingPalettes(
+  manualSeries,
+  manualOther,
+  vibeSeries,
+  vibeOther
+) {
+  return Object.freeze({
+    manual: Object.freeze({
+      series: Object.freeze(manualSeries),
+      other: manualOther
+    }),
+    vibe: Object.freeze({
+      series: Object.freeze(vibeSeries),
+      other: vibeOther
+    })
+  });
 }

@@ -106,6 +106,28 @@ export function renderCompositionLegend({
   });
 }
 
+export function renderSeriesLegend({
+  width,
+  languages,
+  theme,
+  startY,
+  showRanks = false,
+  useThemeSeries = false
+}) {
+  return renderLegend({
+    width,
+    languages: useThemeSeries
+      ? languages.map((language, index) => ({
+          ...language,
+          color: seriesColor(language, index, theme)
+        }))
+      : languages,
+    theme,
+    startY,
+    showRanks
+  });
+}
+
 export function renderCompositionEmpty(config, theme, role) {
   return {
     height: 166,

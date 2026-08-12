@@ -2,7 +2,7 @@ import {
   bytePercentage,
   contrastColor,
   escapeXml,
-  renderLegend,
+  renderSeriesLegend,
   seriesColor,
   svgNumber,
   truncateLabel
@@ -80,11 +80,12 @@ export function renderConstellation({ stats, config, languages, theme }) {
     }
   });
 
-  const legend = renderLegend({
+  const legend = renderSeriesLegend({
     width: config.width,
     languages,
     theme,
-    startY: 346
+    startY: 346,
+    useThemeSeries: config.useThemeSeries
   });
   lines.push(...legend.lines);
   return { height: legend.height, lines };

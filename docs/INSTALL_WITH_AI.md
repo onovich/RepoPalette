@@ -29,7 +29,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@14cda2b1dfd721aae91086a63ee11e3f7148edd7 # v0.6.0
 ```
 
 Commit and push only the intended installation change. Do not create a personal access token, repository secret, hosted service, or dependency lockfile.

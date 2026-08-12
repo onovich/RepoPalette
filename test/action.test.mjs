@@ -120,6 +120,16 @@ test("combines user-declared coding groups into one Action output", async (t) =>
   assert.match(svg, />25\.0%<\/text>/);
   assert.match(svg, />66\.7%<\/text>/);
   assert.match(svg, />33\.3%<\/text>/);
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="manual"[\s\S]*?<rect[^>]*fill="#fd7136"/
+  );
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="vibe"[\s\S]*?<rect[^>]*fill="#024b81"/
+  );
+  assert.match(svg, /data-language="C#"[^>]*fill="#fd7136"/);
+  assert.match(svg, /data-language="TypeScript"[^>]*fill="#024b81"/);
   assert.equal(svg.match(/>RepoPalette<\/text>/g)?.length, 1);
   assert.equal(svg.match(/1 OF 1 PUBLIC REPOS/g)?.length, 1);
 

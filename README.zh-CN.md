@@ -20,7 +20,7 @@ RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在
 
 如果 AI 编程工具可以编辑你的 Profile 仓库，把下面这句话发给它：
 
-> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/a99ae0dfc85ae77c61bb003138ae72ff65fdc789/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
+> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/67c081d8b83fce6213a4d027237efe41c9d2c3c2/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
 
 安装说明已经写明该改什么、哪些内容不能碰，你不需要先学会 GitHub Actions。
 
@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@14cda2b1dfd721aae91086a63ee11e3f7148edd7 # v0.6.0
 ```
 
 <details>
@@ -52,7 +52,7 @@ jobs:
 
 提交文件即可。第一次提交会自动启动 RepoPalette；Actions 检查变绿时，图表已经加入 Profile README。此后每周一自动检查，也可以随时通过 **Actions → RepoPalette → Run workflow** 手动刷新。
 
-发布后也可使用易读的 `@v0.5.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
+发布后也可使用易读的 `@v0.6.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
 
 ## 为什么选择 RepoPalette？
 

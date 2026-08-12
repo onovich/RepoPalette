@@ -181,6 +181,188 @@ test("the combined overview and group legends retain both percentage bases", () 
   assert.doesNotMatch(unbranded, />RepoPalette<\/text>/);
 });
 
+test("paper split groups use matching warm and cool semantic palettes", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+  const svg = renderSplitSvg(groups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper"
+  }));
+  const manualSection = codingGroupSection(svg, "manual");
+  const vibeSection = codingGroupSection(svg, "vibe");
+
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="manual"[^>]*>[\s\S]*?<rect[^>]*fill="#fd7136"/
+  );
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="vibe"[^>]*>[\s\S]*?<rect[^>]*fill="#024b81"/
+  );
+  assert.match(
+    manualSection,
+    /data-language="C#"[^>]*fill="#fd7136"/
+  );
+  assert.match(
+    manualSection,
+    /data-language="ShaderLab"[^>]*fill="#f9915a"/
+  );
+  assert.match(
+    vibeSection,
+    /data-language="TypeScript"[^>]*fill="#024b81"/
+  );
+  assert.match(
+    vibeSection,
+    /data-language="Python"[^>]*fill="#27669f"/
+  );
+  assert.doesNotMatch(manualSection, /fill="#(?:024b81|27669f)"/);
+  assert.doesNotMatch(vibeSection, /fill="#(?:fd7136|f9915a)"/);
+});
+
+test("every theme preserves the warm Manual and cool Vibe color language", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+  const primaries = {
+    light: ["#d85f32", "#075fc7"],
+    paper: ["#fd7136", "#024b81"],
+    midnight: ["#ff7a59", "#58a6ff"],
+    aurora: ["#ff986b", "#63e6be"],
+    terminal: ["#f4c95d", "#45e37d"],
+    neon: ["#ff5fd2", "#55d6ff"]
+  };
+
+  for (const [theme, [manualPrimary, vibePrimary]] of Object.entries(
+    primaries
+  )) {
+    const svg = renderSplitSvg(groups, fixtureConfig({
+      style: "ribbon",
+      theme
+    }));
+    const manualSection = codingGroupSection(svg, "manual");
+    const vibeSection = codingGroupSection(svg, "vibe");
+
+    assert.equal(overviewColor(svg, "manual"), manualPrimary, theme);
+    assert.equal(overviewColor(svg, "vibe"), vibePrimary, theme);
+    assert.equal(compositionColors(manualSection)[0], manualPrimary, theme);
+    assert.equal(compositionColors(vibeSection)[0], vibePrimary, theme);
+    assert.deepEqual(
+      compositionColors(manualSection).filter((color) =>
+        compositionColors(vibeSection).includes(color)
+      ),
+      [],
+      theme
+    );
+  }
+});
+
+test("every split layout applies the semantic group primaries", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+
+  for (const style of STYLES) {
+    const svg = renderSplitSvg(groups, fixtureConfig({
+      style,
+      theme: "paper"
+    }));
+    assert.match(
+      codingGroupSection(svg, "manual"),
+      /(?:fill|stroke)="#fd7136"/,
+      style
+    );
+    assert.match(
+      codingGroupSection(svg, "vibe"),
+      /(?:fill|stroke)="#024b81"/,
+      style
+    );
+  }
+});
+
+test("orbit and constellation legends repeat their group series colors", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+
+  for (const theme of Object.keys(THEMES)) {
+    for (const style of ["orbit", "constellation"]) {
+      const svg = renderSplitSvg(groups, fixtureConfig({ style, theme }));
+      for (const group of ["manual", "vibe"]) {
+        const section = codingGroupSection(svg, group);
+        assert.deepEqual(
+          legendColors(section),
+          plottedSeriesColors(section, style),
+          theme + " " + style + " " + group
+        );
+      }
+    }
+  }
+});
+
+test("semantic legend mapping leaves unclassified cards unchanged", () => {
+  for (const style of ["orbit", "constellation"]) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({
+      style,
+      theme: "paper"
+    }));
+    assert.deepEqual(
+      legendColors(svg),
+      fixtureStats().languages.map((language) => language.color),
+      style
+    );
+  }
+});
+
+test("Other stays inside its owning semantic palette at the top boundary", () => {
+  const groups = equalCodingGroupsFixture();
+  const expectedOther = {
+    light: ["#fbe8df", "#dce9f7"],
+    paper: ["#feeee6", "#dce9f1"],
+    midnight: ["#59352f", "#294764"],
+    aurora: ["#5a3a32", "#275e63"],
+    terminal: ["#59471f", "#285c3a"],
+    neon: ["#63304f", "#3d4d78"]
+  };
+
+  for (const [theme, [manualOther, vibeOther]] of Object.entries(
+    expectedOther
+  )) {
+    const svg = renderSplitSvg(groups, fixtureConfig({
+      style: "ribbon",
+      theme,
+      top: 5
+    }));
+    assert.equal(
+      compositionColor(codingGroupSection(svg, "manual"), "Other"),
+      manualOther,
+      theme + " Manual Other"
+    );
+    assert.equal(
+      compositionColor(codingGroupSection(svg, "vibe"), "Other"),
+      vibeOther,
+      theme + " Vibe Other"
+    );
+  }
+});
+
+test("semantic constellation labels retain small-text contrast", () => {
+  const groups = equalCodingGroupsFixture();
+
+  for (const theme of Object.keys(THEMES)) {
+    const svg = renderSplitSvg(groups, fixtureConfig({
+      style: "constellation",
+      theme,
+      top: 6
+    }));
+    for (const group of ["manual", "vibe"]) {
+      const section = codingGroupSection(svg, group);
+      const background = constellationSurface(section);
+      const pairs = constellationLabelPairs(section);
+      assert.equal(pairs.length, 6, theme + " " + group);
+      for (const { fill, opacity, text } of pairs) {
+        const displayedFill = blendHex(fill, background, opacity);
+        assert.ok(
+          contrastRatio(displayedFill, text) >= 4.5,
+          theme + " " + group + " " + fill + " behind " + text
+        );
+      }
+    }
+  }
+});
+
 test("combined layouts keep an empty declared group explicit and valid", () => {
   const groups = splitCodingStats(
     fixtureStats(),
@@ -666,6 +848,113 @@ function fixtureConfig(overrides = {}) {
     theme: "light",
     ...overrides
   };
+}
+
+function equalCodingGroupsFixture() {
+  const manualNames = Array.from({ length: 6 }, (_, index) =>
+    "Manual " + (index + 1)
+  );
+  const vibeNames = Array.from({ length: 6 }, (_, index) =>
+    "Vibe " + (index + 1)
+  );
+  const languages = [...manualNames, ...vibeNames].map((name) => ({
+    name,
+    bytes: 100,
+    percentage: 100 / 12,
+    color: "#808080"
+  }));
+  return splitCodingStats(fixtureStats({
+    totalBytes: 1_200,
+    languages
+  }), manualNames);
+}
+
+function codingGroupSection(svg, group) {
+  const start = svg.indexOf(
+    'data-role="coding-group" data-group="' + group + '"'
+  );
+  const nextGroup = group === "manual"
+    ? svg.indexOf('data-role="coding-group" data-group="vibe"', start)
+    : svg.length;
+  return svg.slice(start, nextGroup);
+}
+
+function overviewColor(svg, group) {
+  return new RegExp(
+    'data-role="coding-overview-part" data-group="' + group
+      + '"[^>]*>[\\s\\S]*?<rect[^>]*fill="([^"]+)"'
+  ).exec(svg)?.[1];
+}
+
+function compositionColors(section) {
+  return [...section.matchAll(
+    /data-role="composition-part"[^>]*fill="([^"]+)"/g
+  )].map((match) => match[1]);
+}
+
+function compositionColor(section, language) {
+  return new RegExp(
+    'data-role="composition-part" data-language="' + language
+      + '"[^>]*fill="([^"]+)"'
+  ).exec(section)?.[1];
+}
+
+function legendColors(section) {
+  const legend = /<g data-role="legend"[^>]*>([\s\S]*?)<\/g>/.exec(
+    section
+  )?.[1] ?? "";
+  return [...legend.matchAll(/<circle[^>]*fill="([^"]+)"/g)]
+    .map((match) => match[1]);
+}
+
+function plottedSeriesColors(section, style) {
+  const pattern = style === "orbit"
+    ? /data-role="orbit-value"[^>]*stroke="([^"]+)"/g
+    : /data-role="constellation-node"[^>]*fill="([^"]+)"/g;
+  return [...section.matchAll(pattern)].map((match) => match[1]);
+}
+
+function constellationSurface(section) {
+  return /<rect x="24" y="78"[^>]*fill="([^"]+)"/.exec(section)?.[1];
+}
+
+function constellationLabelPairs(section) {
+  return [...section.matchAll(
+    /<circle data-role="constellation-node"[^>]*fill="([^"]+)" fill-opacity="([^"]+)"[^>]*\/>\s*<text class="node-label"[^>]*fill="([^"]+)"/g
+  )].map((match) => ({
+    fill: match[1],
+    opacity: Number(match[2]),
+    text: match[3]
+  }));
+}
+
+function blendHex(foreground, background, opacity) {
+  const channels = [1, 3, 5].map((offset) => Math.round(
+    Number.parseInt(foreground.slice(offset, offset + 2), 16) * opacity
+      + Number.parseInt(background.slice(offset, offset + 2), 16)
+        * (1 - opacity)
+  ));
+  return "#" + channels
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function contrastRatio(first, second) {
+  const lighter = Math.max(testLuminance(first), testLuminance(second));
+  const darker = Math.min(testLuminance(first), testLuminance(second));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function testLuminance(color) {
+  const channels = [1, 3, 5].map((offset) =>
+    Number.parseInt(color.slice(offset, offset + 2), 16) / 255
+  ).map((channel) => channel <= 0.04045
+    ? channel / 12.92
+    : ((channel + 0.055) / 1.055) ** 2.4
+  );
+  return 0.2126 * channels[0]
+    + 0.7152 * channels[1]
+    + 0.0722 * channels[2];
 }
 
 function hasLoneSurrogate(value) {
