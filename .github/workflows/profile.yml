@@ -50,7 +50,7 @@ jobs:
 
       - name: Generate and install RepoPalette
         id: repopalette
-        uses: onovich/RepoPalette@39393c29e928a8725575ec4150078e50993b77d6 # v0.4.0 implementation
+        uses: onovich/RepoPalette@322fbec0cc6b77cc336a5231f6210056f4373e1d # v0.4.0 implementation
         with:
           style: ${{ inputs.style }}
           theme: ${{ inputs.theme }}
