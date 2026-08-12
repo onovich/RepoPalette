@@ -6,32 +6,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
-### Added
-
-- Seven proportional layouts: `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, and `prism`.<br/>**增加七种比例构成布局：`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism`。**
-- Closed composition layouts add an explicit `Other` remainder when Top-N languages do not sum to 100%.<br/>**当 Top-N 语言不足 100% 时，封闭构成图会明确加入 `Other` 剩余项。**
-
-### Changed
-
-- Refined the `paper` theme around the ivory, blue, blush, and coral reference palette.<br/>**依据象牙白、蓝色、淡粉与珊瑚色参考配色优化 `paper` 主题。**
-
 ### Planned
 
 - Optional user-declared coding-style grouping, disabled by default.<br/>**增加默认关闭、由用户主动声明的编程方式分组。**
 - AI-assisted installation and GitHub Marketplace publication.<br/>**增加 AI 辅助安装并发布到 GitHub Marketplace。**
 
-## [0.2.0] - 2026-08-12
+## [0.2.0] - 2026-08-13
 
 ### Added
 
 - Purpose-built `orbit` and `constellation` layouts with exact percentage legends.<br/>**增加专门设计的 `orbit` 与 `constellation` 布局，并保留准确的百分比图例。**
+- Seven proportional layouts: `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, and `prism`.<br/>**增加七种比例构成布局：`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism`。**
 - Six independent themes: `light`, `paper`, `midnight`, `aurora`, `terminal`, and `neon`.<br/>**增加六套可独立选择的主题：`light`、`paper`、`midnight`、`aurora`、`terminal` 与 `neon`。**
 - A checked-in comparison gallery generated from deterministic fixture data.<br/>**增加由固定示例数据生成并纳入版本管理的对比画廊。**
+- Closed composition layouts add an explicit `Other` remainder when Top-N languages do not sum to 100%.<br/>**当 Top-N 语言不足 100% 时，封闭构成图会明确加入 `Other` 剩余项。**
 - Public `style` and `theme` inputs for both the Action and local configuration.<br/>**Action 与本地配置均可通过公开的 `style` 和 `theme` 输入选择视觉方案。**
 
 ### Changed
 
 - Redesigned `bars` with a language spectrum, ranked rows, and clearer information hierarchy.<br/>**重新设计 `bars`，增加语言光谱、排名行和更清晰的信息层级。**
+- Refined the `paper` theme around the ivory, blue, blush, and coral reference palette.<br/>**依据象牙白、蓝色、淡粉与珊瑚色参考配色优化 `paper` 主题。**
 - All layouts now share accessible descriptions, self-contained SVG output, responsive widths from 320 to 800 pixels, and support for up to 12 languages.<br/>**所有布局现在共享可访问性描述、自包含 SVG 输出、320 至 800 像素宽度适配，并支持最多 12 种语言。**
 
 ## [0.1.0] - 2026-08-12
