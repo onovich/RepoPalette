@@ -56,6 +56,7 @@ export function contrastColor(color) {
 export function compositionLanguages(languages, totalBytes, theme) {
   const parts = languages.map((language, index) => ({
     ...language,
+    rank: index + 1,
     share: bytePercentage(language, totalBytes),
     color: seriesColor(language, index, theme)
   }));
@@ -67,10 +68,11 @@ export function compositionLanguages(languages, totalBytes, theme) {
   if (otherBytes > Math.max(1e-9, totalBytes * 1e-9)) {
     parts.push({
       name: "Other",
+      rank: parts.length + 1,
       bytes: otherBytes,
       percentage: bytePercentage({ bytes: otherBytes }, totalBytes),
       share: bytePercentage({ bytes: otherBytes }, totalBytes),
-      color: safeColor(theme.other, theme.track),
+      color: distinctOtherColor(theme, parts.at(-1)?.color),
       isOther: true
     });
   }
@@ -83,16 +85,24 @@ export function compositionAttributes(part) {
     + svgNumber(part.share, 4) + '"';
 }
 
-export function renderCompositionLegend({ width, parts, theme, startY }) {
+export function renderCompositionLegend({
+  width,
+  parts,
+  theme,
+  startY,
+  showRanks = false
+}) {
   return renderLegend({
     width,
     languages: parts.map((part) => ({
       name: part.name,
+      rank: part.rank,
       percentage: part.share,
       color: part.color
     })),
     theme,
-    startY
+    startY,
+    showRanks
   });
 }
 
@@ -108,15 +118,23 @@ export function renderCompositionEmpty(config, theme, role) {
   };
 }
 
-export function renderLegend({ width, languages, theme, startY }) {
+export function renderLegend({
+  width,
+  languages,
+  theme,
+  startY,
+  showRanks = false
+}) {
   const contentWidth = width - 48;
-  const twoColumnWidth = contentWidth / 2;
+  const columnGap = 16;
+  const twoColumnWidth = (contentWidth - columnGap) / 2;
+  const rankOffset = showRanks ? 28 : 0;
   const widestLabel = Math.max(
-    ...languages.map((language) => estimateTextWidth(language.name)),
+    ...languages.map((language) => estimatedTextWidth(language.name)),
     0
   );
-  const columns = widestLabel <= twoColumnWidth - 58 ? 2 : 1;
-  const columnWidth = contentWidth / columns;
+  const columns = widestLabel <= twoColumnWidth - 58 - rankOffset ? 2 : 1;
+  const columnWidth = columns === 2 ? twoColumnWidth : contentWidth;
   const rows = Math.ceil(languages.length / columns);
   const lines = [
     '  <g data-role="legend" data-columns="' + columns + '">'
@@ -125,13 +143,21 @@ export function renderLegend({ width, languages, theme, startY }) {
   languages.forEach((language, index) => {
     const column = index % columns;
     const row = Math.floor(index / columns);
-    const x = 24 + column * columnWidth;
+    const x = 24 + column * (columnWidth + columnGap);
     const y = startY + row * 26;
     const color = safeColor(language.color, theme.accent);
+    if (showRanks) {
+      lines.push(
+        '    <text class="legend-rank" data-role="legend-rank" data-rank="'
+          + language.rank + '" x="' + x + '" y="' + y + '">'
+          + String(language.rank).padStart(2, "0") + "</text>"
+      );
+    }
     lines.push(
-      '    <circle cx="' + (x + 4) + '" cy="' + (y - 4)
+      '    <circle cx="' + (x + rankOffset + 4) + '" cy="' + (y - 4)
         + '" r="4" fill="' + color + '"/>',
-      '    <text class="legend-label" x="' + (x + 16) + '" y="' + y + '">'
+      '    <text class="legend-label" x="' + (x + rankOffset + 16)
+        + '" y="' + y + '">'
         + escapeXml(language.name) + "</text>",
       '    <text class="legend-value" text-anchor="end" x="'
         + (x + columnWidth - 4) + '" y="' + y + '">'
@@ -141,6 +167,22 @@ export function renderLegend({ width, languages, theme, startY }) {
   lines.push("  </g>");
 
   return { lines, height: startY + rows * 26 + 18 };
+}
+
+function distinctOtherColor(theme, adjacentColor) {
+  const normalizedAdjacent = adjacentColor?.toLowerCase();
+  for (const candidate of [
+    theme.other,
+    theme.track,
+    theme.border,
+    theme.accent
+  ]) {
+    if (/^#[0-9a-f]{6}$/i.test(candidate ?? "")
+        && candidate.toLowerCase() !== normalizedAdjacent) {
+      return candidate;
+    }
+  }
+  return normalizedAdjacent === "#ffffff" ? "#111318" : "#ffffff";
 }
 
 function linearize(value) {
@@ -164,7 +206,7 @@ function relativeLuminance(color) {
     + 0.0722 * linearize(blue);
 }
 
-function estimateTextWidth(value) {
+export function estimatedTextWidth(value) {
   return splitGraphemes(value).reduce((width, grapheme) => {
     return width + (/^[\x20-\x7e]$/.test(grapheme) ? 6.3 : 10.5);
   }, 0);

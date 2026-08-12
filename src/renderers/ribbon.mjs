@@ -33,7 +33,8 @@ export function renderRibbon({ stats, config, languages, theme }) {
       '    <rect ' + compositionAttributes(part) + ' x="'
         + svgNumber(cursor) + '" y="' + y + '" width="'
         + svgNumber(partWidth) + '" height="' + height + '" fill="'
-        + part.color + '"/>'
+        + part.color + '" stroke="' + theme.canvas
+        + '" stroke-width="2"/>'
     );
     if (!part.isOther && partWidth >= 62) {
       const textColor = contrastColor(part.color);

@@ -12,10 +12,12 @@
     .rank { fill: #ff5fd2; font-size: 9px; font-weight: 700; }
     .metric { fill: #fff5ff; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
     .metric-label { fill: #c5afd4; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-rank { fill: #c5afd4; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }
     .legend-label { fill: #fff5ff; font-size: 10.5px; font-weight: 600; }
     .legend-value { fill: #c5afd4; font-size: 9.5px; font-variant-numeric: tabular-nums; }
     .axis-note { fill: #c5afd4; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
     .part-label { font-size: 11px; font-weight: 700; }
+    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }
     .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
     .center-label { fill: #fff5ff; font-size: 12px; font-weight: 700; }
     .center-value { fill: #c5afd4; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
@@ -56,21 +58,21 @@
   <g data-role="legend" data-columns="2">
     <circle cx="28" cy="342" r="4" fill="#3178C6"/>
     <text class="legend-label" x="40" y="346">TypeScript</text>
-    <text class="legend-value" text-anchor="end" x="196" y="346">42.0%</text>
-    <circle cx="204" cy="342" r="4" fill="#3572A5"/>
-    <text class="legend-label" x="216" y="346">Python</text>
+    <text class="legend-value" text-anchor="end" x="188" y="346">42.0%</text>
+    <circle cx="212" cy="342" r="4" fill="#3572A5"/>
+    <text class="legend-label" x="224" y="346">Python</text>
     <text class="legend-value" text-anchor="end" x="372" y="346">25.0%</text>
     <circle cx="28" cy="368" r="4" fill="#178600"/>
     <text class="legend-label" x="40" y="372">C#</text>
-    <text class="legend-value" text-anchor="end" x="196" y="372">14.0%</text>
-    <circle cx="204" cy="368" r="4" fill="#222C37"/>
-    <text class="legend-label" x="216" y="372">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="188" y="372">14.0%</text>
+    <circle cx="212" cy="368" r="4" fill="#222C37"/>
+    <text class="legend-label" x="224" y="372">ShaderLab</text>
     <text class="legend-value" text-anchor="end" x="372" y="372">8.0%</text>
     <circle cx="28" cy="394" r="4" fill="#89E051"/>
     <text class="legend-label" x="40" y="398">Shell</text>
-    <text class="legend-value" text-anchor="end" x="196" y="398">6.0%</text>
-    <circle cx="204" cy="394" r="4" fill="#E34C26"/>
-    <text class="legend-label" x="216" y="398">HTML</text>
+    <text class="legend-value" text-anchor="end" x="188" y="398">6.0%</text>
+    <circle cx="212" cy="394" r="4" fill="#E34C26"/>
+    <text class="legend-label" x="224" y="398">HTML</text>
     <text class="legend-value" text-anchor="end" x="372" y="398">5.0%</text>
   </g>
 </svg>

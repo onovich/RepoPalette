@@ -1,36 +1,11 @@
 import { getTheme } from "./presentation.mjs";
 import {
-  renderPrism,
-  renderTreemap,
-  renderVoronoi
-} from "./renderers/area-composition.mjs";
-import { renderBars } from "./renderers/bars.mjs";
-import {
+  compositionLanguages,
   escapeXml,
   formatPercentage,
   truncateLabel
 } from "./renderers/common.mjs";
-import { renderConstellation } from "./renderers/constellation.mjs";
-import { renderHalo } from "./renderers/halo.mjs";
-import { renderOrbit } from "./renderers/orbit.mjs";
-import { renderRibbon } from "./renderers/ribbon.mjs";
-import {
-  renderBeadHalo,
-  renderMatrix
-} from "./renderers/unit-composition.mjs";
-
-const RENDERERS = Object.freeze({
-  bars: renderBars,
-  orbit: renderOrbit,
-  constellation: renderConstellation,
-  ribbon: renderRibbon,
-  "bead-halo": renderBeadHalo,
-  matrix: renderMatrix,
-  halo: renderHalo,
-  treemap: renderTreemap,
-  voronoi: renderVoronoi,
-  prism: renderPrism
-});
+import { getStyleDefinition } from "./renderers/index.mjs";
 
 export function renderSvg(stats, configInput) {
   const config = {
@@ -41,16 +16,16 @@ export function renderSvg(stats, configInput) {
     theme: "light",
     ...configInput
   };
-  const renderer = RENDERERS[config.style];
-  if (!renderer) {
+  const style = getStyleDefinition(config.style);
+  if (!style) {
     throw new TypeError("unknown style: " + config.style);
   }
   const theme = getTheme(config.theme);
   const languages = stats.languages.slice(0, config.top);
-  const descriptionLanguages = config.style in COMPOSITION_RENDERERS
-    ? compositionDescriptionLanguages(stats, languages)
+  const descriptionLanguages = style.composition
+    ? compositionLanguages(languages, stats.totalBytes, theme)
     : languages;
-  const layout = renderer({ stats, config, languages, theme });
+  const layout = style.render({ stats, config, languages, theme });
   const lines = [
     '<svg xmlns="http://www.w3.org/2000/svg"'
       + ' role="img" aria-labelledby="title description"'
@@ -60,7 +35,7 @@ export function renderSvg(stats, configInput) {
       + ' viewBox="0 0 ' + config.width + " " + layout.height + '">',
     '  <title id="title">' + escapeXml(config.title) + "</title>",
     '  <desc id="description">'
-      + buildDescription(stats, descriptionLanguages) + "</desc>",
+      + buildDescription(stats, descriptionLanguages, style) + "</desc>",
     ...styleLines(theme),
     '  <rect class="card" x="0.5" y="0.5" width="'
       + (config.width - 1) + '" height="' + (layout.height - 1)
@@ -74,19 +49,9 @@ export function renderSvg(stats, configInput) {
   return lines.join("\n");
 }
 
-const COMPOSITION_RENDERERS = Object.freeze({
-  ribbon: true,
-  "bead-halo": true,
-  matrix: true,
-  halo: true,
-  treemap: true,
-  voronoi: true,
-  prism: true
-});
-
 export { escapeXml };
 
-function buildDescription(stats, languages) {
+function buildDescription(stats, languages, style) {
   const scope = "Language usage across " + stats.includedRepositoryCount
     + " included public repositories.";
   if (languages.length === 0) {
@@ -96,7 +61,12 @@ function buildDescription(stats, languages) {
     .map((language) => language.name + ": "
       + formatPercentage(language.percentage))
     .join("; ");
-  return escapeXml(scope + " " + breakdown + ".");
+  const quantization = style.quantizedUnit
+    ? " This is a quantized 200-unit chart: 1 " + style.quantizedUnit
+      + " = 0.5%; unit counts are quantized, while the legend shows exact"
+      + " percentages."
+    : "";
+  return escapeXml(scope + " " + breakdown + "." + quantization);
 }
 
 function styleLines(theme) {
@@ -112,10 +82,12 @@ function styleLines(theme) {
     "    .rank { fill: " + theme.accent + "; font-size: 9px; font-weight: 700; }",
     "    .metric { fill: " + theme.ink + "; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }",
     "    .metric-label { fill: " + theme.muted + "; font-size: 7px; letter-spacing: 0.7px; }",
+    "    .legend-rank { fill: " + theme.muted + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }",
     "    .legend-label { fill: " + theme.ink + "; font-size: 10.5px; font-weight: 600; }",
     "    .legend-value { fill: " + theme.muted + "; font-size: 9.5px; font-variant-numeric: tabular-nums; }",
     "    .axis-note { fill: " + theme.muted + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }",
     "    .part-label { font-size: 11px; font-weight: 700; }",
+    "    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }",
     "    .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }",
     "    .center-label { fill: " + theme.ink + "; font-size: 12px; font-weight: 700; }",
     "    .center-value { fill: " + theme.muted + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }",
@@ -123,21 +95,6 @@ function styleLines(theme) {
     "    .empty { fill: " + theme.muted + "; font-size: 11px; }",
     "  </style>"
   ];
-}
-
-function compositionDescriptionLanguages(stats, languages) {
-  const visibleBytes = languages.reduce(
-    (sum, language) => sum + Math.max(0, language.bytes),
-    0
-  );
-  const otherBytes = Math.max(0, stats.totalBytes - visibleBytes);
-  if (otherBytes === 0) {
-    return languages;
-  }
-  return [...languages, {
-    name: "Other",
-    percentage: stats.totalBytes > 0 ? otherBytes / stats.totalBytes * 100 : 0
-  }];
 }
 
 function headerLines(stats, config, theme) {

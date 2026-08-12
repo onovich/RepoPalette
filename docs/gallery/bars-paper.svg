@@ -12,10 +12,12 @@
     .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
     .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
     .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-rank { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }
     .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
     .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
     .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
     .part-label { font-size: 11px; font-weight: 700; }
+    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }
     .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
     .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
     .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }

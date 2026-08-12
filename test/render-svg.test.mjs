@@ -172,6 +172,20 @@ test("unit composition layouts always render exactly two hundred equal units", (
   }
 });
 
+test("unit composition layouts disclose their quantization in accessible text", () => {
+  for (const [style, unit] of [
+    ["bead-halo", "bead"],
+    ["matrix", "cell"]
+  ]) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
+    assert.match(
+      svg,
+      new RegExp("1 " + unit + " = 0\\.5%; unit counts are quantized")
+    );
+    assert.match(svg, /the legend shows exact percentages/);
+  }
+});
+
 test("area composition geometry preserves every visible share", () => {
   for (const style of ["treemap", "voronoi", "prism"]) {
     const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
@@ -191,6 +205,52 @@ test("area composition geometry preserves every visible share", () => {
       assert.ok(Math.abs(actual - expected) <= 0.05, style + " " + expected);
     });
   }
+});
+
+test("area composition cells visibly map by rank to the exact legend", () => {
+  for (const style of ["treemap", "voronoi", "prism"]) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
+    for (const [index, language] of fixtureStats().languages.entries()) {
+      const rank = String(index + 1).padStart(2, "0");
+      assert.match(
+        svg,
+        new RegExp(
+          'data-role="part-rank" data-rank="' + (index + 1)
+            + '"[^>]*>' + rank + "<\\/text>"
+        ),
+        style
+      );
+      assert.match(
+        svg,
+        new RegExp(
+          'data-role="legend-rank" data-rank="' + (index + 1)
+            + '"[^>]*>' + rank + "<\\/text>[\\s\\S]*?>"
+            + language.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+            + "<\\/text>"
+        ),
+        style
+      );
+    }
+  }
+});
+
+test("paper ribbon keeps Other distinct from the adjacent language", () => {
+  const svg = renderSvg(fixtureStats({
+    totalBytes: 100,
+    languages: [
+      { name: "A", bytes: 30, percentage: 30, color: "#111111" },
+      { name: "B", bytes: 25, percentage: 25, color: "#222222" },
+      { name: "C", bytes: 20, percentage: 20, color: "#333333" },
+      { name: "D", bytes: 10, percentage: 10, color: "#444444" },
+      { name: "E", bytes: 8, percentage: 8, color: "#555555" },
+      { name: "F", bytes: 7, percentage: 7, color: "#666666" }
+    ]
+  }), fixtureConfig({ style: "ribbon", theme: "paper", top: 5 }));
+  const adjacent = /data-language="E"[^>]*fill="([^"]+)"[^>]*>[\s\S]*?data-language="Other"[^>]*fill="([^"]+)"/.exec(svg);
+
+  assert.ok(adjacent);
+  assert.notEqual(adjacent[1], adjacent[2]);
+  assert.match(svg, /data-language="Other"[^>]*stroke="#fef7ef"/);
 });
 
 test("prism facets stay ordered and inside the chart at narrow shares", () => {
@@ -304,6 +364,46 @@ test("keeps real long language names visible in narrow visual legends", () => {
       /class="legend-label"[^>]*>DIGITAL Command Language<\/text>/
     );
     assert.match(svg, /class="legend-label"[^>]*>Jupyter Notebook<\/text>/);
+  }
+});
+
+test("area layouts omit direct labels that do not fit their cells", () => {
+  const stats = fixtureStats({
+    totalBytes: 100,
+    languages: [
+      {
+        name: "Jupyter Notebook",
+        bytes: 48,
+        percentage: 48,
+        color: "#DA5B0B"
+      },
+      {
+        name: "Digital Command Language",
+        bytes: 32,
+        percentage: 32,
+        color: "#555555"
+      },
+      {
+        name: "Visual Basic .NET",
+        bytes: 20,
+        percentage: 20,
+        color: "#945DB7"
+      }
+    ]
+  });
+
+  for (const style of ["treemap", "voronoi", "prism"]) {
+    const svg = renderSvg(stats, fixtureConfig({ width: 320, style }));
+    assert.doesNotMatch(
+      svg,
+      /class="part-label"[^>]*>Digital Command Language<\/text>/,
+      style
+    );
+    assert.match(
+      svg,
+      /class="legend-label"[^>]*>Digital Command Language<\/text>/,
+      style
+    );
   }
 });
 

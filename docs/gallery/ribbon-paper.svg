@@ -12,10 +12,12 @@
     .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
     .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
     .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-rank { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }
     .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
     .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
     .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
     .part-label { font-size: 11px; font-weight: 700; }
+    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }
     .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
     .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
     .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
@@ -31,35 +33,35 @@
   <text class="axis-note" text-anchor="middle" x="200" y="88">COMPOSITION</text>
   <text class="axis-note" text-anchor="end" x="376" y="88">100%</text>
   <g data-role="ribbon-part">
-    <rect data-role="composition-part" data-language="TypeScript" data-share="42" x="24" y="100" width="147.84" height="78" fill="#024b81"/>
+    <rect data-role="composition-part" data-language="TypeScript" data-share="42" x="24" y="100" width="147.84" height="78" fill="#024b81" stroke="#fef7ef" stroke-width="2"/>
     <text class="part-label" x="34" y="130" fill="#ffffff">TypeScript</text>
     <text class="part-value" x="34" y="151" fill="#ffffff">42.0%</text>
-    <rect data-role="composition-part" data-language="Python" data-share="25" x="171.84" y="100" width="88" height="78" fill="#367db7"/>
+    <rect data-role="composition-part" data-language="Python" data-share="25" x="171.84" y="100" width="88" height="78" fill="#367db7" stroke="#fef7ef" stroke-width="2"/>
     <text class="part-label" x="181.84" y="130" fill="#ffffff">Python</text>
     <text class="part-value" x="181.84" y="151" fill="#ffffff">25.0%</text>
-    <rect data-role="composition-part" data-language="C#" data-share="14" x="259.84" y="100" width="49.28" height="78" fill="#6faddf"/>
-    <rect data-role="composition-part" data-language="ShaderLab" data-share="8" x="309.12" y="100" width="28.16" height="78" fill="#c9dce8"/>
-    <rect data-role="composition-part" data-language="Shell" data-share="6" x="337.28" y="100" width="21.12" height="78" fill="#fed9da"/>
-    <rect data-role="composition-part" data-language="HTML" data-share="5" x="358.4" y="100" width="17.6" height="78" fill="#fd7136"/>
+    <rect data-role="composition-part" data-language="C#" data-share="14" x="259.84" y="100" width="49.28" height="78" fill="#6faddf" stroke="#fef7ef" stroke-width="2"/>
+    <rect data-role="composition-part" data-language="ShaderLab" data-share="8" x="309.12" y="100" width="28.16" height="78" fill="#c9dce8" stroke="#fef7ef" stroke-width="2"/>
+    <rect data-role="composition-part" data-language="Shell" data-share="6" x="337.28" y="100" width="21.12" height="78" fill="#fed9da" stroke="#fef7ef" stroke-width="2"/>
+    <rect data-role="composition-part" data-language="HTML" data-share="5" x="358.4" y="100" width="17.6" height="78" fill="#fd7136" stroke="#fef7ef" stroke-width="2"/>
   </g>
   <g data-role="legend" data-columns="2">
     <circle cx="28" cy="208" r="4" fill="#024b81"/>
     <text class="legend-label" x="40" y="212">TypeScript</text>
-    <text class="legend-value" text-anchor="end" x="196" y="212">42.0%</text>
-    <circle cx="204" cy="208" r="4" fill="#367db7"/>
-    <text class="legend-label" x="216" y="212">Python</text>
+    <text class="legend-value" text-anchor="end" x="188" y="212">42.0%</text>
+    <circle cx="212" cy="208" r="4" fill="#367db7"/>
+    <text class="legend-label" x="224" y="212">Python</text>
     <text class="legend-value" text-anchor="end" x="372" y="212">25.0%</text>
     <circle cx="28" cy="234" r="4" fill="#6faddf"/>
     <text class="legend-label" x="40" y="238">C#</text>
-    <text class="legend-value" text-anchor="end" x="196" y="238">14.0%</text>
-    <circle cx="204" cy="234" r="4" fill="#c9dce8"/>
-    <text class="legend-label" x="216" y="238">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="188" y="238">14.0%</text>
+    <circle cx="212" cy="234" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="224" y="238">ShaderLab</text>
     <text class="legend-value" text-anchor="end" x="372" y="238">8.0%</text>
     <circle cx="28" cy="260" r="4" fill="#fed9da"/>
     <text class="legend-label" x="40" y="264">Shell</text>
-    <text class="legend-value" text-anchor="end" x="196" y="264">6.0%</text>
-    <circle cx="204" cy="260" r="4" fill="#fd7136"/>
-    <text class="legend-label" x="216" y="264">HTML</text>
+    <text class="legend-value" text-anchor="end" x="188" y="264">6.0%</text>
+    <circle cx="212" cy="260" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="224" y="264">HTML</text>
     <text class="legend-value" text-anchor="end" x="372" y="264">5.0%</text>
   </g>
 </svg>

@@ -1,6 +1,6 @@
 # RepoPalette part-to-whole style research
 
-Date: 2026-08-12  
+Date: 2026-08-12
 Status: research shortlist only; no renderer implementation is authorized by this note.
 
 Implementation update (2026-08-13): after preview review, the vertical Monolith Totem was removed because it duplicated the Ribbon encoding while using the card area less efficiently. The implemented seven are `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, and `prism`. The production code retains the data rules and validation gates below; this document preserves the earlier research path.

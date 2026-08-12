@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="bead-halo" data-theme="paper" width="400" height="406" viewBox="0 0 400 406">
   <title id="title">Language Composition</title>
-  <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%.</desc>
+  <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%. This is a quantized 200-unit chart: 1 bead = 0.5%; unit counts are quantized, while the legend shows exact percentages.</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
     .title { fill: #024b81; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
@@ -12,10 +12,12 @@
     .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
     .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
     .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-rank { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }
     .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
     .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
     .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
     .part-label { font-size: 11px; font-weight: 700; }
+    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }
     .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
     .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
     .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
@@ -244,21 +246,21 @@
   <g data-role="legend" data-columns="2">
     <circle cx="28" cy="306" r="4" fill="#024b81"/>
     <text class="legend-label" x="40" y="310">TypeScript</text>
-    <text class="legend-value" text-anchor="end" x="196" y="310">42.0%</text>
-    <circle cx="204" cy="306" r="4" fill="#367db7"/>
-    <text class="legend-label" x="216" y="310">Python</text>
+    <text class="legend-value" text-anchor="end" x="188" y="310">42.0%</text>
+    <circle cx="212" cy="306" r="4" fill="#367db7"/>
+    <text class="legend-label" x="224" y="310">Python</text>
     <text class="legend-value" text-anchor="end" x="372" y="310">25.0%</text>
     <circle cx="28" cy="332" r="4" fill="#6faddf"/>
     <text class="legend-label" x="40" y="336">C#</text>
-    <text class="legend-value" text-anchor="end" x="196" y="336">14.0%</text>
-    <circle cx="204" cy="332" r="4" fill="#c9dce8"/>
-    <text class="legend-label" x="216" y="336">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="188" y="336">14.0%</text>
+    <circle cx="212" cy="332" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="224" y="336">ShaderLab</text>
     <text class="legend-value" text-anchor="end" x="372" y="336">8.0%</text>
     <circle cx="28" cy="358" r="4" fill="#fed9da"/>
     <text class="legend-label" x="40" y="362">Shell</text>
-    <text class="legend-value" text-anchor="end" x="196" y="362">6.0%</text>
-    <circle cx="204" cy="358" r="4" fill="#fd7136"/>
-    <text class="legend-label" x="216" y="362">HTML</text>
+    <text class="legend-value" text-anchor="end" x="188" y="362">6.0%</text>
+    <circle cx="212" cy="358" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="224" y="362">HTML</text>
     <text class="legend-value" text-anchor="end" x="372" y="362">5.0%</text>
   </g>
 </svg>

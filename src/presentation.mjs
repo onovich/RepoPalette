@@ -1,15 +1,4 @@
-export const STYLE_NAMES = Object.freeze([
-  "bars",
-  "orbit",
-  "constellation",
-  "ribbon",
-  "bead-halo",
-  "matrix",
-  "halo",
-  "treemap",
-  "voronoi",
-  "prism"
-]);
+export { STYLE_NAMES } from "./renderers/index.mjs";
 
 export const THEME_NAMES = Object.freeze([
   "light",

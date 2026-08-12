@@ -8,7 +8,7 @@
     "generate": "node src/cli.mjs",
     "test": "node --test test/*.test.mjs",
     "gallery": "node scripts/generate-gallery.mjs",
-    "check": "node --check scripts/generate-gallery.mjs && node --check src/action.mjs && node --check src/action-runner.mjs && node --check src/aggregate.mjs && node --check src/cli.mjs && node --check src/config.mjs && node --check src/generate.mjs && node --check src/github-client.mjs && node --check src/output-files.mjs && node --check src/presentation.mjs && node --check src/render-svg.mjs && node --check src/renderers/area-composition.mjs && node --check src/renderers/bars.mjs && node --check src/renderers/common.mjs && node --check src/renderers/constellation.mjs && node --check src/renderers/halo.mjs && node --check src/renderers/orbit.mjs && node --check src/renderers/ribbon.mjs && node --check src/renderers/unit-composition.mjs && npm test"
+    "check": "node scripts/check-syntax.mjs && npm test"
   },
   "engines": {
     "node": ">=24"

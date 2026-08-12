@@ -12,10 +12,12 @@
     .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
     .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
     .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-rank { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; font-weight: 700; }
     .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
     .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
     .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
     .part-label { font-size: 11px; font-weight: 700; }
+    .part-rank { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; font-weight: 800; }
     .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
     .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
     .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
@@ -29,38 +31,50 @@
   <text class="style-tag" text-anchor="end" x="376" y="30">TREEMAP</text>
   <g data-role="treemap-part">
     <polygon data-role="composition-part" data-language="TypeScript" data-share="42" data-shape-role="treemap-part" points="24,86 171.84,86 171.84,311.28 24,311.28" fill="#024b81" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="1" text-anchor="middle" x="97.92" y="171.64" fill="#ffffff">01</text>
     <text class="part-label" text-anchor="middle" x="97.92" y="196.64" fill="#ffffff">TypeScript</text>
     <text class="part-value" text-anchor="middle" x="97.92" y="216.64" fill="#ffffff">42.0%</text>
     <polygon data-role="composition-part" data-language="Python" data-share="25" data-shape-role="treemap-part" points="171.84,86 302.71,86 302.71,237.48 171.84,237.48" fill="#367db7" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="2" text-anchor="middle" x="237.28" y="134.74" fill="#ffffff">02</text>
     <text class="part-label" text-anchor="middle" x="237.28" y="159.74" fill="#ffffff">Python</text>
     <text class="part-value" text-anchor="middle" x="237.28" y="179.74" fill="#ffffff">25.0%</text>
     <polygon data-role="composition-part" data-language="C#" data-share="14" data-shape-role="treemap-part" points="302.71,86 376,86 376,237.48 302.71,237.48" fill="#6faddf" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="3" text-anchor="middle" x="339.36" y="134.74" fill="#111318">03</text>
     <text class="part-label" text-anchor="middle" x="339.36" y="159.74" fill="#111318">C#</text>
     <text class="part-value" text-anchor="middle" x="339.36" y="179.74" fill="#111318">14.0%</text>
     <polygon data-role="composition-part" data-language="ShaderLab" data-share="8" data-shape-role="treemap-part" points="171.84,237.48 257.8,237.48 257.8,311.28 171.84,311.28" fill="#c9dce8" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="4" text-anchor="middle" x="214.82" y="247.38" fill="#111318">04</text>
     <text class="part-label" text-anchor="middle" x="214.82" y="272.38" fill="#111318">ShaderLab</text>
     <text class="part-value" text-anchor="middle" x="214.82" y="292.38" fill="#111318">8.0%</text>
     <polygon data-role="composition-part" data-language="Shell" data-share="6" data-shape-role="treemap-part" points="257.8,237.48 322.27,237.48 322.27,311.28 257.8,311.28" fill="#fed9da" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="5" text-anchor="middle" x="290.04" y="277.38" fill="#111318">05</text>
     <polygon data-role="composition-part" data-language="HTML" data-share="5" data-shape-role="treemap-part" points="322.27,237.48 376,237.48 376,311.28 322.27,311.28" fill="#fd7136" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-rank" data-role="part-rank" data-rank="6" text-anchor="middle" x="349.14" y="277.38" fill="#111318">06</text>
   </g>
   <g data-role="legend" data-columns="2">
-    <circle cx="28" cy="345.28" r="4" fill="#024b81"/>
-    <text class="legend-label" x="40" y="349.28">TypeScript</text>
-    <text class="legend-value" text-anchor="end" x="196" y="349.28">42.0%</text>
-    <circle cx="204" cy="345.28" r="4" fill="#367db7"/>
-    <text class="legend-label" x="216" y="349.28">Python</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="1" x="24" y="349.28">01</text>
+    <circle cx="56" cy="345.28" r="4" fill="#024b81"/>
+    <text class="legend-label" x="68" y="349.28">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="188" y="349.28">42.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="2" x="208" y="349.28">02</text>
+    <circle cx="240" cy="345.28" r="4" fill="#367db7"/>
+    <text class="legend-label" x="252" y="349.28">Python</text>
     <text class="legend-value" text-anchor="end" x="372" y="349.28">25.0%</text>
-    <circle cx="28" cy="371.28" r="4" fill="#6faddf"/>
-    <text class="legend-label" x="40" y="375.28">C#</text>
-    <text class="legend-value" text-anchor="end" x="196" y="375.28">14.0%</text>
-    <circle cx="204" cy="371.28" r="4" fill="#c9dce8"/>
-    <text class="legend-label" x="216" y="375.28">ShaderLab</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="3" x="24" y="375.28">03</text>
+    <circle cx="56" cy="371.28" r="4" fill="#6faddf"/>
+    <text class="legend-label" x="68" y="375.28">C#</text>
+    <text class="legend-value" text-anchor="end" x="188" y="375.28">14.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="4" x="208" y="375.28">04</text>
+    <circle cx="240" cy="371.28" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="252" y="375.28">ShaderLab</text>
     <text class="legend-value" text-anchor="end" x="372" y="375.28">8.0%</text>
-    <circle cx="28" cy="397.28" r="4" fill="#fed9da"/>
-    <text class="legend-label" x="40" y="401.28">Shell</text>
-    <text class="legend-value" text-anchor="end" x="196" y="401.28">6.0%</text>
-    <circle cx="204" cy="397.28" r="4" fill="#fd7136"/>
-    <text class="legend-label" x="216" y="401.28">HTML</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="5" x="24" y="401.28">05</text>
+    <circle cx="56" cy="397.28" r="4" fill="#fed9da"/>
+    <text class="legend-label" x="68" y="401.28">Shell</text>
+    <text class="legend-value" text-anchor="end" x="188" y="401.28">6.0%</text>
+    <text class="legend-rank" data-role="legend-rank" data-rank="6" x="208" y="401.28">06</text>
+    <circle cx="240" cy="397.28" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="252" y="401.28">HTML</text>
     <text class="legend-value" text-anchor="end" x="372" y="401.28">5.0%</text>
   </g>
 </svg>
