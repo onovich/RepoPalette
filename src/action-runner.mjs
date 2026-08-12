@@ -57,13 +57,7 @@ function readInputs(env, cwd) {
   }
 
   const style = input(env, "style") || DEFAULTS.style;
-  if (style !== "bars") {
-    throw new Error("style must currently be bars");
-  }
   const theme = input(env, "theme") || DEFAULTS.theme;
-  if (theme !== "light") {
-    throw new Error("theme must currently be light");
-  }
 
   const workspace = resolve(cwd);
   const outputInput = input(env, "output-directory")
@@ -91,7 +85,9 @@ function readInputs(env, cwd) {
       excludeRepositories: listInput(env, "exclude-repositories"),
       excludeLanguages: listInput(env, "exclude-languages"),
       title: input(env, "title") || DEFAULTS.title,
-      width: integerInput(env, "width", DEFAULTS.width)
+      width: integerInput(env, "width", DEFAULTS.width),
+      style,
+      theme
     }
   };
 }

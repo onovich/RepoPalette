@@ -39,17 +39,41 @@ test("runs from GitHub context without a personal access token", async (t) => {
   assert.doesNotMatch(outputs, /automatic-workflow-token/);
 });
 
-test("rejects an unavailable renderer instead of silently changing the design", async () => {
+test("passes a selected style and theme through to the generated card", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-style-"));
+  const outputFile = join(workspace, "github-output.txt");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  await runAction({
+    cwd: workspace,
+    env: {
+      "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+      INPUT_USERNAME: "onovich",
+      INPUT_STYLE: "orbit",
+      INPUT_THEME: "aurora",
+      GITHUB_OUTPUT: outputFile
+    },
+    fetchImpl: async () => fixtureResponse(),
+    sleep: async () => {},
+    logger: { info() {}, warn() {} }
+  });
+
+  const svg = await readFile(join(workspace, "assets", "top-langs.svg"), "utf8");
+  assert.match(svg, /data-style="orbit"/);
+  assert.match(svg, /data-theme="aurora"/);
+});
+
+test("rejects an unknown renderer instead of silently changing the design", async () => {
   await assert.rejects(
     runAction({
       env: {
         "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
         INPUT_USERNAME: "onovich",
-        INPUT_STYLE: "orbit",
+        INPUT_STYLE: "donut",
         GITHUB_OUTPUT: "unused"
       }
     }),
-    /style must currently be bars/
+    /style must be one of: bars, orbit, constellation/
   );
 });
 

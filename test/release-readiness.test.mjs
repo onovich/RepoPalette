@@ -46,6 +46,11 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^name: RepoPalette$/m);
   assert.match(action, /^author: onovich$/m);
   assert.match(action, /^description: .+$/m);
+  assert.match(action, /Visual layout: bars, orbit, or constellation\./);
+  assert.match(
+    action,
+    /Color theme: light, paper, midnight, aurora, terminal, or neon\./
+  );
   assert.match(action, /^\s+using: node24$/m);
   assert.match(action, /^\s+main: src\/action\.mjs$/m);
   assert.match(action, /^branding:\s*$/m);
