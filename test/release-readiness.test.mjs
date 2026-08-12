@@ -10,9 +10,8 @@ test("keeps the public install example aligned with the package version", async 
   const changelog = await readText("CHANGELOG.md");
   const versionTag = "v" + packageJson.version;
 
-  assert.match(readme, new RegExp(
-    "uses: onovich/RepoPalette@" + escapeRegExp(versionTag)
-  ));
+  assert.match(readme, /uses: onovich\/RepoPalette@[0-9a-f]{40}/);
+  assert.match(readme, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
   assert.match(readme, /permissions:\s*\n\s+contents: write/);
   assert.match(
     readme,
@@ -46,10 +45,22 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^\s+color: purple$/m);
 });
 
+test("runs CI for semantic version tags and checks the package version", async () => {
+  const workflow = await readText(".github/workflows/ci.yml");
+
+  assert.match(workflow, /push:\s*\n\s+branches:\s*\n\s+- main/);
+  assert.match(workflow, /tags:\s*\n\s+- "v\*"/);
+  assert.match(workflow, /if: github\.ref_type == 'tag'/);
+  assert.match(workflow, /GITHUB_REF_NAME/);
+  assert.match(workflow, /package\.json/);
+});
+
 test("keeps release-facing text as UTF-8 without a byte-order mark", async () => {
   for (const path of [
     "README.md",
     "CHANGELOG.md",
+    ".gitattributes",
+    ".github/workflows/ci.yml",
     "action.yml",
     "package.json",
     "docs/PRODUCT_DECISIONS.md"
@@ -66,9 +77,14 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
 
 test("keeps the README in paired English and Chinese blocks", async () => {
   const readme = await readText("README.md");
+  assertPairedReadme(readme);
+  assertPairedReadme(readme.replace(/\r?\n/g, "\r\n"));
+});
+
+function assertPairedReadme(readme) {
   let insideCodeFence = false;
 
-  for (const [index, line] of readme.split("\n").entries()) {
+  for (const [index, line] of readme.split(/\r?\n/).entries()) {
     if (line.startsWith("```")) {
       insideCodeFence = !insideCodeFence;
       continue;
@@ -94,7 +110,7 @@ test("keeps the README in paired English and Chinese blocks", async () => {
     );
   }
   assert.equal(insideCodeFence, false, "README has an unclosed code fence");
-});
+}
 
 function readText(path) {
   return readFile(new URL(path, root), "utf8");

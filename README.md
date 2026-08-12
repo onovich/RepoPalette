@@ -56,7 +56,7 @@ jobs:
 
       - name: Generate language visual
         id: repopalette
-        uses: onovich/RepoPalette@v0.1.0
+        uses: onovich/RepoPalette@4dfd83c030dfd6dff7bd8af12ad30947c4b63f1f # Pinned preview revision
         with:
           style: bars
           theme: light
@@ -87,7 +87,7 @@ Embed the generated SVG in the Profile README.<br/>**在 Profile README 中嵌�
 ![GitHub languages](./assets/top-langs.svg)
 ```
 
-The readable `@v0.1.0` tag is convenient for the preview. Workflows with stricter supply-chain requirements can pin RepoPalette to the full commit SHA shown by the release tag.<br/>**易读的 `@v0.1.0` 标签适合预览版快速安装；对供应链要求更严格的工作流，可以固定到该 Release 标签对应的完整提交 SHA。**
+The Quick Start pins the exact revision already exercised by the live Profile because the workflow can write repository files. The readable `@v0.1.0` release tag is available as a convenience, while a full commit SHA remains the recommended default for workflows with `contents: write`.<br/>**由于该工作流可以写入仓库文件，快速开始示例默认固定到已经被真实 Profile 验证的精确版本。发布后也可以使用更易读的 `@v0.1.0` 标签，但对于授予 `contents: write` 的工作流，完整提交 SHA 仍是推荐默认值。**
 
 ## Configuration
 
