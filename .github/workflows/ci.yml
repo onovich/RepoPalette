@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Check source and run tests
+        run: npm run check
+
+  smoke:
+    name: Live action smoke test
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Run RepoPalette locally
+        id: repopalette
+        uses: ./
+        with:
+          username: onovich
+          output-directory: .tmp/smoke
+      - name: Verify generated files and outputs
+        shell: bash
+        run: |
+          test -s "${{ steps.repopalette.outputs.svg-path }}"
+          test -s "${{ steps.repopalette.outputs.data-path }}"
+          test "${{ steps.repopalette.outputs.repository-count }}" -ge 1

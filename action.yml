@@ -1,0 +1,69 @@
+name: RepoPalette
+author: onovich
+description: Distinctive GitHub language visuals, without configuration overload.
+
+inputs:
+  style:
+    description: Visual layout. Phase 1 currently supports bars.
+    required: false
+    default: bars
+  theme:
+    description: Color theme. Phase 1 currently supports light.
+    required: false
+    default: light
+  username:
+    description: GitHub account whose public, owned repositories are analyzed.
+    required: false
+    default: ${{ github.repository_owner }}
+  github-token:
+    description: GitHub API token. The automatic workflow token is used by default; no PAT is needed for public repositories.
+    required: false
+    default: ${{ github.token }}
+  output-directory:
+    description: Repository-relative directory for the generated SVG and audit JSON.
+    required: false
+    default: assets
+  top:
+    description: Number of languages displayed, from 1 to 12.
+    required: false
+    default: "6"
+  include-archived:
+    description: Include archived repositories in the statistics.
+    required: false
+    default: "false"
+  exclude-repositories:
+    description: Comma-separated repository names to exclude.
+    required: false
+    default: ""
+  exclude-languages:
+    description: Comma-separated language names to exclude.
+    required: false
+    default: ""
+  title:
+    description: Title rendered in the SVG.
+    required: false
+    default: Most Used Languages
+  width:
+    description: SVG width from 320 to 800 pixels.
+    required: false
+    default: "400"
+
+outputs:
+  svg-path:
+    description: Absolute path to the generated SVG.
+  data-path:
+    description: Absolute path to the generated audit JSON.
+  repository-count:
+    description: Number of public, owned repositories returned by GitHub.
+  included-repository-count:
+    description: Number of repositories included after filters.
+  language-count:
+    description: Number of languages in the audit data.
+
+runs:
+  using: node24
+  main: src/action.mjs
+
+branding:
+  icon: bar-chart-2
+  color: purple

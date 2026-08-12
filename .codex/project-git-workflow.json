@@ -7,7 +7,7 @@
     "safeDirectory":  "C:/Users/Administrator/Documents/Playground 2/RepoPalette",
     "statusCommand":  "git -c \"safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette\" status --short --branch",
     "validationCommands":  [
-
+                               "npm run check"
                            ],
     "stagingPolicy":  "ask each time",
     "commitCommand":  "",
