@@ -32,7 +32,7 @@ jobs:
       manual-languages: "C#,ShaderLab,HLSL,GLSL"
 ```
 
-The reusable workflow keeps both groups in one SVG. The title, repository scope, outer card, and optional RepoPalette watermark appear once. A shared rail shows each group's share of all language bytes; percentages inside each section show that group's own language composition.
+The reusable workflow keeps both groups in one SVG. The title, repository scope, outer card, and optional RepoPalette watermark appear once. A shared rail shows each group's share of all language bytes; percentages inside each section show that group's own language composition. Manual uses a theme-aware warm palette and Vibe a cool palette. Their primary colors repeat in the shared rail, section marks, chart, and legend so the relationship remains visible across every layout.
 
 ## Use the Action directly
 

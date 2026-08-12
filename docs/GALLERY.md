@@ -8,7 +8,7 @@ Layout names are kept outside the artwork. Each SVG shows the small default `Rep
 
 ## Optional coding-approach view
 
-When the owner declares Manual and Vibe language groups, RepoPalette keeps them in one card. The shared rail shows the groups' overall byte share; each section then shows its own language composition.
+When the owner declares Manual and Vibe language groups, RepoPalette keeps them in one card. The shared rail shows the groups' overall byte share; each section then shows its own language composition. Manual uses a warm palette and Vibe a cool palette, with each section's primary color matching its segment in the shared rail. The exact hues adapt to the selected theme without changing that visual meaning.
 
 ![Combined Manual Coding and Vibe Coding ribbon](gallery/coding-split-ribbon-paper.svg)
 

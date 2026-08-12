@@ -6,6 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-13
+
+### Changed
+
+- Manual Coding now uses a warm semantic palette and Vibe Coding a cool semantic palette across all six themes. Each group's primary color is repeated in the overview rail, section marker, chart, and legend.<br/>**Manual Coding 现在在六种主题中统一使用暖色语义色板，Vibe Coding 使用冷色语义色板；各组主色会在总览带、分区标记、图形和图例中保持一致。**
+- The `paper` split view now keeps every Manual language in the coral/apricot family and every Vibe language, including `Other`, in the deep-blue/mist-blue family.<br/>**`paper` 分组视图现在让所有 Manual 语言保持在珊瑚橙/杏橙色系，所有 Vibe 语言（包括 `Other`）保持在深蓝/雾蓝色系。**
+
 ## [0.5.0] - 2026-08-13
 
 ### Changed
@@ -77,7 +84,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.6.0
 [0.5.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.5.0
 [0.4.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.4.0
 [0.3.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.3.0

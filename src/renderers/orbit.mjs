@@ -1,6 +1,6 @@
 import {
   bytePercentage,
-  renderLegend,
+  renderSeriesLegend,
   seriesColor,
   svgNumber
 } from "./common.mjs";
@@ -49,11 +49,12 @@ export function renderOrbit({ stats, config, languages, theme }) {
   });
 
   const legendY = centerY + outerRadius + 30;
-  const legend = renderLegend({
+  const legend = renderSeriesLegend({
     width: config.width,
     languages,
     theme,
-    startY: legendY
+    startY: legendY,
+    useThemeSeries: config.useThemeSeries
   });
   lines.push(...legend.lines);
   return { height: legend.height, lines };

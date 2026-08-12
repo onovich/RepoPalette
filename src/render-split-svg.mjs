@@ -1,4 +1,4 @@
-import { getTheme } from "./presentation.mjs";
+import { getCodingGroupTheme, getTheme } from "./presentation.mjs";
 import {
   compositionLanguages,
   escapeXml,
@@ -28,16 +28,29 @@ export function renderSplitSvg(groups, configInput) {
     throw new TypeError("unknown style: " + config.style);
   }
   const theme = getTheme(config.theme);
+  const manualTheme = getCodingGroupTheme(config.theme, "manual");
+  const vibeTheme = getCodingGroupTheme(config.theme, "vibe");
   const width = Math.max(640, Math.min(800, config.width * 2));
   const panelWidth = width / 2;
   const panelConfig = {
     ...config,
     width: panelWidth,
     compactPanel: true,
-    showBranding: false
+    showBranding: false,
+    useThemeSeries: true
   };
-  const manualLayout = renderGroupLayout(groups.manual, panelConfig, style, theme);
-  const vibeLayout = renderGroupLayout(groups.vibe, panelConfig, style, theme);
+  const manualLayout = renderGroupLayout(
+    groups.manual,
+    panelConfig,
+    style,
+    manualTheme
+  );
+  const vibeLayout = renderGroupLayout(
+    groups.vibe,
+    panelConfig,
+    style,
+    vibeTheme
+  );
   const height = Math.max(manualLayout.height, vibeLayout.height)
     + CONTENT_OFFSET_Y;
   const repositoryCount = Number.isInteger(groups.manual.repositoryCount)
@@ -45,8 +58,8 @@ export function renderSplitSvg(groups, configInput) {
     : groups.manual.includedRepositoryCount;
   const manualShare = groups.manual.classification.percentageOfTotal;
   const vibeShare = groups.vibe.classification.percentageOfTotal;
-  const manualColor = theme.accent;
-  const vibeColor = theme.series?.[0] ?? theme.ink;
+  const manualColor = manualTheme.series[0];
+  const vibeColor = vibeTheme.series[0];
   const lines = [
     '<svg xmlns="http://www.w3.org/2000/svg"'
       + ' role="img" aria-labelledby="title description"'
@@ -57,9 +70,15 @@ export function renderSplitSvg(groups, configInput) {
       + ' viewBox="0 0 ' + width + " " + height + '">',
     '  <title id="title">' + escapeXml(config.title) + "</title>",
     '  <desc id="description">'
-      + buildDescription(groups, config, style, theme) + "</desc>",
+      + buildDescription(
+        groups,
+        config,
+        style,
+        manualTheme,
+        vibeTheme
+      ) + "</desc>",
     ...renderStyleLines(theme),
-    ...splitStyleLines(theme),
+    ...splitStyleLines(theme, manualColor, vibeColor),
     '  <rect class="card" x="0.5" y="0.5" width="'
       + (width - 1) + '" height="' + (height - 1)
       + '" rx="14" fill="' + theme.canvas + '" stroke="'
@@ -120,7 +139,7 @@ function renderGroupLayout(stats, config, style, theme) {
   return style.render({ stats, config, languages, theme });
 }
 
-function splitStyleLines(theme) {
+function splitStyleLines(theme, manualColor, vibeColor) {
   return [
     "  <style>",
     "    .group-title { fill: " + theme.ink
@@ -129,6 +148,10 @@ function splitStyleLines(theme) {
       + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;"
       + " font-size: 9px; font-variant-numeric: tabular-nums;"
       + " letter-spacing: 0.4px; }",
+    "    [data-role=coding-group][data-group=manual] .rank { fill: "
+      + manualColor + "; }",
+    "    [data-role=coding-group][data-group=vibe] .rank { fill: "
+      + vibeColor + "; }",
     "  </style>"
   ];
 }
@@ -194,7 +217,13 @@ function overviewLines({
   return lines;
 }
 
-function buildDescription(groups, config, style, theme) {
+function buildDescription(
+  groups,
+  config,
+  style,
+  manualTheme,
+  vibeTheme
+) {
   const repositoryCount = Number.isInteger(groups.manual.repositoryCount)
     ? groups.manual.repositoryCount
     : groups.manual.includedRepositoryCount;
@@ -203,14 +232,14 @@ function buildDescription(groups, config, style, theme) {
     groups.manual,
     config.top,
     style,
-    theme
+    manualTheme
   );
   const vibe = describeGroup(
     config.vibeTitle,
     groups.vibe,
     config.top,
     style,
-    theme
+    vibeTheme
   );
   const quantization = style.quantizedUnit
     ? " Values are shown with exact percentages; visual "
