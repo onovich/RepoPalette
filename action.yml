@@ -56,7 +56,7 @@ inputs:
     required: false
     default: off
   manual-languages:
-    description: "Comma-separated languages declared as manually coded when coding-mode is split. Every remaining language is placed in the Vibe Coding chart."
+    description: "Comma-separated languages declared as manually coded when coding-mode is split. Every remaining language is placed in the Vibe Coding section."
     required: false
     default: ""
   manual-title:
