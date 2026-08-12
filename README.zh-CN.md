@@ -6,103 +6,97 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-选择一种布局和主题，根据你的公开 GitHub 仓库生成编程语言构成图。
+为 GitHub Profile 生成一张会自动更新的编程语言构成图：视觉清晰，比例准确，不依赖在线图片服务。
 
-RepoPalette 按计划自动运行，并把 SVG 和审计数据保存在你自己的 Profile 仓库中。无需创建个人令牌、部署图片服务或注册其他账号。
+RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在以后每周一检查变化。
 
-| `ribbon` | `matrix` | `voronoi` |
-| --- | --- | --- |
-| ![Ribbon 布局](docs/gallery/ribbon-paper.svg) | ![Matrix 布局](docs/gallery/matrix-paper.svg) | ![Voronoi 布局](docs/gallery/voronoi-paper.svg) |
+只添加一个小文件、提交一次；不用注册其他账号，不用保管密钥，也不用部署图片服务。
 
-[在画廊中比较全部布局与主题。](docs/GALLERY.md)
-
-## 它有什么不同？
-
-- 十种专门设计的布局，同时保留准确的语言名称和百分比。
-- 读取完整的公开仓库列表，不会在前几页之后悄悄停止统计。
-- 生成文件归你自己的仓库所有，图片显示不依赖实时卡片服务。
-- 可读的 JSON 会列出纳入和排除的仓库；更新失败时，上一份有效文件保持不变。
-- 可选的 Manual/Vibe 双图完全由用户声明，不会假装检测哪些代码由 AI 编写。
+![RepoPalette ribbon 预览](docs/gallery/ribbon-paper.svg)
 
 ## 快速开始
 
-在你的 GitHub Profile 仓库（`你的用户名/你的用户名`）中创建 `.github/workflows/repopalette.yml`：
+### 让 AI 安装
+
+如果 AI 编程工具可以编辑你的 Profile 仓库，把下面这句话发给它：
+
+> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/ecedae024e71824333856352111eea5d05d56773/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
+
+安装说明已经写明该改什么、哪些内容不能碰，你不需要先学会 GitHub Actions。
+
+### 自己安装
+
+在 Profile 仓库（`你的用户名/你的用户名`）中新建 `.github/workflows/repopalette.yml`，粘贴以下内容：
 
 ```yaml
-name: Update RepoPalette
-
+name: RepoPalette
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/repopalette.yml
   schedule:
     - cron: "17 3 * * 1"
-
 permissions:
   contents: write
-
 jobs:
   update:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out profile repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Generate language chart
-        id: repopalette
-        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
-        with:
-          style: orbit
-          theme: aurora
-
-      - name: Commit changes
-        shell: bash
-        env:
-          SVG_PATH: ${{ steps.repopalette.outputs.svg-path }}
-          DATA_PATH: ${{ steps.repopalette.outputs.data-path }}
-        run: |
-          git add -- "$SVG_PATH" "$DATA_PATH"
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore(profile): update RepoPalette"
-          git push
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
 ```
 
-然后：
+<details>
+<summary><strong>不熟悉 GitHub 的文件编辑器？</strong></summary>
 
-1. 打开仓库的 **Actions** 页面，手动运行一次 **Update RepoPalette**。
-2. 在 Profile 的 `README.md` 中加入 `![GitHub languages](./assets/top-langs.svg)`。
+打开你的 Profile 仓库，选择 **Add file → Create new file**，把 `.github/workflows/repopalette.yml` 填入文件名，粘贴上方内容，再选择 **Commit changes**。
+</details>
 
-工作流会在每周一检查变化。正式发布后也可使用易读的 `@v0.3.0` 标签；对于拥有写权限的工作流，上方固定的完整提交 SHA 更安全。
+提交文件即可。第一次提交会自动启动 RepoPalette；Actions 检查变绿时，图表已经加入 Profile README。此后每周一自动检查，也可以随时通过 **Actions → RepoPalette → Run workflow** 手动刷新。
 
-## 自定义
+发布后也可使用易读的 `@v0.4.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
 
-修改 `with` 中的两个值：
+## 为什么选择 RepoPalette？
 
-- `style`：`bars`、`orbit`、`constellation`、`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 或 `prism`
-- `theme`：`light`、`paper`、`midnight`、`aurora`、`terminal` 或 `neon`
+- **不只是常规横条卡片。** 十种布局兼顾视觉辨识度、完整语言名称和准确百分比。
+- **Profile 不依赖实时图片服务。** 生成文件保存在你自己的仓库；以后某次更新失败，原图仍然可以显示。
+- **统计结果可以核对。** 可读的数据文件会列出纳入和排除的仓库，不把统计范围藏起来。
+- **安装保持简单。** 一份短工作流负责生成、验证、加入 README 和后续更新。
 
-你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。图中默认显示小号 `RepoPalette` 署名；设置 `show-branding: false` 可将其关闭。全部选项见 [`action.yml`](action.yml)。
+[在画廊中比较全部布局和主题。](docs/GALLERY.md)
 
-如需分别生成 **Manual Coding** 与 **Vibe Coding** 两张图，设置 `coding-mode: split`，并在 `manual-languages` 中列出你本人声明为手动编码的语言（例如 `"C#,ShaderLab,HLSL,GLSL"`）。其余语言以及以后新出现的语言都会进入 Vibe Coding；可通过 `manual-title` 与 `vibe-title` 修改两张图的标题。提交 `manual-svg-path`、`vibe-svg-path` 与 `data-path` 指向的文件，再嵌入 `assets/top-langs-manual.svg` 和 `assets/top-langs-vibe.svg`。这只是用户主动选择的展示规则，不是 AI 检测。
+## 常见问题
 
-## 统计范围
+<details>
+<summary><strong>我还没有 Profile 仓库，怎么办？</strong></summary>
 
-- 统计所选 GitHub 账号拥有的公开仓库。
-- 排除 fork；默认排除归档仓库。
-- 百分比基于 GitHub 提供的语言字节数。
-- 图表不衡量熟练度、投入时间、代码质量或 AI 作者身份；Manual/Vibe 分组完全由 Profile 所有者声明。
+[新建一个公开仓库](https://github.com/new?visibility=public)，仓库名必须与你的 GitHub 用户名完全相同，并勾选创建 README；然后按上方 Quick Start 操作。GitHub 会把这个 README 显示在你的 Profile 中。
+</details>
 
-RepoPalette 还会生成 `assets/top-langs-data.json`，记录完整的统计范围。
+<details>
+<summary><strong>会统计什么？</strong></summary>
 
-## 开发
+统计你本人拥有的公开仓库。排除 fork，默认排除归档仓库，百分比来自 GitHub 的语言字节数。以后新建的公开仓库会在下一次运行时自动加入。公开仓库连续 60 天没有仓库活动时，GitHub 可能暂停定时任务；遇到这种情况，在 Actions 中重新启用并手动运行一次即可。[查看说明](docs/ADVANCED_USAGE.md#troubleshooting-scheduled-updates)
+</details>
 
-RepoPalette 需要 Node.js 24 或更高版本，并且没有运行时依赖。
+<details>
+<summary><strong>需要创建密钥或个人令牌吗？</strong></summary>
 
-```bash
-npm run check
-```
+不需要。每次运行时，GitHub 会临时给工作流一张“通行证”，运行结束后自动失效。你不用创建或保管长期密钥，也不用注册其他账号或部署服务器。
+</details>
 
-另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。
+<details>
+<summary><strong>为什么需要写入权限？</strong></summary>
+
+只用于把图表和数据保存到 Profile 仓库，并维护 `README.md` 中带标记的一小段内容。它不会修改被统计的其他仓库。
+</details>
+
+<details>
+<summary><strong>它会评价编程能力或检测 AI 代码吗？</strong></summary>
+
+不会。它只展示语言构成，不评价能力、投入时间、代码质量或作者身份。可选的 Manual/Vibe 双图也只是由你本人声明的分组。
+</details>
+
+## 需要更多控制？
+
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 双图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
+
+参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。

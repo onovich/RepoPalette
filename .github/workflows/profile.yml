@@ -1,0 +1,104 @@
+name: Generate RepoPalette profile card
+
+on:
+  workflow_call:
+    inputs:
+      style:
+        description: Visual layout
+        required: false
+        type: string
+        default: ribbon
+      theme:
+        description: Color theme
+        required: false
+        type: string
+        default: paper
+      top:
+        description: Number of languages to show
+        required: false
+        type: number
+        default: 6
+      show-branding:
+        description: Show the small RepoPalette watermark
+        required: false
+        type: boolean
+        default: true
+      coding-mode:
+        description: Use off for one chart or split for Manual and Vibe charts
+        required: false
+        type: string
+        default: off
+      manual-languages:
+        description: Comma-separated manual languages when coding-mode is split
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repopalette-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Generate and install RepoPalette
+        id: repopalette
+        uses: onovich/RepoPalette@bb6f6b4f1cd4a03d02c83a848fd092d823f32091 # v0.4.0 implementation
+        with:
+          style: ${{ inputs.style }}
+          theme: ${{ inputs.theme }}
+          top: ${{ inputs.top }}
+          show-branding: ${{ inputs['show-branding'] }}
+          coding-mode: ${{ inputs['coding-mode'] }}
+          manual-languages: ${{ inputs['manual-languages'] }}
+          update-readme: true
+
+      - name: Verify generated files
+        shell: bash
+        env:
+          SVG_PATH: ${{ steps.repopalette.outputs.svg-path }}
+          MANUAL_SVG_PATH: ${{ steps.repopalette.outputs.manual-svg-path }}
+          VIBE_SVG_PATH: ${{ steps.repopalette.outputs.vibe-svg-path }}
+          DATA_PATH: ${{ steps.repopalette.outputs.data-path }}
+          README_PATH: ${{ steps.repopalette.outputs.readme-path }}
+        run: |
+          test -s "$DATA_PATH"
+          test -s "$README_PATH"
+          if [[ -n "$SVG_PATH" ]]; then
+            test -s "$SVG_PATH"
+          else
+            test -s "$MANUAL_SVG_PATH"
+            test -s "$VIBE_SVG_PATH"
+          fi
+
+      - name: Commit changes
+        shell: bash
+        env:
+          SVG_PATH: ${{ steps.repopalette.outputs.svg-path }}
+          MANUAL_SVG_PATH: ${{ steps.repopalette.outputs.manual-svg-path }}
+          VIBE_SVG_PATH: ${{ steps.repopalette.outputs.vibe-svg-path }}
+          DATA_PATH: ${{ steps.repopalette.outputs.data-path }}
+          README_PATH: ${{ steps.repopalette.outputs.readme-path }}
+        run: |
+          files=("$DATA_PATH" "$README_PATH")
+          if [[ -n "$SVG_PATH" ]]; then
+            files+=("$SVG_PATH")
+          else
+            files+=("$MANUAL_SVG_PATH" "$VIBE_SVG_PATH")
+          fi
+          git add -- "${files[@]}"
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(profile): update RepoPalette"
+          git push

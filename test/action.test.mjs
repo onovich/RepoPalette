@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
 import { runAction } from "../src/action-runner.mjs";
+import { updateProfileReadme } from "../src/profile-readme.mjs";
 
 test("runs from GitHub context without a personal access token", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-action-"));
@@ -147,6 +148,151 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
   assert.match(outputs, /^svg-path=$/m);
   assert.match(outputs, /^manual-svg-path=.*top-langs-manual\.svg$/m);
   assert.match(outputs, /^vibe-svg-path=.*top-langs-vibe\.svg$/m);
+});
+
+test("can install and maintain a single chart in the profile README", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-"));
+  const outputFile = join(workspace, "github-output.txt");
+  const readmePath = join(workspace, "README.md");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+  const originalReadme = "# onovich\n\nHello.\n\n  \n";
+  await writeFile(readmePath, originalReadme, "utf8");
+
+  const options = {
+    cwd: workspace,
+    env: {
+      "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+      GITHUB_REPOSITORY_OWNER: "onovich",
+      "INPUT_UPDATE-README": "true",
+      GITHUB_OUTPUT: outputFile
+    },
+    fetchImpl: async () => fixtureResponse(),
+    sleep: async () => {},
+    logger: { info() {}, warn() {} }
+  };
+
+  const first = await runAction(options);
+  await runAction(options);
+
+  const readme = await readFile(readmePath, "utf8");
+  const outputs = await readFile(outputFile, "utf8");
+  assert.ok(
+    readme.startsWith(originalReadme),
+    "installing the managed block must preserve all existing README bytes"
+  );
+  assert.match(readme, /<!-- repopalette:start -->/);
+  assert.match(
+    readme,
+    /!\[GitHub language composition\]\(\.\/assets\/top-langs\.svg\)/
+  );
+  assert.match(readme, /<!-- repopalette:end -->/);
+  assert.equal(readme.match(/<!-- repopalette:start -->/g)?.length, 1);
+  assert.equal(first.readmePath, readmePath);
+  assert.match(outputs, /^readme-path=.*README\.md$/m);
+});
+
+test("updates the managed README block for split charts", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-split-"));
+  const outputFile = join(workspace, "github-output.txt");
+  const readmePath = join(workspace, "README.md");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+  await writeFile(
+    readmePath,
+    "# Profile\n\n<!-- repopalette:start -->\nold\n<!-- repopalette:end -->\n",
+    "utf8"
+  );
+
+  await runAction({
+    cwd: workspace,
+    env: {
+      "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+      GITHUB_REPOSITORY_OWNER: "onovich",
+      "INPUT_UPDATE-README": "true",
+      "INPUT_CODING-MODE": "split",
+      "INPUT_MANUAL-LANGUAGES": "C#",
+      GITHUB_OUTPUT: outputFile
+    },
+    fetchImpl: async () => fixtureResponse({
+      languages: [
+        { name: "C#", size: 600, color: "#178600" },
+        { name: "TypeScript", size: 400, color: "#3178c6" }
+      ]
+    }),
+    sleep: async () => {},
+    logger: { info() {}, warn() {} }
+  });
+
+  const readme = await readFile(readmePath, "utf8");
+  assert.doesNotMatch(readme, /\nold\n/);
+  assert.match(readme, /top-langs-manual\.svg/);
+  assert.match(readme, /top-langs-vibe\.svg/);
+  assert.match(readme, /width="49%"/);
+  assert.equal(readme.match(/<!-- repopalette:start -->/g)?.length, 1);
+});
+
+test("rejects reversed README markers instead of reporting success", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-order-"));
+  const outputFile = join(workspace, "github-output.txt");
+  const readmePath = join(workspace, "README.md");
+  const originalReadme = [
+    "# Profile",
+    "",
+    "<!-- repopalette:end -->",
+    "old",
+    "<!-- repopalette:start -->",
+    ""
+  ].join("\n");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+  await writeFile(readmePath, originalReadme, "utf8");
+
+  await assert.rejects(
+    runAction({
+      cwd: workspace,
+      env: {
+        "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+        GITHUB_REPOSITORY_OWNER: "onovich",
+        "INPUT_UPDATE-README": "true",
+        GITHUB_OUTPUT: outputFile
+      },
+      fetchImpl: async () => fixtureResponse(),
+      sleep: async () => {},
+      logger: { info() {}, warn() {} }
+    }),
+    /one complete, ordered RepoPalette block or none/
+  );
+  assert.equal(await readFile(readmePath, "utf8"), originalReadme);
+});
+
+test("encodes custom output paths in Markdown and HTML image targets", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-paths-"));
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  await updateProfileReadme({
+    workspace,
+    username: "onovich",
+    codingMode: "split",
+    manualSvgPath: join(
+      workspace,
+      "profile cards",
+      'manual #"chart).svg'
+    ),
+    vibeSvgPath: join(
+      workspace,
+      "profile cards",
+      "vibe (chart).svg"
+    )
+  });
+
+  const readme = await readFile(join(workspace, "README.md"), "utf8");
+  assert.match(
+    readme,
+    /src="\.\/profile%20cards\/manual%20%23%22chart%29\.svg"/
+  );
+  assert.match(
+    readme,
+    /src="\.\/profile%20cards\/vibe%20%28chart%29\.svg"/
+  );
+  assert.doesNotMatch(readme, /src="[^"]*[ #()]/);
 });
 
 test("rejects an unknown renderer instead of silently changing the design", async () => {

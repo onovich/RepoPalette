@@ -67,6 +67,10 @@ inputs:
     description: Title rendered in the vibe SVG when coding-mode is split.
     required: false
     default: Vibe Coding
+  update-readme:
+    description: Add or update a managed RepoPalette chart block in README.md.
+    required: false
+    default: "false"
 
 outputs:
   svg-path:
@@ -77,6 +81,8 @@ outputs:
     description: Absolute path to the Vibe Coding SVG in split mode; otherwise empty.
   data-path:
     description: Absolute path to the generated audit JSON.
+  readme-path:
+    description: Absolute path to README.md when update-readme is enabled; otherwise empty.
   repository-count:
     description: Number of public, owned repositories returned by GitHub.
   included-repository-count:
