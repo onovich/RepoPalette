@@ -4,7 +4,7 @@ import {
   contrastColor,
   escapeXml,
   estimatedTextWidth,
-  formatPercentage,
+  formatPercentageMarkup,
   renderCompositionEmpty,
   renderCompositionLegend,
   svgNumber
@@ -80,7 +80,7 @@ function renderAreaComposition({ stats, config, languages, theme }, layout) {
         '    <text class="part-value" text-anchor="middle" x="'
           + svgNumber(cell.centerX) + '" y="' + svgNumber(cell.centerY + 18)
           + '" fill="' + cell.labelColor + '">'
-          + formatPercentage(cell.part.share) + "</text>"
+          + formatPercentageMarkup(cell.part.share) + "</text>"
       );
     }
   });

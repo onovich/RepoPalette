@@ -4,7 +4,7 @@ import {
   contrastColor,
   escapeXml,
   estimatedTextWidth,
-  formatPercentage,
+  formatPercentageMarkup,
   renderCompositionEmpty,
   renderCompositionLegend,
   svgNumber
@@ -50,7 +50,7 @@ export function renderRibbon({ stats, config, languages, theme }) {
           + escapeXml(part.name) + "</text>",
         '    <text class="part-value" x="' + svgNumber(cursor + 10)
           + '" y="' + (y + 51) + '" fill="' + textColor + '">'
-          + formatPercentage(part.share) + "</text>"
+          + formatPercentageMarkup(part.share) + "</text>"
       );
     }
     cursor += partWidth;

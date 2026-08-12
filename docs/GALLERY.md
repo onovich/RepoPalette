@@ -2,7 +2,7 @@
 
 [Back to README](../README.md)
 
-Every preview below uses the same language data. Names and percentages remain exact; only the layout and theme change.
+Every preview below uses the same language data. Names remain intact and percentages use one-decimal labels; non-zero shares below 0.1% appear as `<0.1%`. Only the layout and theme change.
 
 Layout names are kept outside the artwork. Each SVG shows the small default `RepoPalette` attribution, which can be disabled with `show-branding: false`.
 

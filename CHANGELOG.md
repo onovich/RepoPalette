@@ -6,6 +6,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-08-13
+
+### Fixed
+
+- Non-zero language shares below 0.1% now display as `<0.1%` instead of the misleading `0.0%`; true zero-byte entries remain excluded from the chart.<br/>**非零但低于 0.1% 的语言占比现在显示为 `<0.1%`，不再误显示为 `0.0%`；真正的零字节条目仍不会进入图表。**
+
 ## [0.6.0] - 2026-08-13
 
 ### Changed
@@ -84,7 +90,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/onovich/RepoPalette/releases/tag/v0.6.1
 [0.6.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.6.0
 [0.5.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.5.0
 [0.4.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.4.0
