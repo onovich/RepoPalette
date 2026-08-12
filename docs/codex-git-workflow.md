@@ -41,7 +41,10 @@ git -c "safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette
 
 Run these before commit or push, in order:
 
-No validation commands were configured. Ask before committing or pushing if validation matters for this repo.
+```powershell
+npm run check
+```
+
 ## Staging Policy
 
 ask each time
