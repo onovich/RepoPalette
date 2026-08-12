@@ -2,6 +2,7 @@ import { appendFile } from "node:fs/promises";
 import { join, resolve, sep } from "node:path";
 
 import { generateTopLanguages } from "./generate.mjs";
+import { updateProfileReadme } from "./profile-readme.mjs";
 
 const DEFAULTS = Object.freeze({
   style: "bars",
@@ -14,7 +15,8 @@ const DEFAULTS = Object.freeze({
   showBranding: true,
   codingMode: "off",
   manualTitle: "Manual Coding",
-  vibeTitle: "Vibe Coding"
+  vibeTitle: "Vibe Coding",
+  updateReadme: false
 });
 
 export async function runAction({
@@ -44,14 +46,27 @@ export async function runAction({
     vibeSvgPath: summary.outputFiles.vibeSvg
       ? join(inputs.outputDirectory, summary.outputFiles.vibeSvg)
       : "",
-    dataPath: join(inputs.outputDirectory, "top-langs-data.json")
+    dataPath: join(inputs.outputDirectory, "top-langs-data.json"),
+    readmePath: ""
   };
+
+  if (inputs.updateReadme) {
+    result.readmePath = await updateProfileReadme({
+      workspace: cwd,
+      username: inputs.config.username,
+      codingMode: inputs.config.codingMode,
+      svgPath: result.svgPath,
+      manualSvgPath: result.manualSvgPath,
+      vibeSvgPath: result.vibeSvgPath
+    });
+  }
 
   await appendActionOutputs(env.GITHUB_OUTPUT, {
     "svg-path": result.svgPath,
     "manual-svg-path": result.manualSvgPath,
     "vibe-svg-path": result.vibeSvgPath,
     "data-path": result.dataPath,
+    "readme-path": result.readmePath,
     "repository-count": result.repositoryCount,
     "included-repository-count": result.includedRepositoryCount,
     "language-count": result.languageCount
@@ -88,6 +103,11 @@ function readInputs(env, cwd) {
   return {
     token,
     outputDirectory,
+    updateReadme: booleanInput(
+      env,
+      "update-readme",
+      DEFAULTS.updateReadme
+    ),
     config: {
       username,
       top: integerInput(env, "top", DEFAULTS.top),
