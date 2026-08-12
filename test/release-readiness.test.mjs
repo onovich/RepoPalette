@@ -21,9 +21,10 @@ test("keeps the public install example aligned with the package version", async 
       /uses: onovich\/RepoPalette\/\.github\/workflows\/profile\.yml@[0-9a-f]{40}/
     );
     assert.match(document, new RegExp("`@" + escapeRegExp(versionTag) + "`"));
-    assert.match(document, new RegExp(
-      "/blob/" + escapeRegExp(versionTag) + "/docs/INSTALL_WITH_AI\\.md"
-    ));
+    assert.match(
+      document,
+      /\/blob\/[0-9a-f]{40}\/docs\/INSTALL_WITH_AI\.md/
+    );
     assert.match(document, /permissions:\s*\n\s+contents: write/);
     assert.doesNotMatch(fencedBlock(document, "yaml"), /actions\/checkout/);
   }
@@ -39,6 +40,30 @@ test("keeps the public install example aligned with the package version", async 
   assert.match(changelog, new RegExp(
     "/releases/tag/" + escapeRegExp(versionTag)
   ));
+
+  const guidePins = [readme, chineseReadme].map((document) =>
+    /\/blob\/([0-9a-f]{40})\/docs\/INSTALL_WITH_AI\.md/.exec(document)?.[1]
+  );
+  assert.ok(guidePins.every(Boolean));
+  assert.equal(new Set(guidePins).size, 1);
+  await execFileAsync(
+    "git",
+    ["show", guidePins[0] + ":docs/INSTALL_WITH_AI.md"],
+    { cwd: fileURLToPath(root) }
+  );
+  await execFileAsync(
+    "git",
+    [
+      "diff",
+      "--exit-code",
+      guidePins[0],
+      "HEAD",
+      "--",
+      "docs/INSTALL_WITH_AI.md",
+      "docs/ADVANCED_USAGE.md"
+    ],
+    { cwd: fileURLToPath(root) }
+  );
 });
 
 test("pins a commit that contains the complete reusable installer", async () => {
