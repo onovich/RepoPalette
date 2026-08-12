@@ -54,6 +54,23 @@ export async function writeValidatedOutputs({
   validateSvgOutputs(svgOutputs, expectedAudit);
   validateAuditJson(json, expectedAudit);
   await replaceOutputs({ outputDirectory, svgOutputs, json });
+  await removeObsoleteSvgOutputs(outputDirectory, svgOutputs);
+}
+
+async function removeObsoleteSvgOutputs(outputDirectory, svgOutputs) {
+  const currentNames = new Set(svgOutputs.map(({ filename }) => filename));
+  const reservedNames = [
+    "top-langs.svg",
+    "top-langs-manual.svg",
+    "top-langs-vibe.svg"
+  ];
+  // Legacy cleanup is best-effort: a valid new chart must remain successful
+  // even when an obsolete file cannot be removed on this runner.
+  await Promise.allSettled(
+    reservedNames
+      .filter((filename) => !currentNames.has(filename))
+      .map((filename) => rm(join(outputDirectory, filename), { force: true }))
+  );
 }
 
 function validateSvgOutputs(outputs, expectedAudit) {
@@ -76,19 +93,39 @@ function validateSvgOutputs(outputs, expectedAudit) {
 
   const mode = expectedAudit?.classification?.mode;
   if (mode === "split") {
-    const required = ["top-langs-manual.svg", "top-langs-vibe.svg"];
-    if (names.size !== required.length
-        || required.some((name) => !names.has(name))) {
-      throw new Error(
-        "split mode requires both manual and vibe SVG outputs"
-      );
+    if (names.size !== 1 || !names.has("top-langs.svg")) {
+      throw new Error("split mode requires the single top-langs SVG output");
+    }
+    const document = documents.get("top-langs.svg");
+    if (document.root.attributes["data-coding-mode"] !== "split") {
+      throw new Error('split mode SVG must declare data-coding-mode="split"');
     }
     for (const group of ["manual", "vibe"]) {
-      const attributes = documents.get("top-langs-" + group + ".svg")
-        .root.attributes;
-      if (attributes["data-coding-group"] !== group) {
+      const groupElements = document.elements.filter(({ attributes }) =>
+        attributes["data-role"] === "coding-group"
+          && attributes["data-group"] === group
+      );
+      const overviewElements = document.elements.filter(({ attributes }) =>
+        attributes["data-role"] === "coding-overview-part"
+          && attributes["data-group"] === group
+      );
+      if (groupElements.length !== 1 || overviewElements.length !== 1) {
         throw new Error(
-          group + ' SVG must declare data-coding-group="' + group + '"'
+          "split mode SVG must contain one " + group
+            + " coding group and overview segment"
+        );
+      }
+      const share = Number(
+        overviewElements[0].attributes["data-share"]
+      );
+      const expectedShare = expectedAudit.classification.groups[group]
+        .percentage;
+      if (!Number.isFinite(share)
+          || share < 0
+          || share > 100
+          || Math.abs(share - expectedShare) > 0.0001) {
+        throw new Error(
+          group + " overview share does not match the audit"
         );
       }
     }
@@ -99,6 +136,10 @@ function validateSvgOutputs(outputs, expectedAudit) {
     if (documents.get("top-langs.svg").root.attributes["data-coding-group"]
         !== undefined) {
       throw new Error("off mode SVG must not declare a coding group");
+    }
+    if (documents.get("top-langs.svg").root.attributes["data-coding-mode"]
+        !== undefined) {
+      throw new Error("off mode SVG must not declare a coding mode");
     }
   } else {
     throw new Error("Generated SVG outputs require a known classification mode");
@@ -146,6 +187,7 @@ function parseSvg(svg) {
   const tokenPattern = /<[^>]*>/g;
   const stack = [];
   const elementNames = new Set();
+  const elements = [];
   const styleTextSegments = [];
   let root = null;
   let rootClosed = false;
@@ -194,6 +236,7 @@ function parseSvg(svg) {
         throw new Error("Generated SVG contains multiple root elements");
       }
       elementNames.add(normalizedName);
+      elements.push(opening);
       if (!opening.selfClosing) {
         stack.push(opening.name);
       } else if (stack.length === 0) {
@@ -210,6 +253,7 @@ function parseSvg(svg) {
   }
   return {
     root,
+    elements,
     elementNames,
     styleText: styleTextSegments.join("")
   };

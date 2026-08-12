@@ -2,6 +2,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { splitCodingStats } from "../src/classification.mjs";
+import { renderSplitSvg } from "../src/render-split-svg.mjs";
 import { renderSvg } from "../src/render-svg.mjs";
 
 export const GALLERY_PREVIEWS = Object.freeze([
@@ -29,7 +31,13 @@ export const GALLERY_PREVIEWS = Object.freeze([
   Object.freeze({ style: "halo", theme: "paper", fileName: "halo-paper.svg" }),
   Object.freeze({ style: "treemap", theme: "paper", fileName: "treemap-paper.svg" }),
   Object.freeze({ style: "voronoi", theme: "paper", fileName: "voronoi-paper.svg" }),
-  Object.freeze({ style: "prism", theme: "paper", fileName: "prism-paper.svg" })
+  Object.freeze({ style: "prism", theme: "paper", fileName: "prism-paper.svg" }),
+  Object.freeze({
+    style: "ribbon",
+    theme: "paper",
+    codingMode: "split",
+    fileName: "coding-split-ribbon-paper.svg"
+  })
 ]);
 
 const GALLERY_STATS = Object.freeze({
@@ -79,13 +87,19 @@ const GALLERY_STATS = Object.freeze({
 export async function generateGallery(outputDirectory) {
   await mkdir(outputDirectory, { recursive: true });
   for (const preview of GALLERY_PREVIEWS) {
-    const svg = renderSvg(GALLERY_STATS, {
+    const config = {
       title: "Language Composition",
       top: 6,
       width: 400,
       style: preview.style,
       theme: preview.theme
-    });
+    };
+    const svg = preview.codingMode === "split"
+      ? renderSplitSvg(
+          splitCodingStats(GALLERY_STATS, ["C#", "ShaderLab"]),
+          config
+        )
+      : renderSvg(GALLERY_STATS, config);
     await writeFile(join(outputDirectory, preview.fileName), svg, "utf8");
   }
 }

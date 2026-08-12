@@ -23,9 +23,12 @@ export function renderOrbit({ stats, config, languages, theme }) {
       + theme.surface + '" stroke="' + theme.border + '"/>',
     '  <text class="metric" text-anchor="middle" x="' + centerX
       + '" y="' + (centerY + 2) + '">'
-      + stats.includedRepositoryCount + "</text>",
+      + (config.compactPanel
+        ? languages.length
+        : stats.includedRepositoryCount) + "</text>",
     '  <text class="metric-label" text-anchor="middle" x="' + centerX
-      + '" y="' + (centerY + 19) + '">PUBLIC REPOS</text>'
+      + '" y="' + (centerY + 19) + '">'
+      + (config.compactPanel ? "LANGUAGES" : "PUBLIC REPOS") + "</text>"
   ];
 
   languages.forEach((language, index) => {

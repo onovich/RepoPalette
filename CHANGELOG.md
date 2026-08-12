@@ -6,6 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-13
+
+### Changed
+
+- User-declared Manual/Vibe groups now share one SVG, one outer card, one header, and one watermark. A shared rail shows the groups' overall byte shares while each section keeps exact within-group language percentages.<br/>**用户声明的 Manual/Vibe 分组现在共用一张 SVG、一个外框、一个标题区和一个水印；共享总览带显示两组占全部字节的比例，各分区仍保留准确的组内语言百分比。**
+- Split mode now writes `top-langs.svg` and removes the legacy two-file pair after a valid update. The old dedicated path outputs remain as empty compatibility fields.<br/>**分组模式现在写入 `top-langs.svg`，并在有效更新后清理旧的双文件；原有独立路径输出保留为空的兼容字段。**
+
 ## [0.4.0] - 2026-08-13
 
 ### Added
@@ -70,7 +77,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.5.0
 [0.4.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.4.0
 [0.3.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.3.0
 [0.2.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.2.0

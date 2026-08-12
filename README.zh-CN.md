@@ -20,7 +20,7 @@ RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在
 
 如果 AI 编程工具可以编辑你的 Profile 仓库，把下面这句话发给它：
 
-> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/ecedae024e71824333856352111eea5d05d56773/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
+> 在这个 GitHub Profile 仓库中安装 RepoPalette。按照 https://github.com/onovich/RepoPalette/blob/a99ae0dfc85ae77c61bb003138ae72ff65fdc789/docs/INSTALL_WITH_AI.md 操作，使用默认设置，并验证第一次自动运行。
 
 安装说明已经写明该改什么、哪些内容不能碰，你不需要先学会 GitHub Actions。
 
@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
 ```
 
 <details>
@@ -52,7 +52,7 @@ jobs:
 
 提交文件即可。第一次提交会自动启动 RepoPalette；Actions 检查变绿时，图表已经加入 Profile README。此后每周一自动检查，也可以随时通过 **Actions → RepoPalette → Run workflow** 手动刷新。
 
-发布后也可使用易读的 `@v0.4.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
+发布后也可使用易读的 `@v0.5.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
 
 ## 为什么选择 RepoPalette？
 
@@ -92,11 +92,11 @@ jobs:
 <details>
 <summary><strong>它会评价编程能力或检测 AI 代码吗？</strong></summary>
 
-不会。它只展示语言构成，不评价能力、投入时间、代码质量或作者身份。可选的 Manual/Vibe 双图也只是由你本人声明的分组。
+不会。它只展示语言构成，不评价能力、投入时间、代码质量或作者身份。可选的 Manual/Vibe 合并视图也只是由你本人声明的分组。
 </details>
 
 ## 需要更多控制？
 
-默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 双图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
 
 参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。

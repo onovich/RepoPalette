@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { splitCodingStats } from "../src/classification.mjs";
+import { renderSplitSvg } from "../src/render-split-svg.mjs";
 import { renderSvg } from "../src/render-svg.mjs";
 
 const STYLES = [
@@ -94,6 +96,104 @@ test("allows the RepoPalette watermark to be disabled", () => {
 
   assert.doesNotMatch(svg, /data-role="brand-watermark"/);
   assert.doesNotMatch(svg, />RepoPalette<\/text>/);
+});
+
+test("renders every layout as one combined coding-approach card", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+  const signatures = {
+    bars: 'data-role="spectrum"',
+    orbit: 'data-role="orbit-value"',
+    constellation: 'data-role="constellation-node"',
+    ribbon: 'data-role="ribbon-part"',
+    "bead-halo": 'data-role="bead-halo-unit"',
+    matrix: 'data-role="matrix-unit"',
+    halo: 'data-role="halo-part"',
+    treemap: 'data-role="treemap-part"',
+    voronoi: 'data-role="voronoi-part"',
+    prism: 'data-role="prism-part"'
+  };
+
+  for (const style of STYLES) {
+    const svg = renderSplitSvg(groups, fixtureConfig({
+      style,
+      theme: "paper",
+      showBranding: true,
+      manualTitle: "Handwritten",
+      vibeTitle: "AI-assisted"
+    }));
+    const manualStart = svg.indexOf(
+      'data-role="coding-group" data-group="manual"'
+    );
+    const vibeStart = svg.indexOf(
+      'data-role="coding-group" data-group="vibe"'
+    );
+    const manualSection = svg.slice(manualStart, vibeStart);
+    const vibeSection = svg.slice(vibeStart);
+
+    assert.match(svg, /data-coding-mode="split"/, style);
+    assert.match(svg, /width="800"/, style);
+    assert.match(svg, />Handwritten<\/text>/, style);
+    assert.match(svg, />AI-assisted<\/text>/, style);
+    assert.match(manualSection, new RegExp(signatures[style]), style);
+    assert.match(vibeSection, new RegExp(signatures[style]), style);
+    assert.equal(svg.match(/>RepoPalette<\/text>/g)?.length, 1, style);
+    assert.equal(svg.match(/3 OF 4 PUBLIC REPOS/g)?.length, 1, style);
+    assert.equal(svg.match(/PUBLIC REPOS/g)?.length, 1, style);
+    assert.doesNotMatch(svg, /data-coding-group=/, style);
+    assert.doesNotMatch(svg, />100% COMPOSITION<\/text>/, style);
+    assert.match(manualSection, />C#<\/text>/, style);
+    assert.match(manualSection, />ShaderLab<\/text>/, style);
+    assert.match(vibeSection, />TypeScript<\/text>/, style);
+    assert.match(vibeSection, />Python<\/text>/, style);
+    assert.doesNotMatch(svg, /NaN|Infinity/, style);
+  }
+});
+
+test("the combined overview and group legends retain both percentage bases", () => {
+  const groups = splitCodingStats(fixtureStats(), ["C#", "ShaderLab"]);
+  const svg = renderSplitSvg(groups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper",
+    manualTitle: "Manual Coding",
+    vibeTitle: "Vibe Coding"
+  }));
+
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="manual" data-share="20"/
+  );
+  assert.match(
+    svg,
+    /data-role="coding-overview-part" data-group="vibe" data-share="80"/
+  );
+  assert.match(svg, />60\.0%<\/text>/);
+  assert.match(svg, />40\.0%<\/text>/);
+  assert.match(svg, />65\.0%<\/text>/);
+  assert.match(svg, />35\.0%<\/text>/);
+  assert.equal(svg.match(/>COMPOSITION<\/text>/g)?.length ?? 0, 0);
+
+  const unbranded = renderSplitSvg(groups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper",
+    showBranding: false
+  }));
+  assert.doesNotMatch(unbranded, /data-role="brand-watermark"/);
+  assert.doesNotMatch(unbranded, />RepoPalette<\/text>/);
+});
+
+test("combined layouts keep an empty declared group explicit and valid", () => {
+  const groups = splitCodingStats(
+    fixtureStats(),
+    fixtureStats().languages.map(({ name }) => name)
+  );
+
+  for (const style of STYLES) {
+    const svg = renderSplitSvg(groups, fixtureConfig({ style }));
+    assert.match(svg, /data-group="manual" data-share="100"/, style);
+    assert.match(svg, /data-group="vibe" data-share="0"/, style);
+    assert.match(svg, /No language data available\./, style);
+    assert.doesNotMatch(svg, /NaN|Infinity/, style);
+  }
 });
 
 test("renders an accessible empty state in every layout", () => {

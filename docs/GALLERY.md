@@ -6,6 +6,12 @@ Every preview below uses the same language data. Names and percentages remain ex
 
 Layout names are kept outside the artwork. Each SVG shows the small default `RepoPalette` attribution, which can be disabled with `show-branding: false`.
 
+## Optional coding-approach view
+
+When the owner declares Manual and Vibe language groups, RepoPalette keeps them in one card. The shared rail shows the groups' overall byte share; each section then shows its own language composition.
+
+![Combined Manual Coding and Vibe Coding ribbon](gallery/coding-split-ribbon-paper.svg)
+
 ## Layouts
 
 - `bars` is the most direct ranking view.

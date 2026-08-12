@@ -9,7 +9,7 @@ Add a `with` block to the `update` job:
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
     with:
       style: matrix
       theme: midnight
@@ -19,20 +19,20 @@ jobs:
 
 Available layouts are `bars`, `orbit`, `constellation`, `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, and `prism`. Themes are `light`, `paper`, `midnight`, `aurora`, `terminal`, and `neon`. Browse the [gallery](GALLERY.md) before choosing.
 
-## Manual Coding and Vibe Coding charts
+## Combined Manual Coding and Vibe Coding view
 
-This is an optional grouping declared by the profile owner, not AI detection. Languages listed in `manual-languages` go to the Manual Coding chart; all other and future languages go to the Vibe Coding chart.
+This is an optional grouping declared by the profile owner, not AI detection. Languages listed in `manual-languages` go to the Manual Coding section; all other and future languages go to the Vibe Coding section.
 
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@c4abbdc8488e4166cde8b25575a4022b174afe5a # v0.5.0
     with:
       coding-mode: split
       manual-languages: "C#,ShaderLab,HLSL,GLSL"
 ```
 
-The reusable workflow automatically replaces the single README card with the two split cards.
+The reusable workflow keeps both groups in one SVG. The title, repository scope, outer card, and optional RepoPalette watermark appear once. A shared rail shows each group's share of all language bytes; percentages inside each section show that group's own language composition.
 
 ## Use the Action directly
 
@@ -41,7 +41,7 @@ Use the Action directly when you need titles, width, archived repositories, or r
 ```yaml
 - name: Generate RepoPalette
   id: repopalette
-  uses: onovich/RepoPalette@bb6f6b4f1cd4a03d02c83a848fd092d823f32091 # v0.4.0 implementation
+  uses: onovich/RepoPalette@6f8085196d98ec020aafb6643c90874d088cddd3 # v0.5.0 implementation
   with:
     style: ribbon
     theme: paper
@@ -57,9 +57,10 @@ The block above is the generation step. For a complete checkout, verification, a
 
 ## Generated files
 
-- Single-chart mode: `assets/top-langs.svg`
-- Split mode: `assets/top-langs-manual.svg` and `assets/top-langs-vibe.svg`
-- Both modes: `assets/top-langs-data.json`
+- Both display modes: `assets/top-langs.svg`
+- Audit data: `assets/top-langs-data.json`
+
+After a successful upgrade, RepoPalette removes the legacy `top-langs-manual.svg` and `top-langs-vibe.svg` pair. The deprecated `manual-svg-path` and `vibe-svg-path` Action outputs remain present but empty for compatibility.
 
 The data file records language totals and the repositories included or excluded. Generated files are validated before replacement, so a failed update does not overwrite the last valid result.
 

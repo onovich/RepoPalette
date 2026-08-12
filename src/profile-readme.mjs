@@ -36,14 +36,11 @@ function buildBlock({
   root,
   codingMode,
   svgPath,
-  manualSvgPath,
-  vibeSvgPath,
   eol
 }) {
   const content = codingMode === "split"
     ? [
-        `<img src="${markdownPath(root, manualSvgPath)}" width="49%" alt="Manual Coding language composition">`,
-        `<img src="${markdownPath(root, vibeSvgPath)}" width="49%" alt="Vibe Coding language composition">`
+        `![GitHub language composition by coding approach](${markdownPath(root, svgPath)})`
       ]
     : [
         `![GitHub language composition](${markdownPath(root, svgPath)})`

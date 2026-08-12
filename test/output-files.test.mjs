@@ -4,7 +4,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
+import { splitCodingStats } from "../src/classification.mjs";
 import { writeValidatedOutputs } from "../src/output-files.mjs";
+import { renderSplitSvg } from "../src/render-split-svg.mjs";
 import { renderSvg } from "../src/render-svg.mjs";
 
 test("invalid SVG or JSON never replaces the last successful outputs", async (t) => {
@@ -121,92 +123,92 @@ test("allows URL-like text in a safely escaped title", async (t) => {
   );
 });
 
-test("requires a complete, correctly labelled SVG set for split mode", async (t) => {
+test("requires one complete, correctly labelled SVG for split mode", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "toplang-split-set-"));
   const outputDirectory = join(workspace, "assets");
   t.after(() => rm(workspace, { recursive: true, force: true }));
 
   await mkdir(outputDirectory);
   await writeFile(
+    join(outputDirectory, "top-langs.svg"),
+    "last good combined chart",
+    "utf8"
+  );
+  await writeFile(
     join(outputDirectory, "top-langs-manual.svg"),
-    "last good manual",
+    "legacy manual chart",
     "utf8"
   );
   await writeFile(
     join(outputDirectory, "top-langs-vibe.svg"),
-    "last good vibe",
+    "legacy vibe chart",
     "utf8"
   );
 
   const expected = expectedOutput();
-  expected.audit.classification = {
-    mode: "split",
-    source: "user-declared",
-    manualLanguages: ["C#"],
-    groups: {
-      manual: { totalBytes: 100, percentage: 100, languages: ["C#"] },
-      vibe: { totalBytes: 0, percentage: 0, languages: [] }
-    }
-  };
-  const manualSvg = renderSvg({
-    ...expected.stats,
-    classification: {
-      group: "manual",
-      source: "user-declared",
-      percentageOfTotal: 100
-    }
-  }, { ...expected.config, title: "Manual Coding" });
-  const vibeSvg = renderSvg({
-    ...expected.stats,
-    totalBytes: 0,
-    languages: [],
-    classification: {
-      group: "vibe",
-      source: "user-declared",
-      percentageOfTotal: 0
-    }
-  }, { ...expected.config, title: "Vibe Coding" });
+  const groups = splitCodingStats(expected.stats, ["C#"]);
+  expected.audit.classification = groups.audit;
+  const combinedSvg = renderSplitSvg(groups, expected.config);
   const json = JSON.stringify(expected.audit, null, 2) + "\n";
 
   await assert.rejects(
     writeValidatedOutputs({
       outputDirectory,
-      svgs: [{ filename: "top-langs-manual.svg", content: manualSvg }],
+      svgs: [{ filename: "top-langs-manual.svg", content: combinedSvg }],
       json,
       expectedAudit: expected.audit
     }),
-    /split mode requires both manual and vibe SVG outputs/
+    /split mode requires the single top-langs SVG output/
   );
   await assert.rejects(
     writeValidatedOutputs({
       outputDirectory,
-      svgs: [
-        { filename: "top-langs-manual.svg", content: manualSvg },
-        { filename: "top-langs-vibe.svg", content: manualSvg }
-      ],
+      svgs: [{
+        filename: "top-langs.svg",
+        content: combinedSvg.replace(
+          'data-role="coding-group" data-group="vibe"',
+          'data-role="coding-group" data-group="unknown"'
+        )
+      }],
       json,
       expectedAudit: expected.audit
     }),
-    /vibe SVG must declare data-coding-group="vibe"/
+    /one vibe coding group and overview segment/
+  );
+  await assert.rejects(
+    writeValidatedOutputs({
+      outputDirectory,
+      svgs: [{
+        filename: "top-langs.svg",
+        content: combinedSvg.replace(
+          'data-group="manual" data-share="100"',
+          'data-group="manual" data-share="99"'
+        )
+      }],
+      json,
+      expectedAudit: expected.audit
+    }),
+    /manual overview share does not match the audit/
   );
   assert.equal(
-    await readFile(join(outputDirectory, "top-langs-manual.svg"), "utf8"),
-    "last good manual"
-  );
-  assert.equal(
-    await readFile(join(outputDirectory, "top-langs-vibe.svg"), "utf8"),
-    "last good vibe"
+    await readFile(join(outputDirectory, "top-langs.svg"), "utf8"),
+    "last good combined chart"
   );
 
   await writeValidatedOutputs({
     outputDirectory,
-    svgs: [
-      { filename: "top-langs-manual.svg", content: manualSvg },
-      { filename: "top-langs-vibe.svg", content: vibeSvg }
-    ],
+    svgs: [{ filename: "top-langs.svg", content: combinedSvg }],
     json,
     expectedAudit: expected.audit
   });
+  await assert.rejects(
+    readFile(join(outputDirectory, "top-langs-manual.svg"), "utf8"),
+    /ENOENT/
+  );
+  await assert.rejects(
+    readFile(join(outputDirectory, "top-langs-vibe.svg"), "utf8"),
+    /ENOENT/
+  );
 });
 
 function expectedOutput() {

@@ -16,17 +16,20 @@ export function renderRibbon({ stats, config, languages, theme }) {
   }
   const parts = compositionLanguages(languages, stats.totalBytes, theme);
   const x = 24;
-  const y = 100;
+  const y = config.compactPanel ? 82 : 100;
   const width = config.width - 48;
   const height = 78;
-  const lines = [
-    '  <text class="axis-note" x="24" y="88">0%</text>',
-    '  <text class="axis-note" text-anchor="middle" x="'
-      + config.width / 2 + '" y="88">COMPOSITION</text>',
-    '  <text class="axis-note" text-anchor="end" x="'
-      + (config.width - 24) + '" y="88">100%</text>',
-    '  <g data-role="ribbon-part">'
-  ];
+  const lines = [];
+  if (!config.compactPanel) {
+    lines.push(
+      '  <text class="axis-note" x="24" y="88">0%</text>',
+      '  <text class="axis-note" text-anchor="middle" x="'
+        + config.width / 2 + '" y="88">COMPOSITION</text>',
+      '  <text class="axis-note" text-anchor="end" x="'
+        + (config.width - 24) + '" y="88">100%</text>'
+    );
+  }
+  lines.push('  <g data-role="ribbon-part">');
   let cursor = x;
   for (const part of parts) {
     const partWidth = width * part.share / 100;
@@ -43,10 +46,10 @@ export function renderRibbon({ stats, config, languages, theme }) {
       const textColor = contrastColor(part.color);
       lines.push(
         '    <text class="part-label" x="' + svgNumber(cursor + 10)
-          + '" y="130" fill="' + textColor + '">'
+          + '" y="' + (y + 30) + '" fill="' + textColor + '">'
           + escapeXml(part.name) + "</text>",
         '    <text class="part-value" x="' + svgNumber(cursor + 10)
-          + '" y="151" fill="' + textColor + '">'
+          + '" y="' + (y + 51) + '" fill="' + textColor + '">'
           + formatPercentage(part.share) + "</text>"
       );
     }
@@ -57,7 +60,7 @@ export function renderRibbon({ stats, config, languages, theme }) {
     width: config.width,
     parts,
     theme,
-    startY: 212
+    startY: config.compactPanel ? 194 : 212
   });
   lines.push(...legend.lines);
   return { height: legend.height, lines };

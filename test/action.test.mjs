@@ -65,7 +65,7 @@ test("passes a selected style and theme through to the generated card", async (t
   assert.match(svg, /data-shape-role="voronoi-part"/);
 });
 
-test("splits user-declared manual languages into two Action outputs", async (t) => {
+test("combines user-declared coding groups into one Action output", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-split-"));
   const outputFile = join(workspace, "github-output.txt");
   t.after(() => rm(workspace, { recursive: true, force: true }));
@@ -79,7 +79,6 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
       "INPUT_MANUAL-LANGUAGES": "C#, ShaderLab, HLSL, GLSL",
       "INPUT_MANUAL-TITLE": "Handwritten",
       "INPUT_VIBE-TITLE": "AI-assisted",
-      "INPUT_SHOW-BRANDING": "false",
       INPUT_STYLE: "ribbon",
       INPUT_THEME: "paper",
       GITHUB_OUTPUT: outputFile
@@ -96,12 +95,8 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
     logger: { info() {}, warn() {} }
   });
 
-  const manualSvg = await readFile(
-    join(workspace, "assets", "top-langs-manual.svg"),
-    "utf8"
-  );
-  const vibeSvg = await readFile(
-    join(workspace, "assets", "top-langs-vibe.svg"),
+  const svg = await readFile(
+    join(workspace, "assets", "top-langs.svg"),
     "utf8"
   );
   const audit = JSON.parse(
@@ -109,20 +104,24 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
   );
   const outputs = await readFile(outputFile, "utf8");
 
-  assert.match(manualSvg, /<title id="title">Handwritten<\/title>/);
-  assert.match(manualSvg, />C#<\/text>/);
-  assert.match(manualSvg, />ShaderLab<\/text>/);
-  assert.doesNotMatch(manualSvg, />TypeScript<\/text>/);
-  assert.match(manualSvg, />75\.0%<\/text>/);
-  assert.match(manualSvg, /40\.0% OF BYTES/);
-  assert.doesNotMatch(manualSvg, />RepoPalette<\/text>/);
-
-  assert.match(vibeSvg, /<title id="title">AI-assisted<\/title>/);
-  assert.match(vibeSvg, />TypeScript<\/text>/);
-  assert.match(vibeSvg, />Python<\/text>/);
-  assert.doesNotMatch(vibeSvg, />C#<\/text>/);
-  assert.match(vibeSvg, />66\.7%<\/text>/);
-  assert.match(vibeSvg, /60\.0% OF BYTES/);
+  assert.match(svg, /<title id="title">Most Used Languages<\/title>/);
+  assert.match(svg, /data-coding-mode="split"/);
+  assert.match(svg, /data-role="coding-overview-part" data-group="manual" data-share="40"/);
+  assert.match(svg, /data-role="coding-overview-part" data-group="vibe" data-share="60"/);
+  assert.match(svg, /data-role="coding-group" data-group="manual"/);
+  assert.match(svg, /data-role="coding-group" data-group="vibe"/);
+  assert.match(svg, />Handwritten<\/text>/);
+  assert.match(svg, />AI-assisted<\/text>/);
+  assert.match(svg, />C#<\/text>/);
+  assert.match(svg, />ShaderLab<\/text>/);
+  assert.match(svg, />TypeScript<\/text>/);
+  assert.match(svg, />Python<\/text>/);
+  assert.match(svg, />75\.0%<\/text>/);
+  assert.match(svg, />25\.0%<\/text>/);
+  assert.match(svg, />66\.7%<\/text>/);
+  assert.match(svg, />33\.3%<\/text>/);
+  assert.equal(svg.match(/>RepoPalette<\/text>/g)?.length, 1);
+  assert.equal(svg.match(/1 OF 1 PUBLIC REPOS/g)?.length, 1);
 
   assert.equal(audit.schemaVersion, 3);
   assert.deepEqual(audit.classification, {
@@ -142,12 +141,12 @@ test("splits user-declared manual languages into two Action outputs", async (t) 
       }
     }
   });
-  assert.equal(result.svgPath, "");
-  assert.match(result.manualSvgPath, /top-langs-manual\.svg$/);
-  assert.match(result.vibeSvgPath, /top-langs-vibe\.svg$/);
-  assert.match(outputs, /^svg-path=$/m);
-  assert.match(outputs, /^manual-svg-path=.*top-langs-manual\.svg$/m);
-  assert.match(outputs, /^vibe-svg-path=.*top-langs-vibe\.svg$/m);
+  assert.match(result.svgPath, /top-langs\.svg$/);
+  assert.equal(result.manualSvgPath, "");
+  assert.equal(result.vibeSvgPath, "");
+  assert.match(outputs, /^svg-path=.*top-langs\.svg$/m);
+  assert.match(outputs, /^manual-svg-path=$/m);
+  assert.match(outputs, /^vibe-svg-path=$/m);
 });
 
 test("can install and maintain a single chart in the profile README", async (t) => {
@@ -191,7 +190,7 @@ test("can install and maintain a single chart in the profile README", async (t) 
   assert.match(outputs, /^readme-path=.*README\.md$/m);
 });
 
-test("updates the managed README block for split charts", async (t) => {
+test("updates the managed README block with one combined split chart", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-split-"));
   const outputFile = join(workspace, "github-output.txt");
   const readmePath = join(workspace, "README.md");
@@ -224,9 +223,12 @@ test("updates the managed README block for split charts", async (t) => {
 
   const readme = await readFile(readmePath, "utf8");
   assert.doesNotMatch(readme, /\nold\n/);
-  assert.match(readme, /top-langs-manual\.svg/);
-  assert.match(readme, /top-langs-vibe\.svg/);
-  assert.match(readme, /width="49%"/);
+  assert.match(
+    readme,
+    /!\[GitHub language composition by coding approach\]\(\.\/assets\/top-langs\.svg\)/
+  );
+  assert.doesNotMatch(readme, /top-langs-(?:manual|vibe)\.svg/);
+  assert.doesNotMatch(readme, /width="49%"/);
   assert.equal(readme.match(/<!-- repopalette:start -->/g)?.length, 1);
 });
 
@@ -263,7 +265,7 @@ test("rejects reversed README markers instead of reporting success", async (t) =
   assert.equal(await readFile(readmePath, "utf8"), originalReadme);
 });
 
-test("encodes custom output paths in Markdown and HTML image targets", async (t) => {
+test("encodes a custom combined output path in Markdown", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-paths-"));
   t.after(() => rm(workspace, { recursive: true, force: true }));
 
@@ -271,28 +273,19 @@ test("encodes custom output paths in Markdown and HTML image targets", async (t)
     workspace,
     username: "onovich",
     codingMode: "split",
-    manualSvgPath: join(
+    svgPath: join(
       workspace,
       "profile cards",
-      'manual #"chart).svg'
-    ),
-    vibeSvgPath: join(
-      workspace,
-      "profile cards",
-      "vibe (chart).svg"
+      "coding modes #chart).svg"
     )
   });
 
   const readme = await readFile(join(workspace, "README.md"), "utf8");
   assert.match(
     readme,
-    /src="\.\/profile%20cards\/manual%20%23%22chart%29\.svg"/
+    /\(\.\/profile%20cards\/coding%20modes%20%23chart%29\.svg\)/
   );
-  assert.match(
-    readme,
-    /src="\.\/profile%20cards\/vibe%20%28chart%29\.svg"/
-  );
-  assert.doesNotMatch(readme, /src="[^"]*[ #()]/);
+  assert.doesNotMatch(readme, /\([^\n]*[ #]/);
 });
 
 test("rejects an unknown renderer instead of silently changing the design", async () => {
