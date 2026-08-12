@@ -68,6 +68,21 @@ test("pins a commit that implements every advertised layout", async () => {
   ]) {
     assert.match(registry, new RegExp('defineStyle\\("' + style + '"'));
   }
+  await execFileAsync(
+    "git",
+    [
+      "diff",
+      "--exit-code",
+      pins[0],
+      "HEAD",
+      "--",
+      "action.yml",
+      "package.json",
+      "scripts",
+      "src"
+    ],
+    { cwd: fileURLToPath(root) }
+  );
 });
 
 test("keeps the action metadata ready for a tagged preview", async () => {
