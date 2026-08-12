@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 import { aggregateLanguages } from "./aggregate.mjs";
+import { splitCodingStats, unclassifiedAudit } from "./classification.mjs";
 import { validateConfig } from "./config.mjs";
 import { fetchAllRepositories } from "./github-client.mjs";
 import { writeValidatedOutputs } from "./output-files.mjs";
@@ -39,13 +40,13 @@ export async function generateTopLanguages({
   }
 
   const stats = aggregateLanguages(repositories, config);
-  const audit = buildAudit(stats, config);
-  const svg = renderSvg(stats, config);
+  const rendered = renderOutputs(stats, config);
+  const audit = buildAudit(stats, config, rendered.classification);
   const json = JSON.stringify(audit, null, 2) + "\n";
 
   await writeValidatedOutputs({
     outputDirectory,
-    svg,
+    svgs: rendered.svgs,
     json,
     expectedAudit: audit
   });
@@ -54,14 +55,59 @@ export async function generateTopLanguages({
     repositoryCount: stats.repositoryCount,
     includedRepositoryCount: stats.includedRepositoryCount,
     languageCount: stats.languages.length,
-    pageCount: meta.pageCount
+    pageCount: meta.pageCount,
+    outputFiles: rendered.outputFiles
   };
   logger.info(
-    "Generated top languages card from "
+    "Generated " + rendered.svgs.length + " top languages "
+      + (rendered.svgs.length === 1 ? "card" : "cards") + " from "
       + summary.includedRepositoryCount + "/" + summary.repositoryCount
       + " repositories across " + summary.pageCount + " API page(s)."
   );
   return summary;
+}
+
+function renderOutputs(stats, config) {
+  if (config.codingMode === "split") {
+    const groups = splitCodingStats(stats, config.manualLanguages);
+    return {
+      classification: groups.audit,
+      svgs: [
+        {
+          filename: "top-langs-manual.svg",
+          content: renderSvg(groups.manual, {
+            ...config,
+            title: "Manual Coding"
+          })
+        },
+        {
+          filename: "top-langs-vibe.svg",
+          content: renderSvg(groups.vibe, {
+            ...config,
+            title: "Vibe Coding"
+          })
+        }
+      ],
+      outputFiles: {
+        svg: "",
+        manualSvg: "top-langs-manual.svg",
+        vibeSvg: "top-langs-vibe.svg"
+      }
+    };
+  }
+
+  return {
+    classification: unclassifiedAudit(),
+    svgs: [{
+      filename: "top-langs.svg",
+      content: renderSvg(stats, config)
+    }],
+    outputFiles: {
+      svg: "top-langs.svg",
+      manualSvg: "",
+      vibeSvg: ""
+    }
+  };
 }
 
 async function readConfig(configPath) {
@@ -77,15 +123,16 @@ async function readConfig(configPath) {
   return validateConfig(input);
 }
 
-function buildAudit(stats, config) {
+function buildAudit(stats, config, classification) {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     username: config.username,
     repositoryCount: stats.repositoryCount,
     includedRepositoryCount: stats.includedRepositoryCount,
     totalBytes: stats.totalBytes,
     repositoryScope: stats.repositoryScope,
     languages: stats.languages,
+    classification,
     filters: {
       includeForks: false,
       includeArchived: config.includeArchived,

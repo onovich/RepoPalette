@@ -147,13 +147,19 @@ function expectedOutput() {
     excludeLanguages: []
   };
   const audit = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     username: config.username,
     repositoryCount: stats.repositoryCount,
     includedRepositoryCount: stats.includedRepositoryCount,
     totalBytes: stats.totalBytes,
     repositoryScope: stats.repositoryScope,
     languages: stats.languages,
+    classification: {
+      mode: "off",
+      source: null,
+      manualLanguages: [],
+      groups: null
+    },
     filters: {
       includeForks: false,
       includeArchived: false,

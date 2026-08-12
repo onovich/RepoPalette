@@ -105,6 +105,17 @@ test("keeps the action metadata ready for a tagged preview", async () => {
     action,
     /Color theme: light, paper, midnight, aurora, terminal, or neon\./
   );
+  assert.match(
+    action,
+    /show-branding:[\s\S]*?default: "true"/
+  );
+  assert.match(
+    action,
+    /coding-mode:[\s\S]*?default: off/
+  );
+  assert.match(action, /manual-languages:/);
+  assert.match(action, /^  manual-svg-path:$/m);
+  assert.match(action, /^  vibe-svg-path:$/m);
   assert.match(action, /^\s+using: node24$/m);
   assert.match(action, /^\s+main: src\/action\.mjs$/m);
   assert.match(action, /^branding:\s*$/m);

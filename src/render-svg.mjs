@@ -14,6 +14,7 @@ export function renderSvg(stats, configInput) {
     width: 400,
     style: "bars",
     theme: "light",
+    showBranding: true,
     ...configInput
   };
   const style = getStyleDefinition(config.style);
@@ -31,6 +32,10 @@ export function renderSvg(stats, configInput) {
       + ' role="img" aria-labelledby="title description"'
       + ' data-style="' + escapeXml(config.style) + '"'
       + ' data-theme="' + escapeXml(config.theme) + '"'
+      + (stats.classification
+        ? ' data-coding-group="'
+          + escapeXml(stats.classification.group) + '"'
+        : "")
       + ' width="' + config.width + '" height="' + layout.height + '"'
       + ' viewBox="0 0 ' + config.width + " " + layout.height + '">',
     '  <title id="title">' + escapeXml(config.title) + "</title>",
@@ -52,8 +57,14 @@ export function renderSvg(stats, configInput) {
 export { escapeXml };
 
 function buildDescription(stats, languages, style) {
-  const scope = "Language usage across " + stats.includedRepositoryCount
-    + " included public repositories.";
+  const scope = stats.classification
+    ? "User-declared " + stats.classification.group
+      + " coding group, "
+      + formatPercentage(stats.classification.percentageOfTotal)
+      + " of all language bytes across " + stats.includedRepositoryCount
+      + " included public repositories."
+    : "Language usage across " + stats.includedRepositoryCount
+      + " included public repositories.";
   if (languages.length === 0) {
     return escapeXml(scope + " No language data available.");
   }
@@ -74,9 +85,9 @@ function styleLines(theme) {
     "  <style>",
     "    text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }",
     "    .title { fill: " + theme.ink + "; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }",
-    "    .meta, .style-tag, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }",
+    "    .meta, .brand-watermark, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }",
     "    .meta { fill: " + theme.muted + "; font-size: 9.5px; letter-spacing: 0.9px; }",
-    "    .style-tag { fill: " + theme.accent + "; font-size: 9px; font-weight: 700; letter-spacing: 1px; }",
+    "    .brand-watermark { fill: " + theme.muted + "; font-size: 7.5px; font-weight: 600; letter-spacing: 0.35px; opacity: 0.72; }",
     "    .label { fill: " + theme.ink + "; font-size: 12px; font-weight: 650; }",
     "    .value { fill: " + theme.muted + "; font-size: 11px; font-variant-numeric: tabular-nums; }",
     "    .rank { fill: " + theme.accent + "; font-size: 9px; font-weight: 700; }",
@@ -102,16 +113,26 @@ function headerLines(stats, config, theme) {
   const repositoryCount = Number.isInteger(stats.repositoryCount)
     ? stats.repositoryCount
     : stats.includedRepositoryCount;
-  return [
+  const meta = stats.classification
+    ? formatPercentage(stats.classification.percentageOfTotal)
+      + " OF BYTES · " + stats.includedRepositoryCount + "/"
+      + repositoryCount + " REPOS"
+    : stats.includedRepositoryCount + " OF " + repositoryCount
+      + " PUBLIC REPOS";
+  const lines = [
     '  <rect x="24" y="20" width="4" height="35" rx="2" fill="'
       + theme.accent + '"/>',
     '  <text class="title" x="38" y="35">'
       + escapeXml(truncateLabel(config.title, titleCharacters)) + "</text>",
     '  <text class="meta" x="38" y="55">'
-      + stats.includedRepositoryCount + " OF " + repositoryCount
-      + " PUBLIC REPOS</text>",
-    '  <text class="style-tag" text-anchor="end" x="'
-      + (config.width - 24) + '" y="30">'
-      + escapeXml(config.style.toUpperCase()) + "</text>"
+      + meta + "</text>"
   ];
+  if (config.showBranding) {
+    lines.push(
+      '  <text class="brand-watermark" data-role="brand-watermark"'
+        + ' text-anchor="end" x="' + (config.width - 24) + '" y="29"'
+        + ' aria-hidden="true">RepoPalette</text>'
+    );
+  }
+  return lines;
 }

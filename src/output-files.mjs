@@ -16,6 +16,7 @@ const AUDIT_KEYS = [
   "totalBytes",
   "repositoryScope",
   "languages",
+  "classification",
   "filters"
 ];
 const FILTER_KEYS = [
@@ -43,12 +44,32 @@ const REPOSITORY_EXCLUSION_REASONS = new Set([
 export async function writeValidatedOutputs({
   outputDirectory,
   svg,
+  svgs,
   json,
   expectedAudit
 }) {
-  validateSvg(svg);
+  const svgOutputs = svgs ?? [{ filename: "top-langs.svg", content: svg }];
+  validateSvgOutputs(svgOutputs);
   validateAuditJson(json, expectedAudit);
-  await replaceOutputs({ outputDirectory, svg, json });
+  await replaceOutputs({ outputDirectory, svgOutputs, json });
+}
+
+function validateSvgOutputs(outputs) {
+  if (!Array.isArray(outputs) || outputs.length < 1) {
+    throw new Error("At least one generated SVG output is required");
+  }
+  const names = new Set();
+  for (const output of outputs) {
+    if (!output || typeof output !== "object"
+        || !/^top-langs(?:-(?:manual|vibe))?\.svg$/.test(output.filename)) {
+      throw new Error("Generated SVG has an unsupported output filename");
+    }
+    if (names.has(output.filename)) {
+      throw new Error("Generated SVG output filenames must be unique");
+    }
+    names.add(output.filename);
+    validateSvg(output.content);
+  }
 }
 
 function validateSvg(svg) {
@@ -228,7 +249,7 @@ function validateAuditJson(json, expectedAudit) {
   }
 
   requireExactKeys(audit, AUDIT_KEYS, "audit JSON");
-  if (audit.schemaVersion !== 2) {
+  if (audit.schemaVersion !== 3) {
     throw new Error("Generated audit JSON has an unsupported schemaVersion");
   }
   if (typeof audit.username !== "string" || audit.username === "") {
@@ -296,8 +317,89 @@ function validateAuditJson(json, expectedAudit) {
   if (summedBytes !== audit.totalBytes) {
     throw new Error("Generated audit JSON language bytes do not match totalBytes");
   }
+  validateClassification(audit.classification, audit);
   validateFilters(audit.filters);
   compareExpectedAudit(audit, expectedAudit);
+}
+
+function validateClassification(classification, audit) {
+  requireExactKeys(
+    classification,
+    ["mode", "source", "manualLanguages", "groups"],
+    "classification"
+  );
+  if (!Array.isArray(classification.manualLanguages)
+      || classification.manualLanguages.some((name) =>
+        typeof name !== "string" || name === ""
+      )
+      || new Set(classification.manualLanguages).size
+        !== classification.manualLanguages.length) {
+    throw new Error("Generated audit JSON has invalid manualLanguages");
+  }
+
+  if (classification.mode === "off") {
+    if (classification.source !== null
+        || classification.groups !== null
+        || classification.manualLanguages.length !== 0) {
+      throw new Error("Generated audit JSON has invalid disabled classification");
+    }
+    return;
+  }
+  if (classification.mode !== "split"
+      || classification.source !== "user-declared") {
+    throw new Error("Generated audit JSON has invalid classification mode");
+  }
+
+  requireExactKeys(classification.groups, ["manual", "vibe"], "coding groups");
+  const languageByName = new Map(
+    audit.languages.map((language) => [language.name, language])
+  );
+  const assigned = new Set();
+  let groupedBytes = 0;
+  for (const groupName of ["manual", "vibe"]) {
+    const group = classification.groups[groupName];
+    requireExactKeys(
+      group,
+      ["totalBytes", "percentage", "languages"],
+      groupName + " coding group"
+    );
+    requireNonNegativeInteger(group.totalBytes, groupName + " totalBytes");
+    if (!Number.isFinite(group.percentage)
+        || group.percentage < 0
+        || group.percentage > 100
+        || !Array.isArray(group.languages)) {
+      throw new Error("Generated audit JSON has invalid " + groupName + " group");
+    }
+    let languageBytes = 0;
+    for (const name of group.languages) {
+      const language = languageByName.get(name);
+      if (!language || assigned.has(name)) {
+        throw new Error("Generated audit JSON has invalid coding group languages");
+      }
+      const declaredManual = classification.manualLanguages.includes(name);
+      if ((groupName === "manual") !== declaredManual) {
+        throw new Error("Generated audit JSON contradicts manualLanguages");
+      }
+      assigned.add(name);
+      languageBytes += language.bytes;
+    }
+    const expectedPercentage = percentage(group.totalBytes, audit.totalBytes);
+    if (languageBytes !== group.totalBytes
+        || Math.abs(group.percentage - expectedPercentage) > 0.000_001) {
+      throw new Error("Generated audit JSON coding group totals do not match");
+    }
+    groupedBytes += group.totalBytes;
+  }
+  if (groupedBytes !== audit.totalBytes
+      || assigned.size !== audit.languages.length) {
+    throw new Error("Generated audit JSON coding groups are incomplete");
+  }
+}
+
+function percentage(bytes, totalBytes) {
+  return totalBytes === 0
+    ? 0
+    : Math.round((bytes / totalBytes * 100) * 10_000) / 10_000;
 }
 
 function validateFilters(filters) {
@@ -375,6 +477,8 @@ function compareExpectedAudit(actual, expected) {
   if (JSON.stringify(actual.languages) !== JSON.stringify(expected.languages)
       || JSON.stringify(actual.repositoryScope)
         !== JSON.stringify(expected.repositoryScope)
+      || JSON.stringify(actual.classification)
+        !== JSON.stringify(expected.classification)
       || JSON.stringify(actual.filters) !== JSON.stringify(expected.filters)) {
     throw new Error("Generated audit JSON differs from source data");
   }
@@ -397,7 +501,7 @@ function requireNonNegativeInteger(value, name) {
   }
 }
 
-async function replaceOutputs({ outputDirectory, svg, json }) {
+async function replaceOutputs({ outputDirectory, svgOutputs, json }) {
   await mkdir(outputDirectory, { recursive: true });
   const temporaryDirectory = await mkdtemp(join(outputDirectory, ".toplang-"));
   const targets = [
@@ -406,11 +510,11 @@ async function replaceOutputs({ outputDirectory, svg, json }) {
       destination: join(outputDirectory, "top-langs-data.json"),
       content: json
     },
-    {
-      temporary: join(temporaryDirectory, "top-langs.svg"),
-      destination: join(outputDirectory, "top-langs.svg"),
-      content: svg
-    }
+    ...svgOutputs.map((output) => ({
+      temporary: join(temporaryDirectory, output.filename),
+      destination: join(outputDirectory, output.filename),
+      content: output.content
+    }))
   ];
 
   try {

@@ -1,6 +1,6 @@
 # RepoPalette 产品决策
 
-更新日期：2026-08-12
+更新日期：2026-08-13
 
 ## 1. 产品定位
 
@@ -37,6 +37,10 @@ RepoPalette 专注 GitHub 编程语言构成。只需选择布局和主题，即
 #### 输出由用户自己保存
 
 生成结果提交到用户自己的 Profile 仓库。即使某次更新失败，README 仍可显示上一份有效结果，不依赖每次访问时调用外部绘图服务。
+
+#### 图内署名保持克制且可关闭
+
+图表不再把 `bars`、`ribbon` 等布局名称印在画面中。默认只在右上角显示小号、低对比度的 `RepoPalette` 署名；用户可通过 `show-branding: false` 完全关闭。根元素中的 `data-style` 仅作为机器可读元数据保留，不属于可见内容。
 
 ### 为什么不用最常见的方案
 
@@ -143,13 +147,12 @@ Marketplace 中已经存在几类成熟选择。RepoPalette 的位置不是宣�
 
 ### 首版分类
 
-内部使用中性枚举：
+首版使用一个容易解释的二分规则：
 
-- `vibe`：用户认为该语言属于全 vibe coding；
-- `classic`：用户认为该语言属于传统/古法编程；
-- `unclassified`：开启分组后仍未标记的语言。
+- `manual`：用户在 `manual-languages` 中明确声明为手动编码的语言；
+- `vibe`：用户主动开启分组后，其余语言统一归入 Vibe Coding。
 
-界面文案可允许用户自定义，例如把 `classic` 显示成“古法编程”“手写为主”或其他称呼。
+这不是自动检测。开启分组本身就表示用户接受“所列语言属于 Manual Coding，其余属于 Vibe Coding”这一声明口径。以后出现的新语言也会按同一规则进入 Vibe Coding，直到用户把它加入手动列表。
 
 ### 建议配置
 
@@ -159,34 +162,34 @@ Marketplace 中已经存在几类成熟选择。RepoPalette 的位置不是宣�
 with:
   style: orbit
   theme: aurora
-  coding-style: off
+  coding-mode: off
 ```
 
 用户主动启用：
 
 ```yaml
 with:
-  style: orbit
-  theme: aurora
-  coding-style: manual
-  vibe-languages: "TypeScript,JavaScript"
-  classic-languages: "C#,Python"
+  style: ribbon
+  theme: paper
+  coding-mode: split
+  manual-languages: "C#,ShaderLab,HLSL,GLSL"
 ```
 
 规则：
 
-- 同一种语言不能同时出现在两个列表；
-- 未出现在列表中的语言归入 `unclassified`，不能自动当作 `classic`；
+- 语言名称按 GitHub 返回的完整名称精确匹配；
+- 手动列表不得包含重复项；
+- 未出现在手动列表中的语言进入 `vibe`；
 - 配置只改变统计分组和展示，不改变原始语言字节数；
-- 输出数据中标记 `classificationSource: user-declared`；
-- 只有启用分组的卡片才显示简短说明，例如 `Grouped by the profile owner's choices`。
+- 审计数据标记 `source: user-declared`，并记录原始手动列表与两个分组的字节数；
+- 默认模式继续生成 `top-langs.svg`；分组模式生成 `top-langs-manual.svg` 和 `top-langs-vibe.svg`。
 
 ### 展示方式
 
-- `bars`：Vibe / Classic / Unclassified 三个区块，各自列出语言；
-- `orbit`：每个分组是一条独立轨道，轨道内按语言颜色切分；
-- `constellation`：每个分组形成一个独立星团；
-- 卡片同时显示各分组占全部已统计代码的比例，语言百分比仍以全部代码为分母，避免两个不同口径混淆。
+- Manual Coding 与 Vibe Coding 各自生成一张完整图表，所有现有布局和主题都可使用；
+- 每张图内的语言百分比以该组字节数为分母，因此构成图仍准确闭合到 100%；
+- 标题下方同时显示该组占全部语言字节的比例，使两张图仍可横向比较；
+- 可访问性描述明确说明分组由用户声明，不暗示工具做过 AI 代码检测。
 
 ### 已知限制
 
@@ -194,7 +197,7 @@ with:
 
 ## 6. 当前产品顺序
 
-当前进度（2026-08-13）：第 1、2 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；“使用 AI 协助安装”尚未实现。Marketplace 上架前还需完成安装体验与发布准备。
+当前进度（2026-08-13）：第 1、2、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明生成 Manual Coding 与 Vibe Coding 两张图。“使用 AI 协助安装”尚未实现。Marketplace 上架前还需完成安装体验与发布准备。
 
 1. 将现有统计核心迁入独立仓库并包装成可复用 Action；
 2. 实现 `orbit`、`constellation` 和重制的 `bars`；

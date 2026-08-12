@@ -8,7 +8,10 @@ const DEFAULT_CONFIG = Object.freeze({
   title: "Most Used Languages",
   width: 400,
   style: "bars",
-  theme: "light"
+  theme: "light",
+  showBranding: true,
+  codingMode: "off",
+  manualLanguages: []
 });
 
 export function validateConfig(input) {
@@ -33,7 +36,10 @@ export function validateConfig(input) {
     title: input.title ?? DEFAULT_CONFIG.title,
     width: input.width ?? DEFAULT_CONFIG.width,
     style: input.style ?? DEFAULT_CONFIG.style,
-    theme: input.theme ?? DEFAULT_CONFIG.theme
+    theme: input.theme ?? DEFAULT_CONFIG.theme,
+    showBranding: input.showBranding ?? DEFAULT_CONFIG.showBranding,
+    codingMode: input.codingMode ?? DEFAULT_CONFIG.codingMode,
+    manualLanguages: input.manualLanguages ?? DEFAULT_CONFIG.manualLanguages
   };
 
   if (typeof config.username !== "string" || config.username.trim() === "") {
@@ -57,11 +63,23 @@ export function validateConfig(input) {
   }
   validateChoice(config.style, "style", STYLE_NAMES);
   validateChoice(config.theme, "theme", THEME_NAMES);
+  if (typeof config.showBranding !== "boolean") {
+    throw new TypeError("showBranding must be a boolean");
+  }
+  validateChoice(config.codingMode, "codingMode", ["off", "split"]);
+  validateStringArray(config.manualLanguages, "manualLanguages");
+  if (new Set(config.manualLanguages).size !== config.manualLanguages.length) {
+    throw new TypeError("manualLanguages must not contain duplicates");
+  }
+  if (config.codingMode === "off" && config.manualLanguages.length > 0) {
+    throw new TypeError("manualLanguages requires codingMode split");
+  }
 
   return {
     ...config,
     excludeRepositories: [...config.excludeRepositories],
-    excludeLanguages: [...config.excludeLanguages]
+    excludeLanguages: [...config.excludeLanguages],
+    manualLanguages: [...config.manualLanguages]
   };
 }
 
@@ -77,4 +95,3 @@ function validateStringArray(value, name) {
     throw new TypeError(name + " must contain only non-empty strings");
   }
 }
-
