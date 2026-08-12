@@ -54,9 +54,13 @@ function buildBlock({
 function replaceOrAppend(existing, block, eol) {
   const starts = occurrences(existing, START_MARKER);
   const ends = occurrences(existing, END_MARKER);
-  if (starts !== ends || starts > 1) {
+  const startIndex = existing.indexOf(START_MARKER);
+  const endIndex = existing.indexOf(END_MARKER);
+  if (starts !== ends
+      || starts > 1
+      || (starts === 1 && startIndex > endIndex)) {
     throw new Error(
-      "README.md must contain either one complete RepoPalette block or none"
+      "README.md must contain one complete, ordered RepoPalette block or none"
     );
   }
   if (starts === 1) {
@@ -66,8 +70,11 @@ function replaceOrAppend(existing, block, eol) {
     );
   }
 
-  const prefix = existing.trimEnd();
-  return (prefix === "" ? "" : prefix + eol + eol) + block + eol;
+  let separator = "";
+  if (existing !== "" && !existing.endsWith(eol + eol)) {
+    separator = existing.endsWith(eol) ? eol : eol + eol;
+  }
+  return existing + separator + block + eol;
 }
 
 function markdownPath(root, filePath) {

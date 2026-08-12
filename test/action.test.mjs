@@ -154,7 +154,8 @@ test("can install and maintain a single chart in the profile README", async (t) 
   const outputFile = join(workspace, "github-output.txt");
   const readmePath = join(workspace, "README.md");
   t.after(() => rm(workspace, { recursive: true, force: true }));
-  await writeFile(readmePath, "# onovich\n\nHello.\n", "utf8");
+  const originalReadme = "# onovich\n\nHello.\n\n  \n";
+  await writeFile(readmePath, originalReadme, "utf8");
 
   const options = {
     cwd: workspace,
@@ -174,7 +175,10 @@ test("can install and maintain a single chart in the profile README", async (t) 
 
   const readme = await readFile(readmePath, "utf8");
   const outputs = await readFile(outputFile, "utf8");
-  assert.match(readme, /^# onovich\n\nHello\./);
+  assert.ok(
+    readme.startsWith(originalReadme),
+    "installing the managed block must preserve all existing README bytes"
+  );
   assert.match(readme, /<!-- repopalette:start -->/);
   assert.match(
     readme,
@@ -223,6 +227,39 @@ test("updates the managed README block for split charts", async (t) => {
   assert.match(readme, /top-langs-vibe\.svg/);
   assert.match(readme, /width="49%"/);
   assert.equal(readme.match(/<!-- repopalette:start -->/g)?.length, 1);
+});
+
+test("rejects reversed README markers instead of reporting success", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-readme-order-"));
+  const outputFile = join(workspace, "github-output.txt");
+  const readmePath = join(workspace, "README.md");
+  const originalReadme = [
+    "# Profile",
+    "",
+    "<!-- repopalette:end -->",
+    "old",
+    "<!-- repopalette:start -->",
+    ""
+  ].join("\n");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+  await writeFile(readmePath, originalReadme, "utf8");
+
+  await assert.rejects(
+    runAction({
+      cwd: workspace,
+      env: {
+        "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+        GITHUB_REPOSITORY_OWNER: "onovich",
+        "INPUT_UPDATE-README": "true",
+        GITHUB_OUTPUT: outputFile
+      },
+      fetchImpl: async () => fixtureResponse(),
+      sleep: async () => {},
+      logger: { info() {}, warn() {} }
+    }),
+    /one complete, ordered RepoPalette block or none/
+  );
+  assert.equal(await readFile(readmePath, "utf8"), originalReadme);
 });
 
 test("rejects an unknown renderer instead of silently changing the design", async () => {
