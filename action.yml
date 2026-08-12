@@ -4,11 +4,11 @@ description: Generate a validated GitHub language SVG and auditable JSON in your
 
 inputs:
   style:
-    description: Visual layout. The v0.1 preview supports bars.
+    description: "Visual layout: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, or prism."
     required: false
     default: bars
   theme:
-    description: Color theme. The v0.1 preview supports light.
+    description: "Color theme: light, paper, midnight, aurora, terminal, or neon."
     required: false
     default: light
   username:

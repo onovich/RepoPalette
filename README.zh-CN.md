@@ -6,24 +6,26 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-根据你的公开 GitHub 仓库生成编程语言构成图。
+选择一种布局和主题，根据你的公开 GitHub 仓库生成编程语言构成图。
 
-RepoPalette 在 GitHub Actions 中运行，把经过校验的 SVG 和审计数据直接保存到你的 Profile 仓库。统计公开仓库时使用 GitHub 内置令牌，无需创建个人访问令牌，也无需部署在线服务。
+RepoPalette 按计划自动运行，并把 SVG 和审计数据保存在你自己的 Profile 仓库中。无需创建个人令牌、部署图片服务或注册其他账号。
 
-[![RepoPalette 实际示例](https://raw.githubusercontent.com/onovich/onovich/main/assets/top-langs.svg)](https://github.com/onovich/onovich/blob/main/assets/top-langs-data.json)
+| `ribbon` | `matrix` | `voronoi` |
+| --- | --- | --- |
+| ![Ribbon 布局](docs/gallery/ribbon-paper.svg) | ![Matrix 布局](docs/gallery/matrix-paper.svg) | ![Voronoi 布局](docs/gallery/voronoi-paper.svg) |
 
-> **预览版说明：** v0.1 当前提供 `bars` 布局和 `light` 主题，后续会增加更多布局和主题。
+[在画廊中比较全部布局与主题。](docs/GALLERY.md)
 
-## 为什么使用 RepoPalette？
+## 它有什么不同？
 
-- 配置一次，之后由定时工作流自动更新。
-- 读取公开仓库列表的全部分页，不会统计到一半就停止。
-- SVG 和 JSON 保存在你自己的仓库，不依赖实时图片服务。
-- 更新失败时保留上一张有效图片，并可通过审计 JSON 核对统计范围。
+- 十种专门设计的布局，同时保留准确的语言名称和百分比。
+- 读取完整的公开仓库列表，不会在前几页之后悄悄停止统计。
+- 生成文件归你自己的仓库所有，图片显示不依赖实时卡片服务。
+- 可读的 JSON 会列出纳入和排除的仓库；更新失败时，上一份有效文件保持不变。
 
 ## 快速开始
 
-1. 在你的 GitHub Profile 仓库（`你的用户名/你的用户名`）中创建 `.github/workflows/repopalette.yml`，内容如下：
+在你的 GitHub Profile 仓库（`你的用户名/你的用户名`）中创建 `.github/workflows/repopalette.yml`：
 
 ```yaml
 name: Update RepoPalette
@@ -45,7 +47,10 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@4dfd83c030dfd6dff7bd8af12ad30947c4b63f1f # Pinned preview revision
+        uses: onovich/RepoPalette@c002cc8005a7ecbc9c07da1095add8bf77ba78df # reviewed layouts
+        with:
+          style: orbit
+          theme: aurora
 
       - name: Commit changes
         shell: bash
@@ -64,38 +69,30 @@ jobs:
           git push
 ```
 
-2. 打开仓库的 **Actions** 页面，手动运行一次 **Update RepoPalette**。
+然后：
 
-3. 在 Profile 的 `README.md` 中加入生成的图片：
+1. 打开仓库的 **Actions** 页面，手动运行一次 **Update RepoPalette**。
+2. 在 Profile 的 `README.md` 中加入 `![GitHub languages](./assets/top-langs.svg)`。
 
-```markdown
-![GitHub languages](./assets/top-langs.svg)
-```
-
-工作流会在每周一检查统计变化，有变化时才提交文件。你也可以使用更易读的 `@v0.1.0` Release 标签；不过工作流拥有写权限时，上方固定的完整提交 SHA 更安全。
+工作流会在每周一检查变化。正式发布后也可使用易读的 `@v0.2.0` 标签；对于拥有写权限的工作流，上方固定的完整提交 SHA 更安全。
 
 ## 自定义
 
-在 **Generate language chart** 步骤中添加 `with`。例如：
+修改 `with` 中的两个值：
 
-```yaml
-with:
-  top: "8"
-  title: My Languages
-  exclude-repositories: "demo,sandbox"
-  exclude-languages: "HTML,CSS"
-```
+- `style`：`bars`、`orbit`、`constellation`、`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 或 `prism`
+- `theme`：`light`、`paper`、`midnight`、`aurora`、`terminal` 或 `neon`
 
-所有输入与输出见 [`action.yml`](action.yml)。
+你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。全部选项见 [`action.yml`](action.yml)。
 
 ## 统计范围
 
 - 统计所选 GitHub 账号拥有的公开仓库。
 - 排除 fork；默认排除归档仓库。
-- 语言占比基于 GitHub 提供的语言字节数。
-- 结果不代表熟练度、投入时间、代码质量，也不判断代码是否由 AI 编写。
+- 百分比基于 GitHub 提供的语言字节数。
+- 图表不衡量熟练度、投入时间、代码质量或 AI 作者身份。
 
-RepoPalette 还会生成 `assets/top-langs-data.json`，列出纳入和排除的仓库，以及每项被排除的原因。
+RepoPalette 还会生成 `assets/top-langs-data.json`，记录完整的统计范围。
 
 ## 开发
 

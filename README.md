@@ -6,24 +6,26 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Generate a programming-language chart from your public GitHub repositories.
+Choose a layout and theme, then generate a programming-language chart from your public GitHub repositories.
 
-RepoPalette runs in GitHub Actions and saves a validated SVG plus audit data directly in your Profile repository. Public repositories work with GitHub's built-in token, so there is no personal access token or hosted service to set up.
+RepoPalette runs on a schedule and saves the SVG plus its audit data in your own Profile repository. There is no personal token, hosted image service, or separate account to set up.
 
-[![Live RepoPalette example](https://raw.githubusercontent.com/onovich/onovich/main/assets/top-langs.svg)](https://github.com/onovich/onovich/blob/main/assets/top-langs-data.json)
+| `ribbon` | `matrix` | `voronoi` |
+| --- | --- | --- |
+| ![Ribbon layout](docs/gallery/ribbon-paper.svg) | ![Matrix layout](docs/gallery/matrix-paper.svg) | ![Voronoi layout](docs/gallery/voronoi-paper.svg) |
 
-> **Preview:** v0.1 currently provides the `bars` layout with the `light` theme. More layouts and themes are planned.
+[Compare all layouts and themes in the gallery.](docs/GALLERY.md)
 
-## Why use it?
+## What makes it different?
 
-- Set it up once, then let a scheduled workflow keep the chart current.
-- Check every page of your public repository list instead of silently stopping early.
-- Keep the SVG and JSON in your own repository instead of relying on a live image service.
-- Keep the last valid image when an update fails, and inspect exactly what was counted in the audit JSON.
+- Ten purpose-built layouts keep exact language names and percentages visible.
+- The full public repository list is read instead of silently stopping after an early page.
+- The generated files belong to your repository, so the image does not depend on a live card service.
+- A readable JSON file shows which repositories were included or excluded. If an update fails, the last valid files stay in place.
 
 ## Quick start
 
-1. In your GitHub Profile repository (`your-name/your-name`), create `.github/workflows/repopalette.yml` with this content:
+In your GitHub Profile repository (`your-name/your-name`), create `.github/workflows/repopalette.yml`:
 
 ```yaml
 name: Update RepoPalette
@@ -45,7 +47,10 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@4dfd83c030dfd6dff7bd8af12ad30947c4b63f1f # Pinned preview revision
+        uses: onovich/RepoPalette@c002cc8005a7ecbc9c07da1095add8bf77ba78df # reviewed layouts
+        with:
+          style: orbit
+          theme: aurora
 
       - name: Commit changes
         shell: bash
@@ -64,38 +69,30 @@ jobs:
           git push
 ```
 
-2. Open the repository's **Actions** tab and run **Update RepoPalette** once.
+Then:
 
-3. Add the generated image to your Profile `README.md`:
+1. Open the repository's **Actions** tab and run **Update RepoPalette** once.
+2. Add `![GitHub languages](./assets/top-langs.svg)` to your Profile `README.md`.
 
-```markdown
-![GitHub languages](./assets/top-langs.svg)
-```
-
-The workflow will update the files every Monday when the statistics change. The readable `@v0.1.0` release tag is also available, but the full commit SHA above is safer for a workflow with write access.
+The workflow checks for changes every Monday. The readable `@v0.2.0` tag is also available after release; the full commit SHA above is safer for a workflow with write access.
 
 ## Customize it
 
-Add a `with` block to the **Generate language chart** step. For example:
+Change the two values in the `with` block:
 
-```yaml
-with:
-  top: "8"
-  title: My Languages
-  exclude-repositories: "demo,sandbox"
-  exclude-languages: "HTML,CSS"
-```
+- `style`: `bars`, `orbit`, `constellation`, `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, or `prism`
+- `theme`: `light`, `paper`, `midnight`, `aurora`, `terminal`, or `neon`
 
-See [`action.yml`](action.yml) for every input and output.
+You can also change the title, width, number of languages, and repository or language filters. See [`action.yml`](action.yml) for every option.
 
 ## What gets counted?
 
 - Public repositories owned by the selected GitHub account.
 - Forks are excluded. Archived repositories are excluded by default.
-- Language percentages use GitHub's language byte counts.
-- The result does not measure skill, time spent, code quality, or AI authorship.
+- Percentages use GitHub's language byte counts.
+- The chart does not measure skill, time, code quality, or AI authorship.
 
-RepoPalette also writes `assets/top-langs-data.json`, which lists included and excluded repositories and the reasons for each exclusion.
+RepoPalette also writes `assets/top-langs-data.json` with the complete counting scope.
 
 ## Development
 

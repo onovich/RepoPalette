@@ -49,7 +49,10 @@ test("invalid SVG or JSON never replaces the last successful outputs", async (t)
   await assert.rejects(
     writeValidatedOutputs({
       outputDirectory,
-      svg: validSvg.replace('viewBox="0 0 400 96"', 'viewBox="0 0 399 96"'),
+      svg: validSvg.replace(
+        /viewBox="0 0 400 ([0-9.]+)"/,
+        'viewBox="0 0 399 $1"'
+      ),
       json: validJson,
       expectedAudit: expected.audit
     }),
@@ -61,8 +64,8 @@ test("invalid SVG or JSON never replaces the last successful outputs", async (t)
     writeValidatedOutputs({
       outputDirectory,
       svg: validSvg.replace(
-        "    .card {",
-        '    @import "https://example.com/theme.css";\n    .card {'
+        "  <style>",
+        '  <style>\n    @import "https://example.com/theme.css";'
       ),
       json: validJson,
       expectedAudit: expected.audit

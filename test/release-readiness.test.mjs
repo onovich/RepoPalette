@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 
 const root = new URL("../", import.meta.url);
+const execFileAsync = promisify(execFile);
 
 test("keeps the public install example aligned with the package version", async () => {
   const packageJson = JSON.parse(await readText("package.json"));
@@ -34,6 +38,53 @@ test("keeps the public install example aligned with the package version", async 
   ));
 });
 
+test("pins a commit that implements every advertised layout", async () => {
+  const documents = await Promise.all([
+    readText("README.md"),
+    readText("README.zh-CN.md")
+  ]);
+  const pins = documents.map((document) =>
+    /uses: onovich\/RepoPalette@([0-9a-f]{40})/.exec(document)?.[1]
+  );
+  assert.ok(pins.every(Boolean));
+  assert.equal(new Set(pins).size, 1);
+
+  const { stdout: registry } = await execFileAsync(
+    "git",
+    ["show", pins[0] + ":src/renderers/index.mjs"],
+    { cwd: fileURLToPath(root) }
+  );
+  for (const style of [
+    "bars",
+    "orbit",
+    "constellation",
+    "ribbon",
+    "bead-halo",
+    "matrix",
+    "halo",
+    "treemap",
+    "voronoi",
+    "prism"
+  ]) {
+    assert.match(registry, new RegExp('defineStyle\\("' + style + '"'));
+  }
+  await execFileAsync(
+    "git",
+    [
+      "diff",
+      "--exit-code",
+      pins[0],
+      "HEAD",
+      "--",
+      "action.yml",
+      "package.json",
+      "scripts",
+      "src"
+    ],
+    { cwd: fileURLToPath(root) }
+  );
+});
+
 test("keeps the action metadata ready for a tagged preview", async () => {
   const action = await readText("action.yml");
   const rootEntries = await readdir(root, { withFileTypes: true });
@@ -46,6 +97,14 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^name: RepoPalette$/m);
   assert.match(action, /^author: onovich$/m);
   assert.match(action, /^description: .+$/m);
+  assert.match(
+    action,
+    /Visual layout: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, or prism\./
+  );
+  assert.match(
+    action,
+    /Color theme: light, paper, midnight, aurora, terminal, or neon\./
+  );
   assert.match(action, /^\s+using: node24$/m);
   assert.match(action, /^\s+main: src\/action\.mjs$/m);
   assert.match(action, /^branding:\s*$/m);
@@ -58,6 +117,10 @@ test("runs CI for semantic version tags and checks the package version", async (
 
   assert.match(workflow, /push:\s*\n\s+branches:\s*\n\s+- main/);
   assert.match(workflow, /tags:\s*\n\s+- "v\*"/);
+  assert.match(
+    workflow,
+    /name: Check out repository\s*\n\s+uses: actions\/checkout@[0-9a-f]{40}[^\n]*\n\s+with:\s*\n\s+fetch-depth: 0/
+  );
   assert.match(workflow, /if: github\.ref_type == 'tag'/);
   assert.match(workflow, /GITHUB_REF_NAME/);
   assert.match(workflow, /package\.json/);
@@ -72,6 +135,7 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
     ".github/workflows/ci.yml",
     "action.yml",
     "package.json",
+    "docs/GALLERY.md",
     "docs/PRODUCT_DECISIONS.md"
   ]) {
     const bytes = await readFile(new URL(path, root));
@@ -82,6 +146,11 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
     );
     assert.doesNotMatch(bytes.toString("utf8"), /\uFFFD/, path);
   }
+});
+
+test("keeps generated SVG previews byte-stable across platforms", async () => {
+  const attributes = await readText(".gitattributes");
+  assert.match(attributes, /^\*\.svg text eol=lf$/m);
 });
 
 test("keeps English as the concise default with a Chinese entry point", async () => {

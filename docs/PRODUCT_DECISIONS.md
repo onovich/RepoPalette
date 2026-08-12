@@ -194,7 +194,7 @@ with:
 
 ## 6. 当前产品顺序
 
-当前进度（2026-08-12）：第 1 项已完成，并已在 `onovich/onovich` Profile 仓库中完成真实 Action 接入；`v0.1.0` 作为公开预览版发布。下一产品阶段从第 2 项开始，Marketplace 上架仍以第 2、3 项完成为前提。
+当前进度（2026-08-13）：第 1、2 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；“使用 AI 协助安装”尚未实现。Marketplace 上架前还需完成安装体验与发布准备。
 
 1. 将现有统计核心迁入独立仓库并包装成可复用 Action；
 2. 实现 `orbit`、`constellation` 和重制的 `bars`；

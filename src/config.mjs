@@ -1,10 +1,14 @@
+import { STYLE_NAMES, THEME_NAMES } from "./presentation.mjs";
+
 const DEFAULT_CONFIG = Object.freeze({
   top: 6,
   includeArchived: false,
   excludeRepositories: [],
   excludeLanguages: [],
   title: "Most Used Languages",
-  width: 400
+  width: 400,
+  style: "bars",
+  theme: "light"
 });
 
 export function validateConfig(input) {
@@ -27,7 +31,9 @@ export function validateConfig(input) {
       ?? DEFAULT_CONFIG.excludeRepositories,
     excludeLanguages: input.excludeLanguages ?? DEFAULT_CONFIG.excludeLanguages,
     title: input.title ?? DEFAULT_CONFIG.title,
-    width: input.width ?? DEFAULT_CONFIG.width
+    width: input.width ?? DEFAULT_CONFIG.width,
+    style: input.style ?? DEFAULT_CONFIG.style,
+    theme: input.theme ?? DEFAULT_CONFIG.theme
   };
 
   if (typeof config.username !== "string" || config.username.trim() === "") {
@@ -49,12 +55,20 @@ export function validateConfig(input) {
       || config.width > 800) {
     throw new TypeError("width must be an integer from 320 to 800");
   }
+  validateChoice(config.style, "style", STYLE_NAMES);
+  validateChoice(config.theme, "theme", THEME_NAMES);
 
   return {
     ...config,
     excludeRepositories: [...config.excludeRepositories],
     excludeLanguages: [...config.excludeLanguages]
   };
+}
+
+function validateChoice(value, name, choices) {
+  if (!choices.includes(value)) {
+    throw new TypeError(name + " must be one of: " + choices.join(", "));
+  }
 }
 
 function validateStringArray(value, name) {

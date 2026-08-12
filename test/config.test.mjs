@@ -11,8 +11,38 @@ test("fills the documented defaults for a valid username", () => {
     excludeRepositories: [],
     excludeLanguages: [],
     title: "Most Used Languages",
-    width: 400
+    width: 400,
+    style: "bars",
+    theme: "light"
   });
+});
+
+test("accepts every documented style and theme", () => {
+  for (const style of [
+    "bars",
+    "orbit",
+    "constellation",
+    "ribbon",
+    "bead-halo",
+    "matrix",
+    "halo",
+    "treemap",
+    "voronoi",
+    "prism"
+  ]) {
+    assert.equal(validateConfig({ username: "onovich", style }).style, style);
+  }
+
+  for (const theme of [
+    "light",
+    "paper",
+    "midnight",
+    "aurora",
+    "terminal",
+    "neon"
+  ]) {
+    assert.equal(validateConfig({ username: "onovich", theme }).theme, theme);
+  }
 });
 
 test("rejects malformed, out-of-range, and unknown configuration", () => {
@@ -27,6 +57,14 @@ test("rejects malformed, out-of-range, and unknown configuration", () => {
   assert.throws(
     () => validateConfig({ username: "onovich", width: 200 }),
     /width must be an integer from 320 to 800/
+  );
+  assert.throws(
+    () => validateConfig({ username: "onovich", style: "donut" }),
+    /style must be one of: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, prism/
+  );
+  assert.throws(
+    () => validateConfig({ username: "onovich", theme: "rainbow" }),
+    /theme must be one of: light, paper, midnight, aurora, terminal, neon/
   );
   assert.throws(
     () => validateConfig({ username: "onovich", excludeLanguages: ["C#", 42] }),

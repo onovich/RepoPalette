@@ -1,13 +1,14 @@
 {
   "name": "repopalette",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Generate a validated GitHub language SVG and auditable JSON in your own repository.",
   "type": "module",
   "scripts": {
     "generate": "node src/cli.mjs",
     "test": "node --test test/*.test.mjs",
-    "check": "node --check src/action.mjs && node --check src/action-runner.mjs && node --check src/aggregate.mjs && node --check src/cli.mjs && node --check src/config.mjs && node --check src/generate.mjs && node --check src/github-client.mjs && node --check src/output-files.mjs && node --check src/render-svg.mjs && npm test"
+    "gallery": "node scripts/generate-gallery.mjs",
+    "check": "node scripts/check-syntax.mjs && npm test"
   },
   "engines": {
     "node": ">=24"
