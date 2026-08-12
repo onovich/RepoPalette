@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@3a79027aba65cb621d856ae38b9a60a88f1c07b3 # v0.5.0
 ```
 
 <details>
@@ -52,7 +52,7 @@ jobs:
 
 提交文件即可。第一次提交会自动启动 RepoPalette；Actions 检查变绿时，图表已经加入 Profile README。此后每周一自动检查，也可以随时通过 **Actions → RepoPalette → Run workflow** 手动刷新。
 
-发布后也可使用易读的 `@v0.4.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
+发布后也可使用易读的 `@v0.5.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
 
 ## 为什么选择 RepoPalette？
 

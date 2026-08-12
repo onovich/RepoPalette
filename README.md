@@ -41,7 +41,7 @@ permissions:
   contents: write
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@8895ff5ae8be995336eb138940d5d44d32fdc20b # v0.4.0
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@3a79027aba65cb621d856ae38b9a60a88f1c07b3 # v0.5.0
 ```
 
 <details>
@@ -52,7 +52,7 @@ Open your Profile repository, choose **Add file → Create new file**, enter `.g
 
 Commit the file. That first commit starts RepoPalette automatically; when the Actions check turns green, the chart is already in your Profile README. It then checks every Monday. **Actions → RepoPalette → Run workflow** remains available whenever you want to refresh it manually.
 
-The readable `@v0.4.0` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
+The readable `@v0.5.0` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
 
 ## Why RepoPalette?
 
