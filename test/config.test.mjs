@@ -18,7 +18,18 @@ test("fills the documented defaults for a valid username", () => {
 });
 
 test("accepts every documented style and theme", () => {
-  for (const style of ["bars", "orbit", "constellation"]) {
+  for (const style of [
+    "bars",
+    "orbit",
+    "constellation",
+    "ribbon",
+    "bead-halo",
+    "matrix",
+    "halo",
+    "treemap",
+    "voronoi",
+    "prism"
+  ]) {
     assert.equal(validateConfig({ username: "onovich", style }).style, style);
   }
 
@@ -49,7 +60,7 @@ test("rejects malformed, out-of-range, and unknown configuration", () => {
   );
   assert.throws(
     () => validateConfig({ username: "onovich", style: "donut" }),
-    /style must be one of: bars, orbit, constellation/
+    /style must be one of: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, prism/
   );
   assert.throws(
     () => validateConfig({ username: "onovich", theme: "rainbow" }),

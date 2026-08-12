@@ -15,10 +15,21 @@ test("generates a deterministic preview for every style and theme", async (t) =>
 
   await generateGallery(outputDirectory);
 
-  assert.equal(GALLERY_PREVIEWS.length, 6);
+  assert.equal(GALLERY_PREVIEWS.length, 13);
   assert.deepEqual(
     new Set(GALLERY_PREVIEWS.map(({ style }) => style)),
-    new Set(["bars", "orbit", "constellation"])
+    new Set([
+      "bars",
+      "orbit",
+      "constellation",
+      "ribbon",
+      "bead-halo",
+      "matrix",
+      "halo",
+      "treemap",
+      "voronoi",
+      "prism"
+    ])
   );
   assert.deepEqual(
     new Set(GALLERY_PREVIEWS.map(({ theme }) => theme)),

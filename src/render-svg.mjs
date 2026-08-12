@@ -1,4 +1,9 @@
 import { getTheme } from "./presentation.mjs";
+import {
+  renderPrism,
+  renderTreemap,
+  renderVoronoi
+} from "./renderers/area-composition.mjs";
 import { renderBars } from "./renderers/bars.mjs";
 import {
   escapeXml,
@@ -6,12 +11,25 @@ import {
   truncateLabel
 } from "./renderers/common.mjs";
 import { renderConstellation } from "./renderers/constellation.mjs";
+import { renderHalo } from "./renderers/halo.mjs";
 import { renderOrbit } from "./renderers/orbit.mjs";
+import { renderRibbon } from "./renderers/ribbon.mjs";
+import {
+  renderBeadHalo,
+  renderMatrix
+} from "./renderers/unit-composition.mjs";
 
 const RENDERERS = Object.freeze({
   bars: renderBars,
   orbit: renderOrbit,
-  constellation: renderConstellation
+  constellation: renderConstellation,
+  ribbon: renderRibbon,
+  "bead-halo": renderBeadHalo,
+  matrix: renderMatrix,
+  halo: renderHalo,
+  treemap: renderTreemap,
+  voronoi: renderVoronoi,
+  prism: renderPrism
 });
 
 export function renderSvg(stats, configInput) {
@@ -29,6 +47,9 @@ export function renderSvg(stats, configInput) {
   }
   const theme = getTheme(config.theme);
   const languages = stats.languages.slice(0, config.top);
+  const descriptionLanguages = config.style in COMPOSITION_RENDERERS
+    ? compositionDescriptionLanguages(stats, languages)
+    : languages;
   const layout = renderer({ stats, config, languages, theme });
   const lines = [
     '<svg xmlns="http://www.w3.org/2000/svg"'
@@ -38,7 +59,8 @@ export function renderSvg(stats, configInput) {
       + ' width="' + config.width + '" height="' + layout.height + '"'
       + ' viewBox="0 0 ' + config.width + " " + layout.height + '">',
     '  <title id="title">' + escapeXml(config.title) + "</title>",
-    '  <desc id="description">' + buildDescription(stats, languages) + "</desc>",
+    '  <desc id="description">'
+      + buildDescription(stats, descriptionLanguages) + "</desc>",
     ...styleLines(theme),
     '  <rect class="card" x="0.5" y="0.5" width="'
       + (config.width - 1) + '" height="' + (layout.height - 1)
@@ -51,6 +73,16 @@ export function renderSvg(stats, configInput) {
   ];
   return lines.join("\n");
 }
+
+const COMPOSITION_RENDERERS = Object.freeze({
+  ribbon: true,
+  "bead-halo": true,
+  matrix: true,
+  halo: true,
+  treemap: true,
+  voronoi: true,
+  prism: true
+});
 
 export { escapeXml };
 
@@ -82,10 +114,30 @@ function styleLines(theme) {
     "    .metric-label { fill: " + theme.muted + "; font-size: 7px; letter-spacing: 0.7px; }",
     "    .legend-label { fill: " + theme.ink + "; font-size: 10.5px; font-weight: 600; }",
     "    .legend-value { fill: " + theme.muted + "; font-size: 9.5px; font-variant-numeric: tabular-nums; }",
+    "    .axis-note { fill: " + theme.muted + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }",
+    "    .part-label { font-size: 11px; font-weight: 700; }",
+    "    .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }",
+    "    .center-label { fill: " + theme.ink + "; font-size: 12px; font-weight: 700; }",
+    "    .center-value { fill: " + theme.muted + "; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }",
     "    .node-label { font-size: 9px; font-weight: 750; }",
     "    .empty { fill: " + theme.muted + "; font-size: 11px; }",
     "  </style>"
   ];
+}
+
+function compositionDescriptionLanguages(stats, languages) {
+  const visibleBytes = languages.reduce(
+    (sum, language) => sum + Math.max(0, language.bytes),
+    0
+  );
+  const otherBytes = Math.max(0, stats.totalBytes - visibleBytes);
+  if (otherBytes === 0) {
+    return languages;
+  }
+  return [...languages, {
+    name: "Other",
+    percentage: stats.totalBytes > 0 ? otherBytes / stats.totalBytes * 100 : 0
+  }];
 }
 
 function headerLines(stats, config, theme) {

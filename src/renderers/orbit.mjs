@@ -1,7 +1,7 @@
 import {
   bytePercentage,
   renderLegend,
-  safeColor,
+  seriesColor,
   svgNumber
 } from "./common.mjs";
 
@@ -31,7 +31,7 @@ export function renderOrbit({ stats, config, languages, theme }) {
   languages.forEach((language, index) => {
     const radius = outerRadius - index * step;
     const share = bytePercentage(language, stats.totalBytes);
-    const color = safeColor(language.color, theme.accent);
+    const color = seriesColor(language, index, theme);
     const trackPath = arcPath(centerX, centerY, radius, 135, 270);
     const valuePath = arcPath(centerX, centerY, radius, 135, 270 * share / 100);
     lines.push(

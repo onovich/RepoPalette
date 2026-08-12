@@ -10,15 +10,15 @@
 
 RepoPalette 按计划自动运行，并把 SVG 和审计数据保存在你自己的 Profile 仓库中。无需创建个人令牌、部署图片服务或注册其他账号。
 
-| `bars` | `orbit` | `constellation` |
+| `ribbon` | `matrix` | `voronoi` |
 | --- | --- | --- |
-| ![Bars 布局](docs/gallery/bars-light.svg) | ![Orbit 布局](docs/gallery/orbit-aurora.svg) | ![Constellation 布局](docs/gallery/constellation-neon.svg) |
+| ![Ribbon 布局](docs/gallery/ribbon-paper.svg) | ![Matrix 布局](docs/gallery/matrix-paper.svg) | ![Voronoi 布局](docs/gallery/voronoi-paper.svg) |
 
-[在画廊中比较全部六套主题。](docs/GALLERY.md)
+[在画廊中比较全部布局与主题。](docs/GALLERY.md)
 
 ## 它有什么不同？
 
-- 三种专门设计的布局，同时保留准确的语言名称和百分比。
+- 十种专门设计的布局，同时保留准确的语言名称和百分比。
 - 读取完整的公开仓库列表，不会在前几页之后悄悄停止统计。
 - 生成文件归你自己的仓库所有，图片显示不依赖实时卡片服务。
 - 可读的 JSON 会列出纳入和排除的仓库；更新失败时，上一份有效文件保持不变。
@@ -80,7 +80,7 @@ jobs:
 
 修改 `with` 中的两个值：
 
-- `style`：`bars`、`orbit` 或 `constellation`
+- `style`：`bars`、`orbit`、`constellation`、`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 或 `prism`
 - `theme`：`light`、`paper`、`midnight`、`aurora`、`terminal` 或 `neon`
 
 你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。全部选项见 [`action.yml`](action.yml)。

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="halo" data-theme="paper" width="400" height="433" viewBox="0 0 400 433">
+  <title id="title">Language Composition</title>
+  <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+    .title { fill: #024b81; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
+    .meta, .style-tag, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .meta { fill: #4d738d; font-size: 9.5px; letter-spacing: 0.9px; }
+    .style-tag { fill: #fd7136; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+    .label { fill: #024b81; font-size: 12px; font-weight: 650; }
+    .value { fill: #4d738d; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
+    .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
+    .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
+    .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
+    .part-label { font-size: 11px; font-weight: 700; }
+    .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
+    .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
+    .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
+    .node-label { font-size: 9px; font-weight: 750; }
+    .empty { fill: #4d738d; font-size: 11px; }
+  </style>
+  <rect class="card" x="0.5" y="0.5" width="399" height="432" rx="14" fill="#fef7ef" stroke="#a9c9dc"/>
+  <rect x="24" y="20" width="4" height="35" rx="2" fill="#fd7136"/>
+  <text class="title" x="38" y="35">Language Composition</text>
+  <text class="meta" x="38" y="55">24 OF 27 PUBLIC REPOS</text>
+  <text class="style-tag" text-anchor="end" x="376" y="30">HALO</text>
+  <g data-role="halo-part">
+    <path data-role="composition-part" data-language="TypeScript" data-share="42" d="M 200 85 A 105 105 0 0 1 250.58 282.01 L 233.39 250.73 A 69.3 69.3 0 0 0 200 120.7 Z" fill="#024b81" stroke="#fef7ef" stroke-width="3"/>
+    <path data-role="composition-part" data-language="Python" data-share="25" d="M 250.58 282.01 A 105 105 0 0 1 107.99 240.58 L 139.27 223.39 A 69.3 69.3 0 0 0 233.39 250.73 Z" fill="#367db7" stroke="#fef7ef" stroke-width="3"/>
+    <path data-role="composition-part" data-language="C#" data-share="14" d="M 107.99 240.58 A 105 105 0 0 1 102.37 151.35 L 135.57 164.49 A 69.3 69.3 0 0 0 139.27 223.39 Z" fill="#6faddf" stroke="#fef7ef" stroke-width="3"/>
+    <path data-role="composition-part" data-language="ShaderLab" data-share="8" d="M 102.37 151.35 A 105 105 0 0 1 133.07 109.1 L 155.83 136.6 A 69.3 69.3 0 0 0 135.57 164.49 Z" fill="#c9dce8" stroke="#fef7ef" stroke-width="3"/>
+    <path data-role="composition-part" data-language="Shell" data-share="6" d="M 133.07 109.1 A 105 105 0 0 1 167.55 90.14 L 178.59 124.09 A 69.3 69.3 0 0 0 155.83 136.6 Z" fill="#fed9da" stroke="#fef7ef" stroke-width="3"/>
+    <path data-role="composition-part" data-language="HTML" data-share="5" d="M 167.55 90.14 A 105 105 0 0 1 200 85 L 200 120.7 A 69.3 69.3 0 0 0 178.59 124.09 Z" fill="#fd7136" stroke="#fef7ef" stroke-width="3"/>
+  </g>
+  <text class="center-label" text-anchor="middle" x="200" y="185">LANGUAGE</text>
+  <text class="center-value" text-anchor="middle" x="200" y="205">100% COMPOSITION</text>
+  <g data-role="legend" data-columns="2">
+    <circle cx="28" cy="333" r="4" fill="#024b81"/>
+    <text class="legend-label" x="40" y="337">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="196" y="337">42.0%</text>
+    <circle cx="204" cy="333" r="4" fill="#367db7"/>
+    <text class="legend-label" x="216" y="337">Python</text>
+    <text class="legend-value" text-anchor="end" x="372" y="337">25.0%</text>
+    <circle cx="28" cy="359" r="4" fill="#6faddf"/>
+    <text class="legend-label" x="40" y="363">C#</text>
+    <text class="legend-value" text-anchor="end" x="196" y="363">14.0%</text>
+    <circle cx="204" cy="359" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="216" y="363">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="372" y="363">8.0%</text>
+    <circle cx="28" cy="385" r="4" fill="#fed9da"/>
+    <text class="legend-label" x="40" y="389">Shell</text>
+    <text class="legend-value" text-anchor="end" x="196" y="389">6.0%</text>
+    <circle cx="204" cy="385" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="216" y="389">HTML</text>
+    <text class="legend-value" text-anchor="end" x="372" y="389">5.0%</text>
+  </g>
+</svg>

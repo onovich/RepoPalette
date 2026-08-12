@@ -1,7 +1,14 @@
 export const STYLE_NAMES = Object.freeze([
   "bars",
   "orbit",
-  "constellation"
+  "constellation",
+  "ribbon",
+  "bead-halo",
+  "matrix",
+  "halo",
+  "treemap",
+  "voronoi",
+  "prism"
 ]);
 
 export const THEME_NAMES = Object.freeze([
@@ -25,14 +32,23 @@ const THEME_TOKENS = Object.freeze({
     grid: "#d8dee4"
   }),
   paper: Object.freeze({
-    canvas: "#fbf6ea",
-    surface: "#f2eadb",
-    ink: "#2d261e",
-    muted: "#6e6255",
-    border: "#d8cbb8",
-    accent: "#a4492e",
-    track: "#e8dece",
-    grid: "#ded1bf"
+    canvas: "#fef7ef",
+    surface: "#fffdf9",
+    ink: "#024b81",
+    muted: "#4d738d",
+    border: "#a9c9dc",
+    accent: "#fd7136",
+    track: "#c9dce8",
+    grid: "#dce9f1",
+    series: Object.freeze([
+      "#024b81",
+      "#367db7",
+      "#6faddf",
+      "#c9dce8",
+      "#fed9da",
+      "#fd7136"
+    ]),
+    other: "#fed9da"
   }),
   midnight: Object.freeze({
     canvas: "#0d1117",

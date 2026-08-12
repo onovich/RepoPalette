@@ -4,7 +4,7 @@ description: Generate a validated GitHub language SVG and auditable JSON in your
 
 inputs:
   style:
-    description: "Visual layout: bars, orbit, or constellation."
+    description: "Visual layout: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, or prism."
     required: false
     default: bars
   theme:

@@ -3,7 +3,7 @@ import {
   contrastColor,
   escapeXml,
   renderLegend,
-  safeColor,
+  seriesColor,
   svgNumber,
   truncateLabel
 } from "./common.mjs";
@@ -55,8 +55,8 @@ export function renderConstellation({ stats, config, languages, theme }) {
     );
   });
 
-  nodes.forEach((node) => {
-    const color = safeColor(node.language.color, theme.accent);
+  nodes.forEach((node, index) => {
+    const color = seriesColor(node.language, index, theme);
     lines.push(
       '  <circle cx="' + svgNumber(node.x) + '" cy="' + svgNumber(node.y)
         + '" r="' + svgNumber(node.radius + 6) + '" fill="' + color

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="voronoi" data-theme="paper" width="400" height="445.28" viewBox="0 0 400 445.28">
+  <title id="title">Language Composition</title>
+  <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+    .title { fill: #024b81; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
+    .meta, .style-tag, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .meta { fill: #4d738d; font-size: 9.5px; letter-spacing: 0.9px; }
+    .style-tag { fill: #fd7136; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+    .label { fill: #024b81; font-size: 12px; font-weight: 650; }
+    .value { fill: #4d738d; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
+    .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
+    .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
+    .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
+    .part-label { font-size: 11px; font-weight: 700; }
+    .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
+    .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
+    .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
+    .node-label { font-size: 9px; font-weight: 750; }
+    .empty { fill: #4d738d; font-size: 11px; }
+  </style>
+  <rect class="card" x="0.5" y="0.5" width="399" height="444.28" rx="14" fill="#fef7ef" stroke="#a9c9dc"/>
+  <rect x="24" y="20" width="4" height="35" rx="2" fill="#fd7136"/>
+  <text class="title" x="38" y="35">Language Composition</text>
+  <text class="meta" x="38" y="55">24 OF 27 PUBLIC REPOS</text>
+  <text class="style-tag" text-anchor="end" x="376" y="30">VORONOI</text>
+  <g data-role="voronoi-part">
+    <polygon data-role="composition-part" data-language="TypeScript" data-share="42" data-shape-role="voronoi-part" points="376,162 376,311.28 225.16,311.28 155.88,222.71 162.26,186.98 297.32,110.78" fill="#024b81" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="279.87" y="220.06" fill="#ffffff">TypeScript</text>
+    <text class="part-value" text-anchor="middle" x="279.87" y="240.06" fill="#ffffff">42.0%</text>
+    <polygon data-role="composition-part" data-language="Python" data-share="25" data-shape-role="voronoi-part" points="24,86 110.56,86 162.26,186.98 155.88,222.71 133.57,248.35 24,258.42" fill="#367db7" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="83.66" y="171.92" fill="#ffffff">Python</text>
+    <text class="part-value" text-anchor="middle" x="83.66" y="191.92" fill="#ffffff">25.0%</text>
+    <polygon data-role="composition-part" data-language="C#" data-share="14" data-shape-role="voronoi-part" points="110.56,86 297.32,86 297.32,110.78 162.26,186.98" fill="#6faddf" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="199.43" y="118.9" fill="#111318">C#</text>
+    <text class="part-value" text-anchor="middle" x="199.43" y="138.9" fill="#111318">14.0%</text>
+    <polygon data-role="composition-part" data-language="ShaderLab" data-share="8" data-shape-role="voronoi-part" points="133.57,311.28 24,311.28 24,258.42 133.57,248.35" fill="#c9dce8" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="80.37" y="280.26" fill="#111318">ShaderLab</text>
+    <text class="part-value" text-anchor="middle" x="80.37" y="300.26" fill="#111318">8.0%</text>
+    <polygon data-role="composition-part" data-language="Shell" data-share="6" data-shape-role="voronoi-part" points="155.88,222.71 225.16,311.28 133.57,311.28 133.57,248.35" fill="#fed9da" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="167.03" y="276.66" fill="#111318">Shell</text>
+    <text class="part-value" text-anchor="middle" x="167.03" y="296.66" fill="#111318">6.0%</text>
+    <polygon data-role="composition-part" data-language="HTML" data-share="5" data-shape-role="voronoi-part" points="297.32,86 376,86 376,162 297.32,110.78" fill="#fd7136" stroke="#fef7ef" stroke-width="3" stroke-linejoin="round"/>
+    <text class="part-label" text-anchor="middle" x="343.32" y="111.36" fill="#111318">HTML</text>
+    <text class="part-value" text-anchor="middle" x="343.32" y="131.36" fill="#111318">5.0%</text>
+  </g>
+  <g data-role="legend" data-columns="2">
+    <circle cx="28" cy="345.28" r="4" fill="#024b81"/>
+    <text class="legend-label" x="40" y="349.28">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="196" y="349.28">42.0%</text>
+    <circle cx="204" cy="345.28" r="4" fill="#367db7"/>
+    <text class="legend-label" x="216" y="349.28">Python</text>
+    <text class="legend-value" text-anchor="end" x="372" y="349.28">25.0%</text>
+    <circle cx="28" cy="371.28" r="4" fill="#6faddf"/>
+    <text class="legend-label" x="40" y="375.28">C#</text>
+    <text class="legend-value" text-anchor="end" x="196" y="375.28">14.0%</text>
+    <circle cx="204" cy="371.28" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="216" y="375.28">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="372" y="375.28">8.0%</text>
+    <circle cx="28" cy="397.28" r="4" fill="#fed9da"/>
+    <text class="legend-label" x="40" y="401.28">Shell</text>
+    <text class="legend-value" text-anchor="end" x="196" y="401.28">6.0%</text>
+    <circle cx="204" cy="397.28" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="216" y="401.28">HTML</text>
+    <text class="legend-value" text-anchor="end" x="372" y="401.28">5.0%</text>
+  </g>
+</svg>

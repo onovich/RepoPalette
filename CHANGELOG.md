@@ -6,6 +6,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- Seven proportional layouts: `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, and `prism`.<br/>**增加七种比例构成布局：`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism`。**
+- Closed composition layouts add an explicit `Other` remainder when Top-N languages do not sum to 100%.<br/>**当 Top-N 语言不足 100% 时，封闭构成图会明确加入 `Other` 剩余项。**
+
+### Changed
+
+- Refined the `paper` theme around the ivory, blue, blush, and coral reference palette.<br/>**依据象牙白、蓝色、淡粉与珊瑚色参考配色优化 `paper` 主题。**
+
 ### Planned
 
 - Optional user-declared coding-style grouping, disabled by default.<br/>**增加默认关闭、由用户主动声明的编程方式分组。**

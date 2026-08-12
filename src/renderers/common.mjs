@@ -11,6 +11,13 @@ export function safeColor(value, fallback) {
   return /^#[0-9a-f]{6}$/i.test(value ?? "") ? value : fallback;
 }
 
+export function seriesColor(language, index, theme) {
+  if (Array.isArray(theme.series) && theme.series.length > 0) {
+    return safeColor(theme.series[index % theme.series.length], theme.accent);
+  }
+  return safeColor(language.color, theme.accent);
+}
+
 export function clampPercentage(value) {
   return Math.min(100, Math.max(0, Number.isFinite(value) ? value : 0));
 }
@@ -44,6 +51,61 @@ export function contrastColor(color) {
   return contrastRatio(color, dark) >= contrastRatio(color, light)
     ? dark
     : light;
+}
+
+export function compositionLanguages(languages, totalBytes, theme) {
+  const parts = languages.map((language, index) => ({
+    ...language,
+    share: bytePercentage(language, totalBytes),
+    color: seriesColor(language, index, theme)
+  }));
+  const visibleBytes = languages.reduce(
+    (sum, language) => sum + Math.max(0, language.bytes),
+    0
+  );
+  const otherBytes = Math.max(0, totalBytes - visibleBytes);
+  if (otherBytes > Math.max(1e-9, totalBytes * 1e-9)) {
+    parts.push({
+      name: "Other",
+      bytes: otherBytes,
+      percentage: bytePercentage({ bytes: otherBytes }, totalBytes),
+      share: bytePercentage({ bytes: otherBytes }, totalBytes),
+      color: safeColor(theme.other, theme.track),
+      isOther: true
+    });
+  }
+  return parts;
+}
+
+export function compositionAttributes(part) {
+  return 'data-role="composition-part" data-language="'
+    + escapeXml(part.name) + '" data-share="'
+    + svgNumber(part.share, 4) + '"';
+}
+
+export function renderCompositionLegend({ width, parts, theme, startY }) {
+  return renderLegend({
+    width,
+    languages: parts.map((part) => ({
+      name: part.name,
+      percentage: part.share,
+      color: part.color
+    })),
+    theme,
+    startY
+  });
+}
+
+export function renderCompositionEmpty(config, theme, role) {
+  return {
+    height: 166,
+    lines: [
+      '  <rect data-role="' + role + '" x="24" y="78" width="'
+        + (config.width - 48) + '" height="64" rx="10" fill="'
+        + theme.surface + '"/>',
+      '  <text class="empty" x="40" y="116">No language data available.</text>'
+    ]
+  };
 }
 
 export function renderLegend({ width, languages, theme, startY }) {

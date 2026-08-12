@@ -1,0 +1,264 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description" data-style="bead-halo" data-theme="paper" width="400" height="406" viewBox="0 0 400 406">
+  <title id="title">Language Composition</title>
+  <desc id="description">Language usage across 24 included public repositories. TypeScript: 42.0%; Python: 25.0%; C#: 14.0%; ShaderLab: 8.0%; Shell: 6.0%; HTML: 5.0%.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
+    .title { fill: #024b81; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
+    .meta, .style-tag, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .meta { fill: #4d738d; font-size: 9.5px; letter-spacing: 0.9px; }
+    .style-tag { fill: #fd7136; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+    .label { fill: #024b81; font-size: 12px; font-weight: 650; }
+    .value { fill: #4d738d; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .rank { fill: #fd7136; font-size: 9px; font-weight: 700; }
+    .metric { fill: #024b81; font-size: 27px; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .metric-label { fill: #4d738d; font-size: 7px; letter-spacing: 0.7px; }
+    .legend-label { fill: #024b81; font-size: 10.5px; font-weight: 600; }
+    .legend-value { fill: #4d738d; font-size: 9.5px; font-variant-numeric: tabular-nums; }
+    .axis-note { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9.5px; letter-spacing: 0.6px; }
+    .part-label { font-size: 11px; font-weight: 700; }
+    .part-value { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 10px; font-variant-numeric: tabular-nums; }
+    .center-label { fill: #024b81; font-size: 12px; font-weight: 700; }
+    .center-value { fill: #4d738d; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; }
+    .node-label { font-size: 9px; font-weight: 750; }
+    .empty { fill: #4d738d; font-size: 11px; }
+  </style>
+  <rect class="card" x="0.5" y="0.5" width="399" height="405" rx="14" fill="#fef7ef" stroke="#a9c9dc"/>
+  <rect x="24" y="20" width="4" height="35" rx="2" fill="#fd7136"/>
+  <text class="title" x="38" y="35">Language Composition</text>
+  <text class="meta" x="38" y="55">24 OF 27 PUBLIC REPOS</text>
+  <text class="style-tag" text-anchor="end" x="376" y="30">BEAD-HALO</text>
+  <g data-role="unit-field" data-unit-share="0.5">
+    <g data-role="composition-part" data-language="TypeScript" data-share="42">
+      <circle data-role="bead-halo-unit" cx="242" cy="190.01" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="304.76" cy="197.16" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="283.71" cy="197" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="262.55" cy="197.52" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="303.69" cy="206.52" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="282.4" cy="206.33" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="241.14" cy="198.46" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="301.79" cy="215.75" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="260.79" cy="206.55" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="280.05" cy="215.45" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="299.08" cy="224.77" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="238.59" cy="206.57" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="257.73" cy="215.22" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="276.7" cy="224.26" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="295.56" cy="233.51" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="291.28" cy="241.9" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="272.38" cy="232.63" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="253.44" cy="223.36" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="286.26" cy="249.87" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="234.47" cy="214" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="267.15" cy="240.47" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="280.54" cy="257.36" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="248.02" cy="230.79" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="261.08" cy="247.67" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="274.18" cy="264.31" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="228.93" cy="220.45" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="241.57" cy="237.34" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="254.24" cy="254.14" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="267.22" cy="270.66" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="259.72" cy="276.36" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="246.71" cy="259.81" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="234.23" cy="242.89" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="222.21" cy="225.65" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="251.74" cy="281.37" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="238.6" cy="264.6" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="226.16" cy="247.31" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="243.34" cy="285.64" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="230.01" cy="268.46" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="214.58" cy="229.39" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="234.59" cy="289.14" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="217.54" cy="250.51" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="221.04" cy="271.32" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="225.56" cy="291.84" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="216.33" cy="293.72" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="206.35" cy="231.52" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="211.8" cy="273.17" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="208.54" cy="252.42" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="206.97" cy="294.77" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="202.41" cy="273.97" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="199.36" cy="253" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="197.55" cy="294.97" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="197.86" cy="231.95" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="193" cy="273.71" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="188.15" cy="294.33" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="190.2" cy="252.23" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="183.67" cy="272.4" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="178.85" cy="292.85" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="189.46" cy="230.66" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="169.71" cy="290.54" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="181.24" cy="250.14" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="174.55" cy="270.05" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="160.82" cy="287.42" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="165.74" cy="266.7" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="172.69" cy="246.77" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="181.5" cy="227.7" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="152.25" cy="283.51" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="157.37" cy="262.38" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="144.06" cy="278.86" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="164.71" cy="242.19" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="149.53" cy="257.15" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="136.32" cy="273.48" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="174.28" cy="223.21" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="157.49" cy="236.49" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="129.09" cy="267.44" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="142.33" cy="251.08" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="122.43" cy="260.77" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="168.13" cy="217.35" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="135.86" cy="244.24" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="151.17" cy="229.81" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="116.4" cy="253.53" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="130.19" cy="236.71" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="111.04" cy="245.78" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="145.9" cy="222.28" r="3.78" fill="#024b81"/>
+      <circle data-role="bead-halo-unit" cx="163.27" cy="210.38" r="3.78" fill="#024b81"/>
+    </g>
+    <g data-role="composition-part" data-language="Python" data-share="25">
+      <circle data-role="bead-halo-unit" cx="125.4" cy="228.6" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="106.4" cy="237.59" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="141.77" cy="214.05" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="102.51" cy="229" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="121.54" cy="220.01" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="159.92" cy="202.57" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="99.41" cy="220.11" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="118.68" cy="211.04" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="138.89" cy="205.32" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="97.12" cy="210.97" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="116.83" cy="201.8" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="95.65" cy="201.66" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="158.21" cy="194.24" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="137.31" cy="196.26" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="116.03" cy="192.41" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="95.02" cy="192.26" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="137.07" cy="187.06" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="95.24" cy="182.84" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="116.29" cy="183" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="158.22" cy="185.74" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="96.31" cy="173.48" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="138.17" cy="177.93" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="117.6" cy="173.67" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="98.21" cy="164.25" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="159.93" cy="177.42" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="119.95" cy="164.55" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="100.92" cy="155.23" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="140.58" cy="169.06" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="123.3" cy="155.74" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="104.44" cy="146.49" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="144.26" cy="160.63" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="163.28" cy="169.61" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="108.72" cy="138.1" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="127.62" cy="147.37" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="113.74" cy="130.13" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="149.13" cy="152.83" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="132.85" cy="139.53" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="119.46" cy="122.64" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="168.14" cy="162.64" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="138.92" cy="132.33" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="155.09" cy="145.82" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="125.82" cy="115.69" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="145.76" cy="125.86" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="132.78" cy="109.34" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="174.3" cy="156.78" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="162" cy="139.75" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="140.28" cy="103.64" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="153.29" cy="120.19" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="148.26" cy="98.63" r="3.78" fill="#367db7"/>
+      <circle data-role="bead-halo-unit" cx="169.72" cy="134.75" r="3.78" fill="#367db7"/>
+    </g>
+    <g data-role="composition-part" data-language="C#" data-share="14">
+      <circle data-role="bead-halo-unit" cx="161.4" cy="115.4" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="181.51" cy="152.29" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="156.66" cy="94.36" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="169.99" cy="111.54" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="178.09" cy="130.93" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="165.41" cy="90.86" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="189.48" cy="149.34" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="178.96" cy="108.68" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="174.44" cy="88.16" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="186.92" cy="128.37" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="183.67" cy="86.28" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="188.2" cy="106.83" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="193.03" cy="85.23" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="196.04" cy="127.12" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="197.88" cy="148.05" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="197.59" cy="106.03" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="202.45" cy="85.03" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="205.23" cy="127.22" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="207" cy="106.29" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="211.85" cy="85.67" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="206.37" cy="148.49" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="216.33" cy="107.6" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="221.15" cy="87.15" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="214.32" cy="128.65" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="230.29" cy="89.46" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="225.45" cy="109.95" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="214.59" cy="150.62" r="3.78" fill="#6faddf"/>
+      <circle data-role="bead-halo-unit" cx="223.1" cy="131.39" r="3.78" fill="#6faddf"/>
+    </g>
+    <g data-role="composition-part" data-language="ShaderLab" data-share="8">
+      <circle data-role="bead-halo-unit" cx="239.18" cy="92.58" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="234.26" cy="113.3" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="247.75" cy="96.49" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="231.39" cy="135.37" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="242.63" cy="117.62" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="222.22" cy="154.36" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="255.94" cy="101.14" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="250.47" cy="122.85" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="263.68" cy="106.52" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="239" cy="140.53" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="270.91" cy="112.56" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="257.67" cy="128.92" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="228.94" cy="159.56" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="245.79" cy="146.73" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="277.57" cy="119.23" r="3.78" fill="#c9dce8"/>
+      <circle data-role="bead-halo-unit" cx="264.14" cy="135.76" r="3.78" fill="#c9dce8"/>
+    </g>
+    <g data-role="composition-part" data-language="Shell" data-share="6">
+      <circle data-role="bead-halo-unit" cx="283.6" cy="126.47" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="251.6" cy="153.86" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="234.48" cy="166.01" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="269.81" cy="143.29" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="288.96" cy="134.22" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="274.6" cy="151.4" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="293.6" cy="142.41" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="256.32" cy="161.76" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="238.6" cy="173.44" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="297.49" cy="151" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="278.46" cy="159.99" r="3.78" fill="#fed9da"/>
+      <circle data-role="bead-halo-unit" cx="259.83" cy="170.26" r="3.78" fill="#fed9da"/>
+    </g>
+    <g data-role="composition-part" data-language="HTML" data-share="5">
+      <circle data-role="bead-halo-unit" cx="300.59" cy="159.89" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="281.32" cy="168.96" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="241.14" cy="181.55" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="302.88" cy="169.03" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="262.06" cy="179.18" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="283.17" cy="178.2" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="304.35" cy="178.34" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="283.97" cy="187.59" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="262.98" cy="188.33" r="3.78" fill="#fd7136"/>
+      <circle data-role="bead-halo-unit" cx="304.98" cy="187.74" r="3.78" fill="#fd7136"/>
+    </g>
+  </g>
+  <g data-role="legend" data-columns="2">
+    <circle cx="28" cy="306" r="4" fill="#024b81"/>
+    <text class="legend-label" x="40" y="310">TypeScript</text>
+    <text class="legend-value" text-anchor="end" x="196" y="310">42.0%</text>
+    <circle cx="204" cy="306" r="4" fill="#367db7"/>
+    <text class="legend-label" x="216" y="310">Python</text>
+    <text class="legend-value" text-anchor="end" x="372" y="310">25.0%</text>
+    <circle cx="28" cy="332" r="4" fill="#6faddf"/>
+    <text class="legend-label" x="40" y="336">C#</text>
+    <text class="legend-value" text-anchor="end" x="196" y="336">14.0%</text>
+    <circle cx="204" cy="332" r="4" fill="#c9dce8"/>
+    <text class="legend-label" x="216" y="336">ShaderLab</text>
+    <text class="legend-value" text-anchor="end" x="372" y="336">8.0%</text>
+    <circle cx="28" cy="358" r="4" fill="#fed9da"/>
+    <text class="legend-label" x="40" y="362">Shell</text>
+    <text class="legend-value" text-anchor="end" x="196" y="362">6.0%</text>
+    <circle cx="204" cy="358" r="4" fill="#fd7136"/>
+    <text class="legend-label" x="216" y="362">HTML</text>
+    <text class="legend-value" text-anchor="end" x="372" y="362">5.0%</text>
+  </g>
+</svg>

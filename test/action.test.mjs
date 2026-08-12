@@ -49,8 +49,8 @@ test("passes a selected style and theme through to the generated card", async (t
     env: {
       "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
       INPUT_USERNAME: "onovich",
-      INPUT_STYLE: "orbit",
-      INPUT_THEME: "aurora",
+      INPUT_STYLE: "voronoi",
+      INPUT_THEME: "paper",
       GITHUB_OUTPUT: outputFile
     },
     fetchImpl: async () => fixtureResponse(),
@@ -59,8 +59,9 @@ test("passes a selected style and theme through to the generated card", async (t
   });
 
   const svg = await readFile(join(workspace, "assets", "top-langs.svg"), "utf8");
-  assert.match(svg, /data-style="orbit"/);
-  assert.match(svg, /data-theme="aurora"/);
+  assert.match(svg, /data-style="voronoi"/);
+  assert.match(svg, /data-theme="paper"/);
+  assert.match(svg, /data-shape-role="voronoi-part"/);
 });
 
 test("rejects an unknown renderer instead of silently changing the design", async () => {
@@ -73,7 +74,7 @@ test("rejects an unknown renderer instead of silently changing the design", asyn
         GITHUB_OUTPUT: "unused"
       }
     }),
-    /style must be one of: bars, orbit, constellation/
+    /style must be one of: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, prism/
   );
 });
 

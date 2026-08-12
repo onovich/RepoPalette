@@ -3,10 +3,30 @@ import test from "node:test";
 
 import { renderSvg } from "../src/render-svg.mjs";
 
-const STYLES = ["bars", "orbit", "constellation"];
+const STYLES = [
+  "bars",
+  "orbit",
+  "constellation",
+  "ribbon",
+  "bead-halo",
+  "matrix",
+  "halo",
+  "treemap",
+  "voronoi",
+  "prism"
+];
+const COMPOSITION_STYLES = [
+  "ribbon",
+  "bead-halo",
+  "matrix",
+  "halo",
+  "treemap",
+  "voronoi",
+  "prism"
+];
 const THEMES = {
   light: "#ffffff",
-  paper: "#fbf6ea",
+  paper: "#fef7ef",
   midnight: "#0d1117",
   aurora: "#07131e",
   terminal: "#06110a",
@@ -85,11 +105,18 @@ test("uses the unrounded byte share for bar geometry", () => {
   assert.match(svg, /data-role="bar-value"[^>]*width="117\.33"/);
 });
 
-test("bars, orbit, and constellation use visibly distinct SVG structures", () => {
+test("every layout uses a visibly distinct SVG structure", () => {
   const signatures = {
     bars: 'data-role="spectrum"',
     orbit: 'data-role="orbit-value"',
-    constellation: 'data-role="constellation-node"'
+    constellation: 'data-role="constellation-node"',
+    ribbon: 'data-role="ribbon-part"',
+    "bead-halo": 'data-role="bead-halo-unit"',
+    matrix: 'data-role="matrix-unit"',
+    halo: 'data-role="halo-part"',
+    treemap: 'data-role="treemap-part"',
+    voronoi: 'data-role="voronoi-part"',
+    prism: 'data-role="prism-part"'
   };
   const outputs = {};
 
@@ -103,9 +130,118 @@ test("bars, orbit, and constellation use visibly distinct SVG structures", () =>
     assert.match(svg, />28\.0%<\/text>/);
   }
 
-  assert.notEqual(outputs.bars, outputs.orbit);
-  assert.notEqual(outputs.bars, outputs.constellation);
-  assert.notEqual(outputs.orbit, outputs.constellation);
+  assert.equal(new Set(Object.values(outputs)).size, STYLES.length);
+});
+
+test("closed composition layouts add the omitted languages as Other", () => {
+  const stats = fixtureStats({
+    totalBytes: 100,
+    languages: [
+      { name: "TypeScript", bytes: 60, percentage: 60, color: "#3178C6" },
+      { name: "Python", bytes: 25, percentage: 25, color: "#3572A5" },
+      { name: "Shell", bytes: 15, percentage: 15, color: "#89E051" }
+    ]
+  });
+
+  for (const style of COMPOSITION_STYLES) {
+    const svg = renderSvg(stats, fixtureConfig({ style, top: 2 }));
+    const shares = [...svg.matchAll(
+      /data-role="composition-part"[^>]*data-share="([0-9.]+)"/g
+    )].map((match) => Number(match[1]));
+
+    assert.equal(shares.length, 3, style);
+    assert.ok(Math.abs(shares.reduce((sum, value) => sum + value, 0) - 100) < 0.0001);
+    assert.match(svg, /data-language="Other"[^>]*data-share="15"/);
+    assert.match(svg, /class="legend-label"[^>]*>Other<\/text>/);
+    assert.match(svg, /class="legend-value"[^>]*>15\.0%<\/text>/);
+  }
+});
+
+test("unit composition layouts always render exactly two hundred equal units", () => {
+  for (const [style, role] of [
+    ["bead-halo", "bead-halo-unit"],
+    ["matrix", "matrix-unit"]
+  ]) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
+    assert.equal(
+      [...svg.matchAll(new RegExp('data-role="' + role + '"', "g"))].length,
+      200,
+      style
+    );
+    assert.match(svg, /data-unit-share="0\.5"/);
+  }
+});
+
+test("area composition geometry preserves every visible share", () => {
+  for (const style of ["treemap", "voronoi", "prism"]) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
+    const polygons = [...svg.matchAll(
+      new RegExp(
+        'data-role="composition-part"[^>]*data-share="([0-9.]+)"[^>]*data-shape-role="'
+          + style + '-part"[^>]*points="([^"]+)"',
+        "g"
+      )
+    )];
+    assert.equal(polygons.length, 4, style);
+    const areas = polygons.map((match) => polygonArea(match[2]));
+    const totalArea = areas.reduce((sum, value) => sum + value, 0);
+    polygons.forEach((match, index) => {
+      const expected = Number(match[1]);
+      const actual = areas[index] / totalArea * 100;
+      assert.ok(Math.abs(actual - expected) <= 0.05, style + " " + expected);
+    });
+  }
+});
+
+test("prism facets stay ordered and inside the chart at narrow shares", () => {
+  const svg = renderSvg(fixtureStats({
+    totalBytes: 1000,
+    languages: [
+      { name: "A", bytes: 760, percentage: 76, color: "#3178C6" },
+      { name: "B", bytes: 100, percentage: 10, color: "#3572A5" },
+      { name: "C", bytes: 60, percentage: 6, color: "#178600" },
+      { name: "D", bytes: 40, percentage: 4, color: "#222C37" },
+      { name: "E", bytes: 25, percentage: 2.5, color: "#89E051" },
+      { name: "F", bytes: 15, percentage: 1.5, color: "#E34C26" }
+    ]
+  }), fixtureConfig({ style: "prism", width: 320 }));
+  const polygons = compositionPolygons(svg, "prism");
+  assert.equal(polygons.length, 6);
+  for (const polygon of polygons) {
+    assert.ok(polygon.points[0][0] < polygon.points[1][0]);
+    assert.ok(polygon.points[3][0] < polygon.points[2][0]);
+    assert.ok(polygon.points.every(([x, y]) =>
+      x >= 24 && x <= 296 && y >= 86
+    ));
+  }
+});
+
+test("voronoi keeps tiny visible categories non-empty and within its area gate", () => {
+  const bytes = [
+    700_000, 200_000, 50_000, 20_000, 10_000, 8_000, 5_000,
+    3_000, 2_000, 1_000, 500, 300, 200
+  ];
+  const svg = renderSvg(fixtureStats({
+    totalBytes: 1_000_000,
+    languages: bytes.map((value, index) => ({
+      name: "Language-" + index,
+      bytes: value,
+      percentage: value / 10_000,
+      color: "#3178C6"
+    }))
+  }), fixtureConfig({ style: "voronoi", top: 12 }));
+  const polygons = compositionPolygons(svg, "voronoi");
+  assert.equal(polygons.length, 13);
+  const totalArea = polygons.reduce(
+    (sum, polygon) => sum + polygonAreaFromPoints(polygon.points),
+    0
+  );
+  for (const polygon of polygons) {
+    const area = polygonAreaFromPoints(polygon.points);
+    assert.ok(area > 0, polygon.share);
+    const actualShare = area / totalArea * 100;
+    assert.ok(Math.abs(actualShare - polygon.share) <= 0.05, polygon.share);
+  }
 });
 
 test("every theme selects its own card palette", () => {
@@ -113,6 +249,24 @@ test("every theme selects its own card palette", () => {
     const svg = renderSvg(fixtureStats(), fixtureConfig({ theme }));
     assert.match(svg, new RegExp('data-theme="' + theme + '"'));
     assert.match(svg, new RegExp('class="card"[^>]*fill="' + canvas + '"'));
+  }
+});
+
+test("paper uses the reference-derived categorical palette", () => {
+  const svg = renderSvg(fixtureStats(), fixtureConfig({ theme: "paper" }));
+  assert.match(svg, /data-role="bar-value"[^>]*fill="#024b81"/);
+  assert.match(svg, /data-role="bar-value"[^>]*fill="#367db7"/);
+  assert.doesNotMatch(svg, /data-role="bar-value"[^>]*fill="#3178C6"/);
+});
+
+test("rendered SVG never repeats an attribute on the same element", () => {
+  for (const style of STYLES) {
+    const svg = renderSvg(fixtureStats(), fixtureConfig({ style }));
+    for (const tag of svg.match(/<[^/!][^>]*>/g) ?? []) {
+      const names = [...tag.matchAll(/\s([A-Za-z_:][\w:.-]*)=/g)]
+        .map((match) => match[1]);
+      assert.equal(new Set(names).size, names.length, style + ": " + tag);
+    }
   }
 });
 
@@ -142,7 +296,7 @@ test("keeps real long language names visible in narrow visual legends", () => {
   ];
   const stats = fixtureStats({ totalBytes: 100, languages });
 
-  for (const style of ["orbit", "constellation"]) {
+  for (const style of ["orbit", "constellation", ...COMPOSITION_STYLES]) {
     const svg = renderSvg(stats, fixtureConfig({ width: 320, style }));
     assert.match(svg, /data-role="legend" data-columns="1"/);
     assert.match(
@@ -240,4 +394,33 @@ function hasLoneSurrogate(value) {
     }
   }
   return false;
+}
+
+function polygonArea(pointsText) {
+  const points = pointsText.split(/\s+/).map((pair) => pair.split(",").map(Number));
+  return polygonAreaFromPoints(points);
+}
+
+function polygonAreaFromPoints(points) {
+  let area = 0;
+  points.forEach((point, index) => {
+    const next = points[(index + 1) % points.length];
+    area += point[0] * next[1] - next[0] * point[1];
+  });
+  return Math.abs(area) / 2;
+}
+
+function compositionPolygons(svg, style) {
+  return [...svg.matchAll(
+    new RegExp(
+      'data-role="composition-part"[^>]*data-share="([0-9.]+)"[^>]*data-shape-role="'
+        + style + '-part"[^>]*points="([^"]*)"',
+      "g"
+    )
+  )].map((match) => ({
+    share: Number(match[1]),
+    points: match[2] === ""
+      ? []
+      : match[2].split(/\s+/).map((pair) => pair.split(",").map(Number))
+  }));
 }

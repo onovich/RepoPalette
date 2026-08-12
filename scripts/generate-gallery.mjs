@@ -18,7 +18,18 @@ export const GALLERY_PREVIEWS = Object.freeze([
     style: "constellation",
     theme: "neon",
     fileName: "constellation-neon.svg"
-  })
+  }),
+  Object.freeze({ style: "ribbon", theme: "paper", fileName: "ribbon-paper.svg" }),
+  Object.freeze({
+    style: "bead-halo",
+    theme: "paper",
+    fileName: "bead-halo-paper.svg"
+  }),
+  Object.freeze({ style: "matrix", theme: "paper", fileName: "matrix-paper.svg" }),
+  Object.freeze({ style: "halo", theme: "paper", fileName: "halo-paper.svg" }),
+  Object.freeze({ style: "treemap", theme: "paper", fileName: "treemap-paper.svg" }),
+  Object.freeze({ style: "voronoi", theme: "paper", fileName: "voronoi-paper.svg" }),
+  Object.freeze({ style: "prism", theme: "paper", fileName: "prism-paper.svg" })
 ]);
 
 const GALLERY_STATS = Object.freeze({

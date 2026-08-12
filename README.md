@@ -10,15 +10,15 @@ Choose a layout and theme, then generate a programming-language chart from your 
 
 RepoPalette runs on a schedule and saves the SVG plus its audit data in your own Profile repository. There is no personal token, hosted image service, or separate account to set up.
 
-| `bars` | `orbit` | `constellation` |
+| `ribbon` | `matrix` | `voronoi` |
 | --- | --- | --- |
-| ![Bars layout](docs/gallery/bars-light.svg) | ![Orbit layout](docs/gallery/orbit-aurora.svg) | ![Constellation layout](docs/gallery/constellation-neon.svg) |
+| ![Ribbon layout](docs/gallery/ribbon-paper.svg) | ![Matrix layout](docs/gallery/matrix-paper.svg) | ![Voronoi layout](docs/gallery/voronoi-paper.svg) |
 
-[Compare all six themes in the gallery.](docs/GALLERY.md)
+[Compare all layouts and themes in the gallery.](docs/GALLERY.md)
 
 ## What makes it different?
 
-- Three purpose-built layouts keep exact language names and percentages visible.
+- Ten purpose-built layouts keep exact language names and percentages visible.
 - The full public repository list is read instead of silently stopping after an early page.
 - The generated files belong to your repository, so the image does not depend on a live card service.
 - A readable JSON file shows which repositories were included or excluded. If an update fails, the last valid files stay in place.
@@ -80,7 +80,7 @@ The workflow checks for changes every Monday. The readable `@v0.2.0` tag is also
 
 Change the two values in the `with` block:
 
-- `style`: `bars`, `orbit`, or `constellation`
+- `style`: `bars`, `orbit`, `constellation`, `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, or `prism`
 - `theme`: `light`, `paper`, `midnight`, `aurora`, `terminal`, or `neon`
 
 You can also change the title, width, number of languages, and repository or language filters. See [`action.yml`](action.yml) for every option.

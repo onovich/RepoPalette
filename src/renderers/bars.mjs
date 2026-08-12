@@ -2,7 +2,7 @@ import {
   bytePercentage,
   escapeXml,
   formatPercentage,
-  safeColor,
+  seriesColor,
   svgNumber,
   truncateLabel
 } from "./common.mjs";
@@ -21,14 +21,14 @@ export function renderBars({ stats, config, languages, theme }) {
   ];
 
   let segmentX = 24;
-  for (const language of languages) {
+  for (const [index, language] of languages.entries()) {
     const share = bytePercentage(language, stats.totalBytes);
     const segmentWidth = chartWidth * share / 100;
     lines.push(
       '    <rect data-share="' + svgNumber(share, 4)
         + '" x="' + svgNumber(segmentX) + '" y="78" width="'
         + svgNumber(segmentWidth) + '" height="12" fill="'
-        + safeColor(language.color, theme.accent) + '"/>'
+        + seriesColor(language, index, theme) + '"/>'
     );
     segmentX += segmentWidth;
   }
@@ -39,7 +39,7 @@ export function renderBars({ stats, config, languages, theme }) {
     const labelY = 124 + index * 42;
     const barY = labelY + 11;
     const share = bytePercentage(language, stats.totalBytes);
-    const color = safeColor(language.color, theme.accent);
+    const color = seriesColor(language, index, theme);
     const filledWidth = chartWidth * share / 100;
     const rank = String(index + 1).padStart(2, "0");
 
