@@ -22,6 +22,7 @@ RepoPalette runs on a schedule and saves the SVG plus its audit data in your own
 - The full public repository list is read instead of silently stopping after an early page.
 - The generated files belong to your repository, so the image does not depend on a live card service.
 - A readable JSON file shows which repositories were included or excluded. If an update fails, the last valid files stay in place.
+- Optional, user-declared Manual/Vibe splitting creates two separate charts without pretending to detect AI-written code.
 
 ## Quick start
 
@@ -47,7 +48,7 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@c002cc8005a7ecbc9c07da1095add8bf77ba78df # reviewed layouts
+        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
         with:
           style: orbit
           theme: aurora
@@ -74,7 +75,7 @@ Then:
 1. Open the repository's **Actions** tab and run **Update RepoPalette** once.
 2. Add `![GitHub languages](./assets/top-langs.svg)` to your Profile `README.md`.
 
-The workflow checks for changes every Monday. The readable `@v0.2.0` tag is also available after release; the full commit SHA above is safer for a workflow with write access.
+The workflow checks for changes every Monday. The readable `@v0.3.0` tag is also available after release; the full commit SHA above is safer for a workflow with write access.
 
 ## Customize it
 
@@ -83,14 +84,16 @@ Change the two values in the `with` block:
 - `style`: `bars`, `orbit`, `constellation`, `ribbon`, `bead-halo`, `matrix`, `halo`, `treemap`, `voronoi`, or `prism`
 - `theme`: `light`, `paper`, `midnight`, `aurora`, `terminal`, or `neon`
 
-You can also change the title, width, number of languages, and repository or language filters. See [`action.yml`](action.yml) for every option.
+You can also change the title, width, number of languages, and repository or language filters. The small `RepoPalette` watermark is shown by default; set `show-branding: false` to remove it. See [`action.yml`](action.yml) for every option.
+
+To create separate **Manual Coding** and **Vibe Coding** charts, set `coding-mode: split` and list the languages you personally classify as manual in `manual-languages` (for example, `"C#,ShaderLab,HLSL,GLSL"`). All remaining and newly discovered languages go to Vibe Coding. The two titles can be changed with `manual-title` and `vibe-title`. Commit the paths from `manual-svg-path`, `vibe-svg-path`, and `data-path`, then embed `assets/top-langs-manual.svg` and `assets/top-langs-vibe.svg`. This is an opt-in display rule, not AI detection.
 
 ## What gets counted?
 
 - Public repositories owned by the selected GitHub account.
 - Forks are excluded. Archived repositories are excluded by default.
 - Percentages use GitHub's language byte counts.
-- The chart does not measure skill, time, code quality, or AI authorship.
+- The chart does not measure skill, time, code quality, or AI authorship. Any Manual/Vibe split is declared by the profile owner.
 
 RepoPalette also writes `assets/top-langs-data.json` with the complete counting scope.
 

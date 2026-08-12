@@ -22,6 +22,7 @@ RepoPalette 按计划自动运行，并把 SVG 和审计数据保存在你自己
 - 读取完整的公开仓库列表，不会在前几页之后悄悄停止统计。
 - 生成文件归你自己的仓库所有，图片显示不依赖实时卡片服务。
 - 可读的 JSON 会列出纳入和排除的仓库；更新失败时，上一份有效文件保持不变。
+- 可选的 Manual/Vibe 双图完全由用户声明，不会假装检测哪些代码由 AI 编写。
 
 ## 快速开始
 
@@ -47,7 +48,7 @@ jobs:
 
       - name: Generate language chart
         id: repopalette
-        uses: onovich/RepoPalette@c002cc8005a7ecbc9c07da1095add8bf77ba78df # reviewed layouts
+        uses: onovich/RepoPalette@0fc117b98c59a7bb34b3d140ab9b01abfde1aa87 # v0.3.0 implementation
         with:
           style: orbit
           theme: aurora
@@ -74,7 +75,7 @@ jobs:
 1. 打开仓库的 **Actions** 页面，手动运行一次 **Update RepoPalette**。
 2. 在 Profile 的 `README.md` 中加入 `![GitHub languages](./assets/top-langs.svg)`。
 
-工作流会在每周一检查变化。正式发布后也可使用易读的 `@v0.2.0` 标签；对于拥有写权限的工作流，上方固定的完整提交 SHA 更安全。
+工作流会在每周一检查变化。正式发布后也可使用易读的 `@v0.3.0` 标签；对于拥有写权限的工作流，上方固定的完整提交 SHA 更安全。
 
 ## 自定义
 
@@ -83,14 +84,16 @@ jobs:
 - `style`：`bars`、`orbit`、`constellation`、`ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 或 `prism`
 - `theme`：`light`、`paper`、`midnight`、`aurora`、`terminal` 或 `neon`
 
-你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。全部选项见 [`action.yml`](action.yml)。
+你还可以调整标题、宽度、语言数量，以及仓库或语言筛选项。图中默认显示小号 `RepoPalette` 署名；设置 `show-branding: false` 可将其关闭。全部选项见 [`action.yml`](action.yml)。
+
+如需分别生成 **Manual Coding** 与 **Vibe Coding** 两张图，设置 `coding-mode: split`，并在 `manual-languages` 中列出你本人声明为手动编码的语言（例如 `"C#,ShaderLab,HLSL,GLSL"`）。其余语言以及以后新出现的语言都会进入 Vibe Coding；可通过 `manual-title` 与 `vibe-title` 修改两张图的标题。提交 `manual-svg-path`、`vibe-svg-path` 与 `data-path` 指向的文件，再嵌入 `assets/top-langs-manual.svg` 和 `assets/top-langs-vibe.svg`。这只是用户主动选择的展示规则，不是 AI 检测。
 
 ## 统计范围
 
 - 统计所选 GitHub 账号拥有的公开仓库。
 - 排除 fork；默认排除归档仓库。
 - 百分比基于 GitHub 提供的语言字节数。
-- 图表不衡量熟练度、投入时间、代码质量或 AI 作者身份。
+- 图表不衡量熟练度、投入时间、代码质量或 AI 作者身份；Manual/Vibe 分组完全由 Profile 所有者声明。
 
 RepoPalette 还会生成 `assets/top-langs-data.json`，记录完整的统计范围。
 

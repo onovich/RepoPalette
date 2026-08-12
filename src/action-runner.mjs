@@ -10,7 +10,11 @@ const DEFAULTS = Object.freeze({
   includeArchived: false,
   title: "Most Used Languages",
   width: 400,
-  outputDirectory: "assets"
+  outputDirectory: "assets",
+  showBranding: true,
+  codingMode: "off",
+  manualTitle: "Manual Coding",
+  vibeTitle: "Vibe Coding"
 });
 
 export async function runAction({
@@ -31,12 +35,22 @@ export async function runAction({
   });
   const result = {
     ...summary,
-    svgPath: join(inputs.outputDirectory, "top-langs.svg"),
+    svgPath: summary.outputFiles.svg
+      ? join(inputs.outputDirectory, summary.outputFiles.svg)
+      : "",
+    manualSvgPath: summary.outputFiles.manualSvg
+      ? join(inputs.outputDirectory, summary.outputFiles.manualSvg)
+      : "",
+    vibeSvgPath: summary.outputFiles.vibeSvg
+      ? join(inputs.outputDirectory, summary.outputFiles.vibeSvg)
+      : "",
     dataPath: join(inputs.outputDirectory, "top-langs-data.json")
   };
 
   await appendActionOutputs(env.GITHUB_OUTPUT, {
     "svg-path": result.svgPath,
+    "manual-svg-path": result.manualSvgPath,
+    "vibe-svg-path": result.vibeSvgPath,
     "data-path": result.dataPath,
     "repository-count": result.repositoryCount,
     "included-repository-count": result.includedRepositoryCount,
@@ -87,7 +101,16 @@ function readInputs(env, cwd) {
       title: input(env, "title") || DEFAULTS.title,
       width: integerInput(env, "width", DEFAULTS.width),
       style,
-      theme
+      theme,
+      showBranding: booleanInput(
+        env,
+        "show-branding",
+        DEFAULTS.showBranding
+      ),
+      codingMode: input(env, "coding-mode") || DEFAULTS.codingMode,
+      manualLanguages: listInput(env, "manual-languages"),
+      manualTitle: input(env, "manual-title") || DEFAULTS.manualTitle,
+      vibeTitle: input(env, "vibe-title") || DEFAULTS.vibeTitle
     }
   };
 }

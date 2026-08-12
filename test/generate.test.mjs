@@ -49,7 +49,7 @@ test("generates an auditable SVG and JSON from the public configuration", async 
   assert.match(svg, />C#</);
   assert.equal(summary.repositoryCount, 1);
   assert.deepEqual(data, {
-    schemaVersion: 2,
+    schemaVersion: 3,
     username: "onovich",
     repositoryCount: 1,
     includedRepositoryCount: 1,
@@ -61,6 +61,12 @@ test("generates an auditable SVG and JSON from the public configuration", async 
     languages: [
       { name: "C#", bytes: 1_000, percentage: 100, color: "#178600" }
     ],
+    classification: {
+      mode: "off",
+      source: null,
+      manualLanguages: [],
+      groups: null
+    },
     filters: {
       includeForks: false,
       includeArchived: false,

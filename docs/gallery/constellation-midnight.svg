@@ -4,9 +4,9 @@
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; }
     .title { fill: #f0f6fc; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
-    .meta, .style-tag, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .meta, .brand-watermark, .rank, .metric-label { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
     .meta { fill: #8b949e; font-size: 9.5px; letter-spacing: 0.9px; }
-    .style-tag { fill: #58a6ff; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+    .brand-watermark { fill: #8b949e; font-size: 7.5px; font-weight: 600; letter-spacing: 0.35px; opacity: 0.72; }
     .label { fill: #f0f6fc; font-size: 12px; font-weight: 650; }
     .value { fill: #8b949e; font-size: 11px; font-variant-numeric: tabular-nums; }
     .rank { fill: #58a6ff; font-size: 9px; font-weight: 700; }
@@ -28,7 +28,7 @@
   <rect x="24" y="20" width="4" height="35" rx="2" fill="#58a6ff"/>
   <text class="title" x="38" y="35">Language Composition</text>
   <text class="meta" x="38" y="55">24 OF 27 PUBLIC REPOS</text>
-  <text class="style-tag" text-anchor="end" x="376" y="30">CONSTELLATION</text>
+  <text class="brand-watermark" data-role="brand-watermark" text-anchor="end" x="376" y="29" aria-hidden="true">RepoPalette</text>
   <rect x="24" y="78" width="352" height="240" rx="12" fill="#161b22"/>
   <circle cx="42" cy="98" r="1.5" fill="#26303a"/>
   <circle cx="353" cy="109" r="2" fill="#26303a"/>

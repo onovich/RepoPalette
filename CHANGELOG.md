@@ -8,8 +8,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Planned
 
-- Optional user-declared coding-style grouping, disabled by default.<br/>**增加默认关闭、由用户主动声明的编程方式分组。**
 - AI-assisted installation and GitHub Marketplace publication.<br/>**增加 AI 辅助安装并发布到 GitHub Marketplace。**
+
+## [0.3.0] - 2026-08-13
+
+### Added
+
+- Optional, user-declared Manual Coding and Vibe Coding SVG outputs, disabled by default.<br/>**增加默认关闭、由用户主动声明的 Manual Coding 与 Vibe Coding 双 SVG 输出。**
+- `show-branding` controls the small `RepoPalette` watermark, which remains enabled by default.<br/>**增加 `show-branding` 配置，用于控制默认开启的小号 `RepoPalette` 署名。**
+- Schema v3 audit data records the classification rule, declared manual languages, and both group totals.<br/>**schema v3 审计数据会记录分组规则、用户声明的手动语言以及两组汇总。**
+- Dedicated `manual-svg-path` and `vibe-svg-path` Action outputs for split mode.<br/>**分组模式新增独立的 `manual-svg-path` 与 `vibe-svg-path` Action 输出。**
+
+### Changed
+
+- Layout names such as `RIBBON` are no longer printed inside the SVG; machine-readable `data-style` metadata is retained.<br/>**SVG 画面中不再显示 `RIBBON` 等布局名称，同时保留机器可读的 `data-style` 元数据。**
+- Split charts show within-group language composition and disclose each group's share of all language bytes.<br/>**双图按组内语言构成展示，并明确标出该组占全部语言字节的比例。**
 
 ## [0.2.0] - 2026-08-13
 
@@ -47,6 +60,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.3.0
 [0.2.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.2.0
 [0.1.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.1.0

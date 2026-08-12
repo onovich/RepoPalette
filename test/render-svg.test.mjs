@@ -73,6 +73,29 @@ test("renders a deterministic, escaped, dependency-free card", () => {
   assert.doesNotMatch(first, /(?:@import|url\s*\()/i);
 });
 
+test("shows subtle RepoPalette branding without printing the layout name", () => {
+  const svg = renderSvg(
+    fixtureStats(),
+    fixtureConfig({ style: "ribbon" })
+  );
+
+  assert.match(
+    svg,
+    /data-role="brand-watermark"[^>]*>RepoPalette<\/text>/
+  );
+  assert.doesNotMatch(svg, />RIBBON<\/text>/);
+});
+
+test("allows the RepoPalette watermark to be disabled", () => {
+  const svg = renderSvg(
+    fixtureStats(),
+    fixtureConfig({ showBranding: false })
+  );
+
+  assert.doesNotMatch(svg, /data-role="brand-watermark"/);
+  assert.doesNotMatch(svg, />RepoPalette<\/text>/);
+});
+
 test("renders an accessible empty state in every layout", () => {
   for (const style of STYLES) {
     const svg = renderSvg(fixtureStats({
