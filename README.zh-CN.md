@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml/badge.svg)](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml)
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-RepoPalette-2088ff?logo=github-actions&logoColor=white)](https://github.com/marketplace/actions/repopalette)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 RepoPalette 根据你的公开仓库，为 GitHub Profile 生成自动更新的编程语言构成图：提供十种视觉布局和准确百分比，图表文件保存在你自己的仓库。
@@ -52,7 +53,7 @@ jobs:
 
 提交文件即可。第一次提交会自动启动 RepoPalette；Actions 检查变绿时，图表已经加入 Profile README。此后每周一自动检查，也可以随时通过 **Actions → RepoPalette → Run workflow** 手动刷新。
 
-发布后也可使用易读的 `@v0.7.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
+也可以使用易读的 `@v0.7.0` 标签。上方固定的完整提交引用更适合拥有仓库写权限的工作流。
 
 ## 为什么选择 RepoPalette？
 
@@ -97,6 +98,6 @@ jobs:
 
 ## 需要更多控制？
 
-默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。上架后，Marketplace 将展示这个底层 Action；大多数 Profile 用户更适合上面的快速开始，因为它还会自动完成 checkout、校验、README 放置和提交。全部输入也可在 [`action.yml`](action.yml) 中查询。
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。底层 Action 已在 [GitHub Marketplace](https://github.com/marketplace/actions/repopalette) 上架；大多数 Profile 用户更适合上面的快速开始，因为它还会自动完成 checkout、校验、README 放置和提交。全部输入也可在 [`action.yml`](action.yml) 中查询。
 
 参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。
