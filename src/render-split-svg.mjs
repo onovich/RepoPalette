@@ -10,7 +10,10 @@ import {
   withExactBytePercentages
 } from "./renderers/common.mjs";
 import { getStyleDefinition } from "./renderers/index.mjs";
-import { renderStyleLines } from "./render-svg.mjs";
+import {
+  renderSingleCodingGroupSvg,
+  renderStyleLines
+} from "./render-svg.mjs";
 
 const CONTENT_OFFSET_Y = 45;
 
@@ -31,9 +34,20 @@ export function renderSplitSvg(groups, configInput) {
     throw new TypeError("unknown style: " + config.style);
   }
   const theme = getTheme(config.theme);
+  const width = Math.max(640, Math.min(800, config.width * 2));
+  const singleGroup = findSingleNonEmptyGroup(groups);
+  if (singleGroup) {
+    const label = singleGroup === "manual"
+      ? config.manualTitle
+      : config.vibeTitle;
+    return renderSingleCodingGroupSvg(
+      groups[singleGroup],
+      { ...config, width, compactPanel: false },
+      { group: singleGroup, label }
+    );
+  }
   const manualTheme = getCodingGroupTheme(config.theme, "manual");
   const vibeTheme = getCodingGroupTheme(config.theme, "vibe");
-  const width = Math.max(640, Math.min(800, config.width * 2));
   const panelWidth = width / 2;
   const panelConfig = {
     ...config,
@@ -144,6 +158,13 @@ export function renderSplitSvg(groups, configInput) {
     ""
   ];
   return lines.join("\n");
+}
+
+function findSingleNonEmptyGroup(groups) {
+  const nonEmpty = ["manual", "vibe"].filter((group) =>
+    groups[group].totalBytes > 0 && groups[group].languages.length > 0
+  );
+  return nonEmpty.length === 1 ? nonEmpty[0] : null;
 }
 
 function renderGroupLayout(stats, config, style, theme) {
