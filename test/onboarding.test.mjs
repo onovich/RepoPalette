@@ -41,6 +41,19 @@ test("keeps the beginner path focused and moves internals to advanced docs", asy
   assert.doesNotMatch(beforeAdvanced, /GITHUB_TOKEN|GraphQL|audit JSON|atomic|output path/i);
 });
 
+test("describes the product with searchable, concrete GitHub Profile terms", async () => {
+  const readme = await readText("README.md");
+  const chineseReadme = await readText("README.zh-CN.md");
+
+  assert.match(
+    readme,
+    /self-updating GitHub Profile language chart from your public repositories/i
+  );
+  assert.match(readme, /polished SVG, exact percentages, and audit data/i);
+  assert.match(chineseReadme, /GitHub Profile.*自动更新的编程语言构成图/);
+  assert.match(readme, /Marketplace listing exposes this lower-level Action/);
+});
+
 test("ships an idempotent reusable workflow with friendly visual defaults", async () => {
   const workflow = await readText(".github/workflows/profile.yml");
 

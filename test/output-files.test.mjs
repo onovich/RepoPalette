@@ -146,6 +146,13 @@ test("requires one complete, correctly labelled SVG for split mode", async (t) =
   );
 
   const expected = expectedOutput();
+  expected.stats.totalBytes = 200;
+  expected.stats.languages = [
+    { name: "C#", bytes: 100, percentage: 50, color: "#178600" },
+    { name: "TypeScript", bytes: 100, percentage: 50, color: "#3178C6" }
+  ];
+  expected.audit.totalBytes = expected.stats.totalBytes;
+  expected.audit.languages = expected.stats.languages;
   const groups = splitCodingStats(expected.stats, ["C#"]);
   expected.audit.classification = groups.audit;
   const combinedSvg = renderSplitSvg(groups, expected.config);
@@ -181,8 +188,8 @@ test("requires one complete, correctly labelled SVG for split mode", async (t) =
       svgs: [{
         filename: "top-langs.svg",
         content: combinedSvg.replace(
-          'data-group="manual" data-share="100"',
-          'data-group="manual" data-share="99"'
+          'data-group="manual" data-share="50"',
+          'data-group="manual" data-share="49"'
         )
       }],
       json,
@@ -208,6 +215,42 @@ test("requires one complete, correctly labelled SVG for split mode", async (t) =
   await assert.rejects(
     readFile(join(outputDirectory, "top-langs-vibe.svg"), "utf8"),
     /ENOENT/
+  );
+});
+
+test("accepts one full-width coding group and rejects inactive group markup", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "toplang-single-group-"));
+  const outputDirectory = join(workspace, "assets");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  const expected = expectedOutput();
+  const groups = splitCodingStats(expected.stats, ["C#"]);
+  expected.audit.classification = groups.audit;
+  const combinedSvg = renderSplitSvg(groups, expected.config);
+  const json = JSON.stringify(expected.audit, null, 2) + "\n";
+
+  await writeValidatedOutputs({
+    outputDirectory,
+    svgs: [{ filename: "top-langs.svg", content: combinedSvg }],
+    json,
+    expectedAudit: expected.audit
+  });
+  assert.match(combinedSvg, /data-coding-layout="single-group"/);
+
+  await assert.rejects(
+    writeValidatedOutputs({
+      outputDirectory,
+      svgs: [{
+        filename: "top-langs.svg",
+        content: combinedSvg.replace(
+          'data-role="coding-group" data-group="manual"',
+          'data-role="coding-group" data-group="vibe"'
+        )
+      }],
+      json,
+      expectedAudit: expected.audit
+    }),
+    /single-group SVG must contain only the manual coding group/
   );
 });
 

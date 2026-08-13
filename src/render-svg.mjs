@@ -10,6 +10,22 @@ import {
 import { getStyleDefinition } from "./renderers/index.mjs";
 
 export function renderSvg(stats, configInput) {
+  return renderSvgDocument(stats, configInput);
+}
+
+export function renderSingleCodingGroupSvg(
+  stats,
+  configInput,
+  { group, label }
+) {
+  return renderSvgDocument(
+    stats,
+    { ...configInput, useThemeSeries: true },
+    { group, label }
+  );
+}
+
+function renderSvgDocument(stats, configInput, singleCodingGroup = null) {
   const config = {
     title: "Most Used Languages",
     top: 6,
@@ -37,7 +53,10 @@ export function renderSvg(stats, configInput) {
       + ' role="img" aria-labelledby="title description"'
       + ' data-style="' + escapeXml(config.style) + '"'
       + ' data-theme="' + escapeXml(config.theme) + '"'
-      + (stats.classification
+      + (singleCodingGroup
+        ? ' data-coding-mode="split" data-coding-layout="single-group"'
+          + ' data-coding-group="' + escapeXml(singleCodingGroup.group) + '"'
+        : stats.classification
         ? ' data-coding-group="'
           + escapeXml(stats.classification.group) + '"'
         : "")
@@ -45,14 +64,26 @@ export function renderSvg(stats, configInput) {
       + ' viewBox="0 0 ' + config.width + " " + layout.height + '">',
     '  <title id="title">' + escapeXml(config.title) + "</title>",
     '  <desc id="description">'
-      + buildDescription(stats, descriptionLanguages, style) + "</desc>",
+      + buildDescription(
+        stats,
+        descriptionLanguages,
+        style,
+        singleCodingGroup?.label
+      ) + "</desc>",
     ...renderStyleLines(theme),
     '  <rect class="card" x="0.5" y="0.5" width="'
       + (config.width - 1) + '" height="' + (layout.height - 1)
       + '" rx="14" fill="' + theme.canvas + '" stroke="'
       + theme.border + '"/>',
-    ...headerLines(stats, config, theme),
-    ...layout.lines,
+    ...headerLines(stats, config, theme, singleCodingGroup?.label),
+    ...(singleCodingGroup
+      ? [
+          '  <g data-role="coding-group" data-group="'
+            + escapeXml(singleCodingGroup.group) + '">',
+          ...layout.lines,
+          "  </g>"
+        ]
+      : layout.lines),
     "</svg>",
     ""
   ];
@@ -61,10 +92,13 @@ export function renderSvg(stats, configInput) {
 
 export { escapeXml };
 
-function buildDescription(stats, languages, style) {
+function buildDescription(stats, languages, style, classificationLabel) {
   const scope = stats.classification
-    ? "User-declared " + stats.classification.group
-      + " coding group, "
+    ? "User-declared "
+      + (classificationLabel
+        ? classificationLabel + " group"
+        : stats.classification.group + " coding group")
+      + ", "
       + formatPercentage(stats.classification.percentageOfTotal)
       + " of all language bytes across " + stats.includedRepositoryCount
       + " included public repositories."
@@ -113,15 +147,18 @@ export function renderStyleLines(theme) {
   ];
 }
 
-function headerLines(stats, config, theme) {
+function headerLines(stats, config, theme, classificationLabel) {
   const titleCharacters = Math.max(12, Math.floor((config.width - 128) / 9));
   const repositoryCount = Number.isInteger(stats.repositoryCount)
     ? stats.repositoryCount
     : stats.includedRepositoryCount;
   const meta = stats.classification
-    ? formatPercentageMarkup(stats.classification.percentageOfTotal)
-      + " OF BYTES · " + stats.includedRepositoryCount + "/"
-      + repositoryCount + " REPOS"
+    ? (classificationLabel
+      ? classificationLabel.toUpperCase() + " · USER-DECLARED · "
+        + stats.includedRepositoryCount + "/" + repositoryCount + " REPOS"
+      : formatPercentageMarkup(stats.classification.percentageOfTotal)
+        + " OF BYTES · " + stats.includedRepositoryCount + "/"
+        + repositoryCount + " REPOS")
     : stats.includedRepositoryCount + " OF " + repositoryCount
       + " PUBLIC REPOS";
   const lines = [

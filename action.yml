@@ -1,6 +1,6 @@
 name: RepoPalette
 author: onovich
-description: Generate a validated GitHub language SVG and auditable JSON in your own repository.
+description: Generate validated, self-updating GitHub Profile language charts and auditable data in your own repository.
 
 inputs:
   style:
@@ -44,7 +44,7 @@ inputs:
     required: false
     default: Most Used Languages
   width:
-    description: Base SVG width from 320 to 800 pixels. Split mode combines two panels into a 640 to 800 pixel card.
+    description: Base SVG width from 320 to 800 pixels. Split mode uses a 640 to 800 pixel card and expands a lone non-empty group to full width.
     required: false
     default: "400"
   show-branding:
@@ -52,7 +52,7 @@ inputs:
     required: false
     default: "true"
   coding-mode:
-    description: "Programming-method display: off for one composition, or split for one combined Manual Coding and Vibe Coding view. Classification is always user-declared."
+    description: "Programming-method display: off for one composition, or split for an adaptive Manual Coding and Vibe Coding view. Classification is always user-declared."
     required: false
     default: off
   manual-languages:

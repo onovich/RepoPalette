@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-为 GitHub Profile 生成一张会自动更新的编程语言构成图：视觉清晰，比例准确，不依赖在线图片服务。
+RepoPalette 根据你的公开仓库，为 GitHub Profile 生成自动更新的编程语言构成图：SVG 视觉清晰、百分比准确，并附带可核对的统计数据。
 
 RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在以后每周一检查变化。
 
@@ -97,6 +97,6 @@ jobs:
 
 ## 需要更多控制？
 
-默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。全部输入也可在 [`action.yml`](action.yml) 中查询。
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。Marketplace 展示的是这个底层 Action；大多数 Profile 用户更适合上面的快速开始，因为它还会自动完成 checkout、校验、README 放置和提交。全部输入也可在 [`action.yml`](action.yml) 中查询。
 
 参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。

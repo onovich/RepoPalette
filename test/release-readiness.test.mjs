@@ -139,6 +139,8 @@ test("pins a commit that contains the complete reusable installer", async () => 
 
 test("keeps the action metadata ready for a tagged preview", async () => {
   const action = await readText("action.yml");
+  const packageJson = JSON.parse(await readText("package.json"));
+  const marketplace = await readText("docs/MARKETPLACE_RELEASE.md");
   const rootEntries = await readdir(root, { withFileTypes: true });
   const rootMetadataFiles = rootEntries
     .filter((entry) => entry.isFile())
@@ -148,7 +150,14 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.deepEqual(rootMetadataFiles, ["action.yml"]);
   assert.match(action, /^name: RepoPalette$/m);
   assert.match(action, /^author: onovich$/m);
-  assert.match(action, /^description: .+$/m);
+  assert.match(
+    action,
+    /^description: Generate validated, self-updating GitHub Profile language charts and auditable data in your own repository\.$/m
+  );
+  assert.equal(
+    packageJson.description,
+    "Generate validated, self-updating GitHub Profile language charts and auditable data in your own repository."
+  );
   assert.match(
     action,
     /Visual layout: bars, orbit, constellation, ribbon, bead-halo, matrix, halo, treemap, voronoi, or prism\./
@@ -177,6 +186,13 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^branding:\s*$/m);
   assert.match(action, /^\s+icon: bar-chart-2$/m);
   assert.match(action, /^\s+color: purple$/m);
+  assert.match(marketplace, /Primary category: `Reporting`/);
+  assert.match(marketplace, /Secondary category: `Utilities`/);
+  assert.match(marketplace, /merge the feature pull request first/i);
+  assert.match(
+    marketplace,
+    /docs\.github\.com\/en\/actions\/how-tos\/create-and-publish-actions\/publish-in-github-marketplace/
+  );
 });
 
 test("runs CI for semantic version tags and checks the package version", async () => {
@@ -207,6 +223,7 @@ test("keeps release-facing text as UTF-8 without a byte-order mark", async () =>
     "docs/ADVANCED_USAGE.md",
     "docs/INSTALL_WITH_AI.md",
     "docs/QUICK_START_INSTALLATION_RESEARCH.md",
+    "docs/MARKETPLACE_RELEASE.md",
     ".github/workflows/profile.yml"
   ]) {
     const bytes = await readFile(new URL(path, root));

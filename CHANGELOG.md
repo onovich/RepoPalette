@@ -6,6 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+
+- Split mode now expands a lone non-empty Manual or Vibe group to the full card width and restores the selected theme's regular multi-language palette; the empty section and redundant overview rail are omitted.<br/>**分组模式现在会把唯一有数据的 Manual 或 Vibe 组扩展到整张卡片，并恢复所选主题的常规多语言配色；空分区和重复的总览条不再显示。**
+- Refined the Action metadata and README wording for GitHub Marketplace discovery and GitHub Profile language-chart searches.<br/>**优化 Action 元数据与 README 表述，便于用户在 GitHub Marketplace 和 GitHub Profile 语言图表相关搜索中发现 RepoPalette。**
+
 ## [0.6.1] - 2026-08-13
 
 ### Fixed

@@ -159,6 +159,47 @@ test("combines user-declared coding groups into one Action output", async (t) =>
   assert.match(outputs, /^vibe-svg-path=$/m);
 });
 
+test("uses one full-width, multi-color card when only one coding group has data", async (t) => {
+  const workspace = await mkdtemp(join(tmpdir(), "repopalette-single-group-"));
+  const outputFile = join(workspace, "github-output.txt");
+  t.after(() => rm(workspace, { recursive: true, force: true }));
+
+  await runAction({
+    cwd: workspace,
+    env: {
+      "INPUT_GITHUB-TOKEN": "automatic-workflow-token",
+      INPUT_USERNAME: "onovich",
+      "INPUT_CODING-MODE": "split",
+      "INPUT_MANUAL-LANGUAGES": "C#, TypeScript, Python",
+      INPUT_STYLE: "bars",
+      INPUT_THEME: "light",
+      GITHUB_OUTPUT: outputFile
+    },
+    fetchImpl: async () => fixtureResponse({
+      languages: [
+        { name: "TypeScript", size: 500, color: "#3178c6" },
+        { name: "Python", size: 300, color: "#3572A5" },
+        { name: "C#", size: 200, color: "#178600" }
+      ]
+    }),
+    sleep: async () => {},
+    logger: { info() {}, warn() {} }
+  });
+
+  const svg = await readFile(
+    join(workspace, "assets", "top-langs.svg"),
+    "utf8"
+  );
+  assert.match(svg, /data-coding-layout="single-group"/);
+  assert.match(svg, /width="800"[^>]*viewBox="0 0 800 /);
+  assert.match(svg, /data-role="coding-group" data-group="manual"/);
+  assert.doesNotMatch(svg, /data-group="vibe"/);
+  assert.doesNotMatch(svg, /data-role="coding-overview-part"/);
+  assert.match(svg, /data-role="bar-value"[^>]*fill="#3178c6"/i);
+  assert.match(svg, /data-role="bar-value"[^>]*fill="#3572A5"/);
+  assert.match(svg, /data-role="bar-value"[^>]*fill="#178600"/);
+});
+
 test("keeps a non-zero sub-tenth language visible without calling it zero", async (t) => {
   const workspace = await mkdtemp(join(tmpdir(), "repopalette-small-share-"));
   const outputFile = join(workspace, "github-output.txt");
