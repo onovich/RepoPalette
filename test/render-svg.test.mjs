@@ -431,19 +431,74 @@ test("semantic constellation labels retain small-text contrast", () => {
   }
 });
 
-test("combined layouts keep an empty declared group explicit and valid", () => {
+test("a single non-empty coding group expands across the combined card", () => {
+  for (const [activeGroup, manualLanguages] of [
+    ["manual", fixtureStats().languages.map(({ name }) => name)],
+    ["vibe", []]
+  ]) {
+    const groups = splitCodingStats(fixtureStats(), manualLanguages);
+    const inactiveGroup = activeGroup === "manual" ? "vibe" : "manual";
+
+    for (const style of STYLES) {
+      const svg = renderSplitSvg(groups, fixtureConfig({ style }));
+      assert.match(svg, /data-coding-mode="split"/, style);
+      assert.match(svg, /data-coding-layout="single-group"/, style);
+      assert.match(svg, /width="800"[^>]*viewBox="0 0 800 /, style);
+      assert.match(
+        svg,
+        new RegExp('data-role="coding-group" data-group="' + activeGroup + '"'),
+        style
+      );
+      assert.doesNotMatch(
+        svg,
+        new RegExp('data-role="coding-group" data-group="' + inactiveGroup + '"'),
+        style
+      );
+      assert.doesNotMatch(svg, /data-role="coding-overview-part"/, style);
+      assert.doesNotMatch(svg, /No language data available\./, style);
+      assert.doesNotMatch(svg, /NaN|Infinity/, style);
+    }
+  }
+});
+
+test("a single coding group uses the regular multi-language palette", () => {
+  const allManual = splitCodingStats(
+    fixtureStats(),
+    fixtureStats().languages.map(({ name }) => name)
+  );
+  const allVibe = splitCodingStats(fixtureStats(), []);
+
+  for (const [group, groups] of [["manual", allManual], ["vibe", allVibe]]) {
+    const paper = renderSplitSvg(groups, fixtureConfig({
+      style: "ribbon",
+      theme: "paper"
+    }));
+    const light = renderSplitSvg(groups, fixtureConfig({
+      style: "bars",
+      theme: "light"
+    }));
+
+    assert.match(paper, /data-language="TypeScript"[^>]*fill="#024b81"/, group);
+    assert.match(paper, /data-language="Python"[^>]*fill="#367db7"/, group);
+    assert.match(light, /data-role="bar-value"[^>]*fill="#3178C6"/, group);
+    assert.match(light, /data-role="bar-value"[^>]*fill="#3572A5"/, group);
+    assert.match(light, /data-role="bar-value"[^>]*fill="#178600"/, group);
+  }
+});
+
+test("a single coding group safely renders a custom group title", () => {
   const groups = splitCodingStats(
     fixtureStats(),
     fixtureStats().languages.map(({ name }) => name)
   );
+  const svg = renderSplitSvg(groups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper",
+    manualTitle: "Hand & <Code>"
+  }));
 
-  for (const style of STYLES) {
-    const svg = renderSplitSvg(groups, fixtureConfig({ style }));
-    assert.match(svg, /data-group="manual" data-share="100"/, style);
-    assert.match(svg, /data-group="vibe" data-share="0"/, style);
-    assert.match(svg, /No language data available\./, style);
-    assert.doesNotMatch(svg, /NaN|Infinity/, style);
-  }
+  assert.match(svg, /HAND &amp; &lt;CODE&gt; · USER-DECLARED/);
+  assert.doesNotMatch(svg, /HAND & <CODE>/);
 });
 
 test("renders an accessible empty state in every layout", () => {

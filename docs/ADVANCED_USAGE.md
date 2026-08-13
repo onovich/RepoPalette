@@ -9,7 +9,7 @@ Add a `with` block to the `update` job:
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@d15d0c57a8d71461fc247819fb041b95aab0b9a6 # v0.6.1
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@3b0996b905fb3acd9049197cf5a1317b95224320 # v0.7.0
     with:
       style: matrix
       theme: midnight
@@ -26,13 +26,15 @@ This is an optional grouping declared by the profile owner, not AI detection. La
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@d15d0c57a8d71461fc247819fb041b95aab0b9a6 # v0.6.1
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@3b0996b905fb3acd9049197cf5a1317b95224320 # v0.7.0
     with:
       coding-mode: split
       manual-languages: "C#,ShaderLab,HLSL,GLSL"
 ```
 
-The reusable workflow keeps both groups in one SVG. The title, repository scope, outer card, and optional RepoPalette watermark appear once. A shared rail shows each group's share of all language bytes; percentages inside each section show that group's own language composition. Manual uses a theme-aware warm palette and Vibe a cool palette. Their primary colors repeat in the shared rail, section marks, chart, and legend so the relationship remains visible across every layout.
+The reusable workflow keeps both groups in one SVG. When both groups contain data, the title, repository scope, outer card, and optional RepoPalette watermark appear once. A shared rail shows each group's share of all language bytes; percentages inside each section show that group's own language composition. Manual uses a theme-aware warm palette and Vibe a cool palette. Their primary colors repeat in the shared rail, section marks, chart, and legend so the relationship remains visible across every layout.
+
+If only one group contains data, RepoPalette removes the empty section and redundant shared rail, expands the remaining chart to the full card width, and uses the selected theme's regular multi-language palette. The grouping remains recorded in the SVG metadata and audit JSON.
 
 ## Use the Action directly
 
@@ -41,7 +43,7 @@ Use the Action directly when you need titles, width, archived repositories, or r
 ```yaml
 - name: Generate RepoPalette
   id: repopalette
-  uses: onovich/RepoPalette@e4b4dea8b8725de720a9d9d16468f4c5f4413209 # v0.6.1 implementation
+  uses: onovich/RepoPalette@d511e9140db69a07c98d91d4893decf204a144b0 # v0.7.0 implementation
   with:
     style: ribbon
     theme: paper

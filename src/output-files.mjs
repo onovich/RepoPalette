@@ -100,6 +100,13 @@ function validateSvgOutputs(outputs, expectedAudit) {
     if (document.root.attributes["data-coding-mode"] !== "split") {
       throw new Error('split mode SVG must declare data-coding-mode="split"');
     }
+    const populatedGroups = ["manual", "vibe"].filter((group) =>
+      expectedAudit.classification.groups[group].totalBytes > 0
+    );
+    if (populatedGroups.length === 1) {
+      validateSingleGroupSvg(document, populatedGroups[0]);
+      return;
+    }
     for (const group of ["manual", "vibe"]) {
       const groupElements = document.elements.filter(({ attributes }) =>
         attributes["data-role"] === "coding-group"
@@ -143,6 +150,30 @@ function validateSvgOutputs(outputs, expectedAudit) {
     }
   } else {
     throw new Error("Generated SVG outputs require a known classification mode");
+  }
+}
+
+function validateSingleGroupSvg(document, activeGroup) {
+  const { attributes } = document.root;
+  if (attributes["data-coding-layout"] !== "single-group"
+      || attributes["data-coding-group"] !== activeGroup) {
+    throw new Error(
+      "single-group SVG must identify the " + activeGroup + " coding group"
+    );
+  }
+  const codingGroups = document.elements.filter(({ attributes: element }) =>
+    element["data-role"] === "coding-group"
+  );
+  const overviewParts = document.elements.filter(({ attributes: element }) =>
+    element["data-role"] === "coding-overview-part"
+  );
+  if (codingGroups.length !== 1
+      || codingGroups[0].attributes["data-group"] !== activeGroup
+      || overviewParts.length !== 0) {
+    throw new Error(
+      "single-group SVG must contain only the " + activeGroup
+        + " coding group and no overview segments"
+    );
   }
 }
 
