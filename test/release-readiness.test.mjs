@@ -241,6 +241,14 @@ test("keeps generated SVG previews byte-stable across platforms", async () => {
   assert.match(attributes, /^\*\.svg text eol=lf$/m);
 });
 
+test("records the adaptive single-group split behavior in product decisions", async () => {
+  const decisions = await readText("docs/PRODUCT_DECISIONS.md");
+
+  assert.match(decisions, /若只有一个非空组，则省略空分区和总占比带/);
+  assert.match(decisions, /仅一个组有数据时使用全宽布局/);
+  assert.match(decisions, /仅一个组有数据时.*常规多语言色板/);
+});
+
 test("keeps English as the concise default with a Chinese entry point", async () => {
   const readme = await readText("README.md");
   const chineseReadme = await readText("README.zh-CN.md");
