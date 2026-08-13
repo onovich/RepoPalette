@@ -53,8 +53,14 @@ test("describes the product with searchable, concrete GitHub Profile terms", asy
   assert.match(chineseReadme, /GitHub Profile.*自动更新的编程语言构成图/);
   assert.match(
     readme,
-    /Once published, the Marketplace listing will expose this lower-level Action/
+    /https:\/\/github\.com\/marketplace\/actions\/repopalette/
   );
+  assert.match(
+    chineseReadme,
+    /https:\/\/github\.com\/marketplace\/actions\/repopalette/
+  );
+  assert.doesNotMatch(readme, /Once published/);
+  assert.doesNotMatch(chineseReadme, /上架后/);
 });
 
 test("ships an idempotent reusable workflow with friendly visual defaults", async () => {

@@ -13,10 +13,21 @@ RepoPalette is published as a GitHub Action, not a GitHub App. The root `action.
 
 ## Release gate
 
-Publish the Marketplace listing only from a release whose tag contains the current `action.yml`, implementation, tests, and documentation. For the present work, merge the feature pull request first and then create the next minor release from `main`.
+Publish the Marketplace listing only from a release whose tag contains the current `action.yml`, implementation, tests, and documentation.
+
+## Published release
+
+- Marketplace: [RepoPalette](https://github.com/marketplace/actions/repopalette)
+- First Marketplace release: [`v0.7.0`](https://github.com/onovich/RepoPalette/releases/tag/v0.7.0)
+- Published: 2026-08-13
+- Categories: `Utilities` and `Reporting`
+- Validation: release tag CI, the live Action smoke test, and the public listing all passed
+
+## Future releases
 
 Before publishing:
 
+- Merge the release pull request into `main` before creating the tag.
 - Confirm the repository is public and contains exactly one root Action metadata file.
 - Open `action.yml` on GitHub and use **Draft a release** from the Marketplace banner.
 - Select **Publish this Action to the GitHub Marketplace**.

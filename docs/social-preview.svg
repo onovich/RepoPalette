@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+  <title id="title">RepoPalette social preview</title>
+  <desc id="description">RepoPalette branding beside a precise language composition chart in the paper theme.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  </style>
+
+  <rect width="1280" height="640" fill="#fef7ef"/>
+  <circle cx="1170" cy="-8" r="212" fill="#fffdf9" stroke="#c9dce8" stroke-width="2"/>
+  <circle cx="65" cy="620" r="128" fill="#fffdf9" stroke="#fed9da" stroke-width="2"/>
+
+  <g transform="translate(74 86)">
+    <rect x="0" y="2" width="6" height="70" rx="3" fill="#fd7136"/>
+    <text x="24" y="17" class="mono" fill="#4d738d" font-size="15" font-weight="700" letter-spacing="2.2">GITHUB PROFILE LANGUAGE CHARTS</text>
+    <text x="18" y="104" fill="#024b81" font-size="78" font-weight="760" letter-spacing="-3.2">RepoPalette</text>
+    <text x="18" y="164" fill="#024b81" font-size="28" font-weight="650">Precise composition, rendered your way.</text>
+    <text x="18" y="211" fill="#4d738d" font-size="21">Self-updating SVG charts and auditable data,</text>
+    <text x="18" y="243" fill="#4d738d" font-size="21">saved in your own repository.</text>
+
+    <g transform="translate(18 304)">
+      <circle cx="7" cy="7" r="7" fill="#fd7136"/>
+      <text x="27" y="13" fill="#024b81" font-size="18" font-weight="650">10 visual layouts</text>
+      <circle cx="7" cy="53" r="7" fill="#6faddf"/>
+      <text x="27" y="59" fill="#024b81" font-size="18" font-weight="650">Exact percentages</text>
+      <circle cx="7" cy="99" r="7" fill="#024b81"/>
+      <text x="27" y="105" fill="#024b81" font-size="18" font-weight="650">No separate server or secret key</text>
+    </g>
+
+    <text x="18" y="486" class="mono" fill="#4d738d" font-size="15" letter-spacing="0.6">github.com/onovich/RepoPalette</text>
+  </g>
+
+  <g transform="translate(694 104)">
+    <rect x="0" y="0" width="512" height="432" rx="24" fill="#fffdf9" stroke="#a9c9dc" stroke-width="2"/>
+    <rect x="30" y="28" width="5" height="48" rx="2.5" fill="#fd7136"/>
+    <text x="51" y="49" fill="#024b81" font-size="23" font-weight="720">Language Composition</text>
+    <text x="51" y="74" class="mono" fill="#4d738d" font-size="12" letter-spacing="1.1">24 OF 27 PUBLIC REPOS</text>
+    <text x="482" y="42" text-anchor="end" class="mono" fill="#4d738d" font-size="10" font-weight="650" opacity="0.72">RepoPalette</text>
+
+    <text x="30" y="126" class="mono" fill="#4d738d" font-size="12">0%</text>
+    <text x="256" y="126" text-anchor="middle" class="mono" fill="#4d738d" font-size="12" letter-spacing="1">COMPOSITION</text>
+    <text x="482" y="126" text-anchor="end" class="mono" fill="#4d738d" font-size="12">100%</text>
+
+    <g transform="translate(30 143)">
+      <rect x="0" y="0" width="189.84" height="104" fill="#024b81"/>
+      <rect x="189.84" y="0" width="113" height="104" fill="#367db7"/>
+      <rect x="302.84" y="0" width="63.28" height="104" fill="#6faddf"/>
+      <rect x="366.12" y="0" width="36.16" height="104" fill="#c9dce8"/>
+      <rect x="402.28" y="0" width="27.12" height="104" fill="#fed9da"/>
+      <rect x="429.4" y="0" width="22.6" height="104" fill="#fd7136"/>
+      <path d="M189.84 0v104M302.84 0v104M366.12 0v104M402.28 0v104M429.4 0v104" stroke="#fffdf9" stroke-width="3"/>
+      <text x="16" y="43" fill="#ffffff" font-size="17" font-weight="720">TypeScript</text>
+      <text x="16" y="70" class="mono" fill="#ffffff" font-size="15" font-weight="700">42.0%</text>
+      <text x="205" y="43" fill="#ffffff" font-size="15" font-weight="720">Python</text>
+      <text x="205" y="70" class="mono" fill="#ffffff" font-size="14" font-weight="700">25.0%</text>
+    </g>
+
+    <g font-size="14">
+      <circle cx="36" cy="284" r="6" fill="#024b81"/><text x="52" y="289" fill="#024b81" font-weight="650">TypeScript</text><text x="238" y="289" text-anchor="end" class="mono" fill="#4d738d">42.0%</text>
+      <circle cx="274" cy="284" r="6" fill="#367db7"/><text x="290" y="289" fill="#024b81" font-weight="650">Python</text><text x="476" y="289" text-anchor="end" class="mono" fill="#4d738d">25.0%</text>
+      <circle cx="36" cy="326" r="6" fill="#6faddf"/><text x="52" y="331" fill="#024b81" font-weight="650">C#</text><text x="238" y="331" text-anchor="end" class="mono" fill="#4d738d">14.0%</text>
+      <circle cx="274" cy="326" r="6" fill="#c9dce8"/><text x="290" y="331" fill="#024b81" font-weight="650">ShaderLab</text><text x="476" y="331" text-anchor="end" class="mono" fill="#4d738d">8.0%</text>
+      <circle cx="36" cy="368" r="6" fill="#fed9da"/><text x="52" y="373" fill="#024b81" font-weight="650">Shell</text><text x="238" y="373" text-anchor="end" class="mono" fill="#4d738d">6.0%</text>
+      <circle cx="274" cy="368" r="6" fill="#fd7136"/><text x="290" y="373" fill="#024b81" font-weight="650">HTML</text><text x="476" y="373" text-anchor="end" class="mono" fill="#4d738d">5.0%</text>
+    </g>
+  </g>
+</svg>

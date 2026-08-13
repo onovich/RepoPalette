@@ -188,11 +188,28 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^\s+color: purple$/m);
   assert.match(marketplace, /Primary category: `Utilities`/);
   assert.match(marketplace, /Secondary category: `Reporting`/);
-  assert.match(marketplace, /merge the feature pull request first/i);
+  assert.match(marketplace, /First Marketplace release:[\s\S]*v0\.7\.0/);
+  assert.match(
+    marketplace,
+    /https:\/\/github\.com\/marketplace\/actions\/repopalette/
+  );
+  assert.match(marketplace, /merge the release pull request.*before creating the tag/i);
   assert.match(
     marketplace,
     /docs\.github\.com\/en\/actions\/how-tos\/create-and-publish-actions\/publish-in-github-marketplace/
   );
+});
+
+test("ships a reusable GitHub social preview at the recommended dimensions", async () => {
+  const source = await readText("docs/social-preview.svg");
+  const png = await readFile(new URL("docs/social-preview.png", root));
+
+  assert.match(source, /width="1280" height="640"/);
+  assert.match(source, /RepoPalette/);
+  assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  assert.equal(png.readUInt32BE(16), 1280);
+  assert.equal(png.readUInt32BE(20), 640);
+  assert.ok(png.length < 1_000_000);
 });
 
 test("runs CI for semantic version tags and checks the package version", async () => {

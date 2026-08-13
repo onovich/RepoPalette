@@ -215,7 +215,7 @@ with:
 
 ## 7. 当前产品顺序
 
-当前进度（2026-08-13）：第 1、2、3、5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明合并到一张 Manual Coding / Vibe Coding 图中。安装体验通过公共 reusable workflow 压缩为“一个短文件、一次提交”，首次提交自动生成并幂等插入 README，同时提供 AI 安装约定。Marketplace 上架仍待完成。
+当前进度（2026-08-13）：第 1 至 5 项已完成；在 `v0.2.0` 的三种基础布局上，又实现了 `ribbon`、`bead-halo`、`matrix`、`halo`、`treemap`、`voronoi` 与 `prism` 七种比例构成布局，并更新预览画廊。所有封闭构成图在 Top-N 不足 100% 时明确加入 `Other`；编程方式分组按用户声明合并到一张 Manual Coding / Vibe Coding 图中。安装体验通过公共 reusable workflow 压缩为“一个短文件、一次提交”，首次提交自动生成并幂等插入 README，同时提供 AI 安装约定。`v0.7.0` 已作为免费 Action 发布到 GitHub Marketplace，分类为 `Utilities` 与 `Reporting`。
 
 1. 将现有统计核心迁入独立仓库并包装成可复用 Action；
 2. 实现 `orbit`、`constellation` 和重制的 `bars`；

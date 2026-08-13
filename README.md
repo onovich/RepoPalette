@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml/badge.svg)](https://github.com/onovich/RepoPalette/actions/workflows/ci.yml)
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-RepoPalette-2088ff?logo=github-actions&logoColor=white)](https://github.com/marketplace/actions/repopalette)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 RepoPalette generates a self-updating GitHub Profile language chart from your public repositories—with ten visual layouts, exact percentages, and files saved in your own repository.
@@ -52,7 +53,7 @@ Open your Profile repository, choose **Add file → Create new file**, enter `.g
 
 Commit the file. That first commit starts RepoPalette automatically; when the Actions check turns green, the chart is already in your Profile README. It then checks every Monday. **Actions → RepoPalette → Run workflow** remains available whenever you want to refresh it manually.
 
-The readable `@v0.7.0` tag is available after release. The full commit reference above is safer for a workflow that can write to your repository.
+The readable `@v0.7.0` tag is also available. The full commit reference above is safer for a workflow that can write to your repository.
 
 ## Why RepoPalette?
 
@@ -97,6 +98,6 @@ No. It reports language composition, not ability, time, quality, or authorship. 
 
 ## Need more control?
 
-The default is `ribbon` with the `paper` theme. See the [gallery](docs/GALLERY.md) to choose a look, then use the [advanced guide](docs/ADVANCED_USAGE.md) for themes, filters, titles, branding, the combined Manual/Vibe view, or the lower-level Action. Once published, the Marketplace listing will expose this lower-level Action; most Profile users should use the Quick start because it also handles checkout, validation, README placement, and commits. Every input is listed in [`action.yml`](action.yml).
+The default is `ribbon` with the `paper` theme. See the [gallery](docs/GALLERY.md) to choose a look, then use the [advanced guide](docs/ADVANCED_USAGE.md) for themes, filters, titles, branding, the combined Manual/Vibe view, or the lower-level Action. The lower-level Action is available on [GitHub Marketplace](https://github.com/marketplace/actions/repopalette); most Profile users should use the Quick start because it also handles checkout, validation, README placement, and commits. Every input is listed in [`action.yml`](action.yml).
 
 Contributors need Node.js 24 or newer and can run `npm run check`. See the [changelog](CHANGELOG.md), [product decisions](docs/PRODUCT_DECISIONS.md), and [MIT license](LICENSE).
