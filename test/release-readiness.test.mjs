@@ -186,8 +186,8 @@ test("keeps the action metadata ready for a tagged preview", async () => {
   assert.match(action, /^branding:\s*$/m);
   assert.match(action, /^\s+icon: bar-chart-2$/m);
   assert.match(action, /^\s+color: purple$/m);
-  assert.match(marketplace, /Primary category: `Reporting`/);
-  assert.match(marketplace, /Secondary category: `Utilities`/);
+  assert.match(marketplace, /Primary category: `Utilities`/);
+  assert.match(marketplace, /Secondary category: `Reporting`/);
   assert.match(marketplace, /merge the feature pull request first/i);
   assert.match(
     marketplace,
