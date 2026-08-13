@@ -486,6 +486,21 @@ test("a single coding group uses the regular multi-language palette", () => {
   }
 });
 
+test("a single coding group safely renders a custom group title", () => {
+  const groups = splitCodingStats(
+    fixtureStats(),
+    fixtureStats().languages.map(({ name }) => name)
+  );
+  const svg = renderSplitSvg(groups, fixtureConfig({
+    style: "ribbon",
+    theme: "paper",
+    manualTitle: "Hand & <Code>"
+  }));
+
+  assert.match(svg, /HAND &amp; &lt;CODE&gt; · USER-DECLARED/);
+  assert.doesNotMatch(svg, /HAND & <CODE>/);
+});
+
 test("renders an accessible empty state in every layout", () => {
   for (const style of STYLES) {
     const svg = renderSvg(fixtureStats({

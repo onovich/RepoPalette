@@ -154,7 +154,10 @@ function headerLines(stats, config, theme, classificationLabel) {
     : stats.includedRepositoryCount;
   const meta = stats.classification
     ? (classificationLabel
-      ? classificationLabel.toUpperCase() + " · USER-DECLARED · "
+      ? escapeXml(truncateLabel(
+        classificationLabel.toUpperCase(),
+        titleCharacters
+      )) + " · USER-DECLARED · "
         + stats.includedRepositoryCount + "/" + repositoryCount + " REPOS"
       : formatPercentageMarkup(stats.classification.percentageOfTotal)
         + " OF BYTES · " + stats.includedRepositoryCount + "/"
