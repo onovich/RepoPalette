@@ -1,6 +1,6 @@
 {
   "name": "repopalette",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": true,
   "description": "Generate validated, self-updating GitHub Profile language charts and auditable data in your own repository.",
   "type": "module",

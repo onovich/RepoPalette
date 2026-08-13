@@ -6,6 +6,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-08-13
+
 ### Changed
 
 - Split mode now expands a lone non-empty Manual or Vibe group to the full card width and restores the selected theme's regular multi-language palette; the empty section and redundant overview rail are omitted.<br/>**分组模式现在会把唯一有数据的 Manual 或 Vibe 组扩展到整张卡片，并恢复所选主题的常规多语言配色；空分区和重复的总览条不再显示。**
@@ -95,7 +97,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Collection is limited to public repositories owned by a GitHub user.<br/>**采集范围限于 GitHub 用户拥有的公开仓库。**
 - Historical timelines, hosted dashboards, automatic AI-code detection, and Marketplace publication are not included.<br/>**暂不包含历史时间线、托管仪表盘、AI 代码自动检测与 Marketplace 上架。**
 
-[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/onovich/RepoPalette/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.7.0
 [0.6.1]: https://github.com/onovich/RepoPalette/releases/tag/v0.6.1
 [0.6.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.6.0
 [0.5.0]: https://github.com/onovich/RepoPalette/releases/tag/v0.5.0
