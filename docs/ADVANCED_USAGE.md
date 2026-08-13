@@ -43,7 +43,7 @@ Use the Action directly when you need titles, width, archived repositories, or r
 ```yaml
 - name: Generate RepoPalette
   id: repopalette
-  uses: onovich/RepoPalette@9a9aa166cc1d105beb3543d31ca279d1519d4723 # v0.7.0 implementation
+  uses: onovich/RepoPalette@d511e9140db69a07c98d91d4893decf204a144b0 # v0.7.0 implementation
   with:
     style: ribbon
     theme: paper
