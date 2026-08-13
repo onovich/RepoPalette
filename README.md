@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-RepoPalette generates a self-updating GitHub Profile language chart from your public repositories—with polished SVG, exact percentages, and audit data you can inspect.
+RepoPalette generates a self-updating GitHub Profile language chart from your public repositories—with ten visual layouts, exact percentages, and files saved in your own repository.
 
 RepoPalette reads your public repositories, creates an SVG in your Profile repository, and checks for changes every Monday.
 

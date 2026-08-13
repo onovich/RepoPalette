@@ -49,7 +49,7 @@ test("describes the product with searchable, concrete GitHub Profile terms", asy
     readme,
     /self-updating GitHub Profile language chart from your public repositories/i
   );
-  assert.match(readme, /polished SVG, exact percentages, and audit data/i);
+  assert.match(readme, /ten visual layouts, exact percentages/i);
   assert.match(chineseReadme, /GitHub Profile.*自动更新的编程语言构成图/);
   assert.match(readme, /Marketplace listing exposes this lower-level Action/);
 });

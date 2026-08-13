@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/onovich/RepoPalette?include_prereleases)](https://github.com/onovich/RepoPalette/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-RepoPalette 根据你的公开仓库，为 GitHub Profile 生成自动更新的编程语言构成图：SVG 视觉清晰、百分比准确，并附带可核对的统计数据。
+RepoPalette 根据你的公开仓库，为 GitHub Profile 生成自动更新的编程语言构成图：提供十种视觉布局和准确百分比，图表文件保存在你自己的仓库。
 
 RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在以后每周一检查变化。
 
