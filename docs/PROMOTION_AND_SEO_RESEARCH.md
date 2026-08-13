@@ -9,7 +9,7 @@ RepoPalette **需要 SEO，但现在只需要轻量、基础的 SEO**。它首�
 
 1. 让 GitHub 能在仓库名、描述和 Topics 中正确找到它；
 2. 让访问者在 README 首屏立即理解差异、看到效果并完成安装；
-3. 上架 GitHub Marketplace，获得 Action 专属页面与分类入口；
+3. 维护已上线的 GitHub Marketplace 页面、版本与分类入口；
 4. 用默认可关闭的小署名，让每张公开 Profile 图表成为产品示例；
 5. 等出现真实安装、常见问题和案例后，再建设可由 Search Console 衡量的 GitHub Pages 落地页。
 
@@ -19,17 +19,24 @@ Google 也明确说明：SEO 的重点是帮助搜索引擎理解内容和帮助
 
 ## 当前状态与主要缺口
 
-截至快照时，[RepoPalette 公开仓库](https://github.com/onovich/RepoPalette)创建约一天，仓库 API 显示 0 stars、0 forks、0 subscribers、7 个 Releases、Discussions 未启用、Homepage 为空；已有 Topics 为 `developer-tools`、`github-action`、`github-profile`、`language-statistics`、`profile-readme`、`svg`。[GitHub REST 仓库快照](https://api.github.com/repos/onovich/RepoPalette) 当前 [Marketplace 搜索 RepoPalette](https://github.com/marketplace?type=actions&query=RepoPalette)为 0 结果。
+截至 2026-08-13 首发收尾时，基础可发现性已经落地：
+
+- [`v0.7.0`](https://github.com/onovich/RepoPalette/releases/tag/v0.7.0) 已作为首个 Marketplace 版本发布，[RepoPalette Marketplace 页面](https://github.com/marketplace/actions/repopalette)正常显示，分类为 `Utilities` 与 `Reporting`；
+- 仓库 Description 已改为以 `Self-updating GitHub Profile language charts` 开头的用户意图表述；Topics 已补齐 `github-profile-readme`、`github-stats`、`readme-card`、`data-visualization` 等准确发现词；
+- 1280×640 的 [Social preview](social-preview.png) 已上传，并从公开仓库页验证 `og:image` 指向该图片；
+- [onovich Profile](https://github.com/onovich) 已固定使用正式 `v0.7.0` 提交，语言图可点击进入 RepoPalette，且真实生成与审计流程通过；
+- README、Gallery、AI 安装说明、Release、Marketplace 和中文入口均已公开可达。
 
 当前 [README](../README.md) 的基础已经较好：英文默认、顶部有中文入口、首屏说明用途、直接给预览和 Quick start，并将高级选项放到后续文档；[Gallery](GALLERY.md) 也已集中展示 10 种布局和多个主题。GitHub 官方同样把 README 定义为访问者通常最先看到、用于说明“做什么、为什么有用、如何开始、去哪里求助”的入口。[GitHub：About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes)
 
-当前缺口按优先级排序：
+当前缺口已经从“发布基础设施”转为“外部用户证据”，按优先级排序：
 
-- **未进入 Marketplace。** 仓库已有根目录 [`action.yml`](../action.yml)、版本标签与 Releases，已接近发布条件，但 Marketplace 页面还不存在。
-- **仓库描述偏实现语言。** 现有描述 `Validated GitHub language SVGs and auditable JSON, generated in your own repository.` 准确，却没有把 `GitHub Profile`、`self-updating`、`language chart` 这些用户意图放在前面。
-- **Topic 仍可补一个强意图词。** 现有 Topics 基本准确，缺少 `github-profile-readme`；不需要为了凑满上限加入模糊词。GitHub 允许最多 20 个 Topics，并通过 Topics 页面、相关 Topics 和 `topic:` 查询提供发现入口。[GitHub：Classifying a repository with topics](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics) · [GitHub：Searching topics](https://docs.github.com/en/search-github/searching-on-github/searching-topics)
-- **社交分享识别度待确认。** GitHub 的公开 API 不暴露是否设置了自定义 Social preview，应在仓库 Settings 中人工确认；GitHub 建议使用至少 640×320、最佳 1280×640、1 MB 以下的 PNG/JPG/GIF。[GitHub：Social media preview](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/customizing-your-repositorys-social-media-preview)
 - **缺少外部用户证据。** 目前没有 stars、forks 或公开社区讨论。此时继续扩写大量“SEO 文章”不会解决信任和激活问题，先获得真实安装和可展示案例更重要。
+- **陌生用户安装仍未被验证。** 作者自己的 live demo 已通过，但它不能替代 3–5 位不了解内部实现的用户完成 Quick Start。
+- **没有留存基线。** 需要观察首次生成、第二次自动更新和 35 天有效输出，而不是只记录一次复制 workflow。
+- **推广内容尚未真实投放。** [`LAUNCH_KIT.md`](LAUNCH_KIT.md) 已准备可复制素材，但是否发布、发到哪里和用哪个账号仍由维护者决定。
+
+GitHub 允许最多 20 个 Topics，并通过 Topics 页面、相关 Topics 和 `topic:` 查询提供发现入口；当前 Topics 已足够，不应为了凑满上限加入模糊词。[GitHub：Classifying a repository with topics](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/classifying-your-repository-with-topics) · [GitHub：Searching topics](https://docs.github.com/en/search-github/searching-on-github/searching-topics) GitHub 建议 Social preview 至少 640×320、最佳 1280×640、1 MB 以下；当前成品符合最佳尺寸与体积要求。[GitHub：Social media preview](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/customizing-your-repositorys-social-media-preview)
 
 ## GitHub 内部发现机制：各入口应承担什么角色
 
@@ -54,7 +61,7 @@ RepoPalette 应上架为 **GitHub Action，不是 GitHub App**。GitHub 官方�
 - Primary：`Utilities`——当前 Marketplace 将其描述为增强 GitHub 使用体验的辅助工具，且同页已有 Profile SVG/统计类 Action。[Marketplace Utilities Actions](https://github.com/marketplace?category=utilities&type=actions)
 - Secondary：`Reporting`——RepoPalette 的确生成统计报告，但该分类更偏开发过程洞察，因此放第二。[Marketplace Reporting Actions](https://github.com/marketplace?category=reporting&type=actions)
 
-发布前要解决一个产品一致性问题：README 的主路径是调用 reusable workflow，而 Marketplace 展示的是根 Action 的 `action.yml`。Marketplace 文案必须明确：最省事的 Profile 安装仍使用短 workflow；直接 Action 适用于希望自己控制 checkout、提交和 README 更新的人。不要让 Marketplace 的“Use latest version”看起来像完整的一键安装。
+这一形态已在 `v0.7.0` 落地。README 的主路径调用 reusable workflow，而 Marketplace 展示根 Action 的 `action.yml`；当前文案明确区分：最省事的 Profile 安装使用短 workflow，直接 Action 适用于希望自己控制 checkout、提交和 README 更新的人。后续版本仍要保持这一区分，不把 Marketplace 的“Use latest version”描述成完整的一键安装。
 
 ## 推荐信息架构与关键词
 
@@ -117,14 +124,14 @@ Google 的搜索摘要主要根据页面正文自动生成，meta description �
 
 ## 30 / 60 / 90 天执行计划
 
+截至 2026-08-13：基础 SEO、Topics、Social preview、Marketplace `v0.7.0` 和作者 Profile dogfooding 已完成。以下计划从“招募外部安装者”开始计时。
+
 ### 0–30 天：完成可发现性与首轮分发
 
-1. 更新 repository description，并补充 `github-profile-readme`、`github-stats`、`readme-card` 三个强意图 Topics；删除任何未来发现无关的泛词，而不是追求 20 个上限。
-2. 在 Settings 检查并上传 1280×640 的 Social preview：品牌名、短句 `Self-updating GitHub Profile language charts`，以及三个代表性布局的小幅预览；不放安装代码。
-3. 微调 README 首句与 H1 附近文本，使 `GitHub Profile language chart` 自然出现一次；保持当前 Quick start 的长度和层级。
-4. 为下一个稳定 Release 发布 Marketplace listing，Primary `Utilities`、Secondary `Reporting`；Listing 明确区分 reusable workflow 快速安装与底层 Action。
-5. 找 5 位非作者账号完成真实安装；记录首次安装耗时、失败点、最终 Profile 链接。获得同意后收录至少 3 个 Showcase。
-6. 每周保存一次 GitHub Traffic、stars/forks、公开依赖仓库数的快照。GitHub Traffic 只保留最近 14 天的完整 clones/visitors，并提供热门内容与外部 referrers，因此必须定期留存。[GitHub：Viewing traffic](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-traffic-to-a-repository)
+1. 使用 [`LAUNCH_KIT.md`](LAUNCH_KIT.md) 中的一条中文或英文文案做一次克制首发，不同时向大量社区重复灌水。
+2. 找 5 位非作者账号完成真实安装；记录首次安装耗时、失败点、最终 Profile 链接。获得同意后收录至少 3 个 Showcase。
+3. 观察这些安装是否完成第二次自动更新；将失败区分为文档、权限、GitHub schedule 暂停或产品缺陷。
+4. 每周保存一次 GitHub Traffic、stars/forks、公开依赖仓库数的快照。GitHub Traffic 只保留最近 14 天的完整 clones/visitors，并提供热门内容与外部 referrers，因此必须定期留存。[GitHub：Viewing traffic](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-traffic-to-a-repository)
 
 **30 天建议门槛（目标，不是预测）：** Marketplace 已上线；至少 5 个独立公开安装；其中至少 3 个成功经历两次自动更新；首次安装中位数不超过 10 分钟；没有需要 PAT 或外部服务的支持案例。
 
@@ -193,13 +200,11 @@ Stars、forks 和 README views 只做辅助信号；真正的北极星指标应�
 - **强制、放大或隐藏式署名。** 保持小水印与完整 opt-out，不引入追踪像素或外部图片服务。
 - **为了“看起来更正式”改做 GitHub App。** 当前产品是一次 workflow 任务，Marketplace Action 已能完成分发；GitHub App 会引入另一套安装、权限、服务和政策成本。
 
-## 最先执行的五件事
+## 当前最先执行的三件事
 
-1. 更新 repository description，并补充 3 个高意图 Topics。
-2. 制作并上传 1280×640 Social preview。
-3. 准备 Marketplace 文案与主预览，在下一个稳定 Release 上架 `Utilities / Reporting`。
-4. 招募 5 个外部安装者，记录激活耗时与两次自动更新结果。
-5. 建立每周指标快照；先证明安装和留存，再决定 Pages 与持续 SEO 内容投入。
+1. 从 [`LAUNCH_KIT.md`](LAUNCH_KIT.md) 选择一条首发文案与配图，由维护者确认后发布。
+2. 招募 5 个外部安装者，记录激活耗时与两次自动更新结果。
+3. 建立每周指标快照；先证明安装和留存，再决定 Discussions、Pages 与持续 SEO 内容投入。
 
 ## 主要一手来源
 
