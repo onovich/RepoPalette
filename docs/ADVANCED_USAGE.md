@@ -9,7 +9,7 @@ Add a `with` block to the `update` job:
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@d15d0c57a8d71461fc247819fb041b95aab0b9a6 # v0.6.1
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@7837efd721cefe8aa1a8821ace3cce89daae53b9 # v0.7.0
     with:
       style: matrix
       theme: midnight
@@ -26,7 +26,7 @@ This is an optional grouping declared by the profile owner, not AI detection. La
 ```yaml
 jobs:
   update:
-    uses: onovich/RepoPalette/.github/workflows/profile.yml@d15d0c57a8d71461fc247819fb041b95aab0b9a6 # v0.6.1
+    uses: onovich/RepoPalette/.github/workflows/profile.yml@7837efd721cefe8aa1a8821ace3cce89daae53b9 # v0.7.0
     with:
       coding-mode: split
       manual-languages: "C#,ShaderLab,HLSL,GLSL"
