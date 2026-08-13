@@ -97,6 +97,6 @@ jobs:
 
 ## 需要更多控制？
 
-默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。Marketplace 展示的是这个底层 Action；大多数 Profile 用户更适合上面的快速开始，因为它还会自动完成 checkout、校验、README 放置和提交。全部输入也可在 [`action.yml`](action.yml) 中查询。
+默认使用 `ribbon` 布局和 `paper` 主题。先在[画廊](docs/GALLERY.md)中挑选样式，再通过[高级使用说明](docs/ADVANCED_USAGE.md)设置主题、筛选、标题、署名、Manual/Vibe 合并视图，或直接使用底层 Action。上架后，Marketplace 将展示这个底层 Action；大多数 Profile 用户更适合上面的快速开始，因为它还会自动完成 checkout、校验、README 放置和提交。全部输入也可在 [`action.yml`](action.yml) 中查询。
 
 参与开发需要 Node.js 24 或更高版本，可运行 `npm run check`。另见[版本记录](CHANGELOG.md)、[产品决策](docs/PRODUCT_DECISIONS.md)和 [MIT 许可证](LICENSE)。

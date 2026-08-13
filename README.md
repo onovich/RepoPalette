@@ -97,6 +97,6 @@ No. It reports language composition, not ability, time, quality, or authorship. 
 
 ## Need more control?
 
-The default is `ribbon` with the `paper` theme. See the [gallery](docs/GALLERY.md) to choose a look, then use the [advanced guide](docs/ADVANCED_USAGE.md) for themes, filters, titles, branding, the combined Manual/Vibe view, or the lower-level Action. The Marketplace listing exposes this lower-level Action; most Profile users should use the Quick start because it also handles checkout, validation, README placement, and commits. Every input is listed in [`action.yml`](action.yml).
+The default is `ribbon` with the `paper` theme. See the [gallery](docs/GALLERY.md) to choose a look, then use the [advanced guide](docs/ADVANCED_USAGE.md) for themes, filters, titles, branding, the combined Manual/Vibe view, or the lower-level Action. Once published, the Marketplace listing will expose this lower-level Action; most Profile users should use the Quick start because it also handles checkout, validation, README placement, and commits. Every input is listed in [`action.yml`](action.yml).
 
 Contributors need Node.js 24 or newer and can run `npm run check`. See the [changelog](CHANGELOG.md), [product decisions](docs/PRODUCT_DECISIONS.md), and [MIT license](LICENSE).
