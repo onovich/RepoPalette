@@ -5,10 +5,8 @@
 
 Initialization status: initialized
 Project: RepoPalette
-Repository root: C:/Users/Administrator/Documents/Playground 2/RepoPalette
-Machine config: `
-.codex\project-git-workflow.json
-`
+Repository root: D:/GithubProjects/RepoPalette
+Machine config: `.codex/project-git-workflow.json`
 Skill: project-git-workflow
 
 Treat this document and the machine config as the source of truth for this repository's Codex git workflow. Do not replace them with generic defaults unless the user explicitly asks to reinitialize or update the policy.
@@ -17,8 +15,7 @@ Treat this document and the machine config as the source of truth for this repos
 
 Run these from the repository root:
 
-```
-powershell
+```powershell
 C:\Users\Administrator\.codex\skills\project-git-workflow\scripts\git\Status.cmd
 C:\Users\Administrator\.codex\skills\project-git-workflow\scripts\git\Validate.cmd
 C:\Users\Administrator\.codex\skills\project-git-workflow\scripts\git\Commit.cmd -Message "commit message" -Paths path\to\file,other\file
@@ -32,9 +29,8 @@ C:\Users\Administrator\.codex\skills\project-git-workflow\scripts\git\DiscardPat
 
 ## Status
 
-```
-powershell
-git -c "safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette" status --short --branch
+```powershell
+git -c safe.directory=D:/GithubProjects/RepoPalette status --short --branch
 ```
 
 ## Validation
@@ -57,15 +53,14 @@ Use the global wrapper's built-in git commit after staging according to policy. 
 
 ## Push
 
-```
-powershell
-git -c "safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette" push -u origin HEAD
+```powershell
+git -c safe.directory=D:/GithubProjects/RepoPalette push -u origin HEAD
 ```
 
 ## Docs And TODO
 
-None configured.
+Keep `README.md`, `README.zh-CN.md`, `CHANGELOG.md`, `docs/PRODUCT_DECISIONS.md`, and `docs/GALLERY.md` aligned with public behavior.
 
 ## Safety And Branch Policy
 
-No extra policy configured. Destructive git commands still require explicit user approval.
+Do not force-push, publish a release, change Marketplace metadata, or upload promotional assets unless the user explicitly asks. Destructive git commands still require explicit user approval.

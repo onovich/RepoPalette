@@ -3,15 +3,15 @@
     "initializedMarker":  "codex-project-git-workflow: initialized",
     "initializedAt":  "2026-08-12 18:55:51 +08:00",
     "projectName":  "RepoPalette",
-    "repoRoot":  "C:/Users/Administrator/Documents/Playground 2/RepoPalette",
-    "safeDirectory":  "C:/Users/Administrator/Documents/Playground 2/RepoPalette",
-    "statusCommand":  "git -c \"safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette\" status --short --branch",
+    "repoRoot":  "D:/GithubProjects/RepoPalette",
+    "safeDirectory":  "D:/GithubProjects/RepoPalette",
+    "statusCommand":  "git -c safe.directory=D:/GithubProjects/RepoPalette status --short --branch",
     "validationCommands":  [
                                "npm run check"
                            ],
     "stagingPolicy":  "ask each time",
     "commitCommand":  "",
-    "pushCommand":  "git -c \"safe.directory=C:/Users/Administrator/Documents/Playground 2/RepoPalette\" push -u origin HEAD",
-    "docsRequirement":  "",
-    "forbiddenCommands":  ""
+    "pushCommand":  "git -c safe.directory=D:/GithubProjects/RepoPalette push -u origin HEAD",
+    "docsRequirement":  "Keep README.md, README.zh-CN.md, CHANGELOG.md, docs/PRODUCT_DECISIONS.md, and docs/GALLERY.md aligned with public behavior.",
+    "forbiddenCommands":  "Do not force-push, publish a release, change Marketplace metadata, or upload promotional assets unless the user explicitly asks."
 }
