@@ -15,6 +15,8 @@ RepoPalette 读取你的公开仓库，把 SVG 保存到 Profile 仓库，并在
 
 ![RepoPalette ribbon 预览](docs/gallery/ribbon-paper.svg)
 
+![RepoPalette 封面](docs/cover.png)
+
 ## 快速开始
 
 ### 让 AI 安装

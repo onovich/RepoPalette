@@ -15,6 +15,8 @@ One small file, one commit. No separate account, secret key, or image server to 
 
 ![RepoPalette ribbon preview](docs/gallery/ribbon-paper.svg)
 
+![RepoPalette cover](docs/cover.png)
+
 ## Quick start
 
 ### Install with AI
